@@ -4,9 +4,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -179,10 +178,12 @@ public class Main extends Application {
         Button getOutOfAboutMenu = new Button("Back to main menu");
         getOutOfAboutMenu.setFont(new Font(FONT_SIZE));
         getOutOfAboutMenu.setLayoutX(50);
-        getOutOfAboutMenu.setLayoutY(150);
+        getOutOfAboutMenu.setLayoutY(300);
 
 
-        Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!");
+        Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!" +
+                "\nThis game has big text and the option to use touchscreen controls because it's intended\n" +
+                "for small tablets with 1280x800 resolution screens, though you can also play in\nwindowed mode with keyboard controls.");
         aboutText.setFont(new Font(FONT_SIZE));
         aboutText.setLayoutX(50);
         aboutText.setLayoutY(50);
@@ -200,10 +201,15 @@ public class Main extends Application {
 
         //settings menu stuff
 
-        Text settingsText = new Text("Settings\nRestart the game in order for the changes to take effect.");
+        Text settingsText = new Text("Settings");
         settingsText.setFont(new Font(FONT_SIZE));
         settingsText.setLayoutX(50);
         settingsText.setLayoutY(50);
+        Text settingsNoteText = new Text("Restart the game in order for the changes to take effect.");
+        settingsNoteText.setFont(new Font(FONT_SIZE));
+        settingsNoteText.setFill(Color.RED);
+        settingsNoteText.setLayoutX(50);
+        settingsNoteText.setLayoutY(100);
         Button getOutOfSettingsMenu = new Button("Back to main menu");
         getOutOfSettingsMenu.setFont(new Font(FONT_SIZE));
         getOutOfSettingsMenu.setLayoutX(50);
@@ -216,12 +222,20 @@ public class Main extends Application {
         controlsText.setLayoutY(150);
         Button keyboardControlsButton = new Button("Keyboard");
         keyboardControlsButton.setFont(new Font(FONT_SIZE));
+        Border activeBorder = new Border(new BorderStroke(Color.GREEN,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5.0)));
+
         keyboardControlsButton.setLayoutX(100);
         keyboardControlsButton.setLayoutY(200);
         Button touchscreenControlsButton = new Button("Touchscreen");
         touchscreenControlsButton.setFont(new Font(FONT_SIZE));
         touchscreenControlsButton.setLayoutX(300);
         touchscreenControlsButton.setLayoutY(200);
+        if (controls.equals("keyboard")) {
+            keyboardControlsButton.setBorder(activeBorder);
+        } else {
+            touchscreenControlsButton.setBorder(activeBorder);
+        }
         Text currentControlsText = new Text("Current controls: ");
         currentControlsText.setFont(new Font(FONT_SIZE));
         currentControlsText.setLayoutX(50);
@@ -253,6 +267,16 @@ public class Main extends Application {
         windowedWindowModeButton.setFont(new Font(FONT_SIZE));
         windowedWindowModeButton.setLayoutX(300);
         windowedWindowModeButton.setLayoutY(450);
+        switch (windowMode) {
+            case "fullscreen":
+                fullscreenWindowModeButton.setBorder(activeBorder);
+                break;
+            case "windowed":
+                windowedWindowModeButton.setBorder(activeBorder);
+                break;
+            default:
+                break;
+        }
         Text currentWindowModeText = new Text("Current window mode: ");
         currentWindowModeText.setFont(new Font(FONT_SIZE));
         currentWindowModeText.setLayoutX(50);
@@ -274,13 +298,13 @@ public class Main extends Application {
 
 
         settingsButton.setOnAction(e -> {
-            mainMenu.getChildren().addAll(tempBackgroundView, settingsText, getOutOfSettingsMenu);
+            mainMenu.getChildren().addAll(tempBackgroundView, settingsText, settingsNoteText, getOutOfSettingsMenu);
             mainMenu.getChildren().addAll(controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, controlsStatusFromFile);
             mainMenu.getChildren().addAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
         });
 
         getOutOfSettingsMenu.setOnAction(e -> {
-            mainMenu.getChildren().removeAll(tempBackgroundView, settingsText, getOutOfSettingsMenu);
+            mainMenu.getChildren().removeAll(tempBackgroundView, settingsText, settingsNoteText, getOutOfSettingsMenu);
             mainMenu.getChildren().removeAll(controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, controlsStatusFromFile);
             mainMenu.getChildren().removeAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
         });
