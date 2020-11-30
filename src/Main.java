@@ -106,36 +106,42 @@ public class Main extends Application {
         ImageView menuBackgroundView = new ImageView(menuBackground);
         mainMenu.getChildren().add(menuBackgroundView);
         Label label1 = new Label("This game isn't finished yet!");
-        
+        label1.setFont(new Font(FONT_SIZE));
         //buttons
         Button newButton = new Button();
         newButton.setText("New Game");
+        newButton.setFont(new Font(FONT_SIZE));
         newButton.setLayoutX(50);
         newButton.setLayoutY(50);
 
         Button continueButton = new Button();
         continueButton.setText("Continue");
+        continueButton.setFont(new Font(FONT_SIZE));
         continueButton.setLayoutX(50);
-        continueButton.setLayoutY(100);
+        continueButton.setLayoutY(150);
 
         Button aboutButton = new Button();
         aboutButton.setText("About");
+        aboutButton.setFont(new Font(FONT_SIZE));
         aboutButton.setLayoutX(50);
-        aboutButton.setLayoutY(150);
+        aboutButton.setLayoutY(250);
 
         Button settingsButton = new Button();
         settingsButton.setText("Settings");
+        settingsButton.setFont(new Font(FONT_SIZE));
         settingsButton.setLayoutX(50);
-        settingsButton.setLayoutY(200);
+        settingsButton.setLayoutY(350);
 
         Button controlsButton = new Button("Controls");
+        controlsButton.setFont(new Font(FONT_SIZE));
         controlsButton.setLayoutX(50);
-        controlsButton.setLayoutY(250);
+        controlsButton.setLayoutY(450);
 
         Button quitButton = new Button();
         quitButton.setText("Quit");
+        quitButton.setFont(new Font(FONT_SIZE));
         quitButton.setLayoutX(50);
-        quitButton.setLayoutY(300);
+        quitButton.setLayoutY(550);
 
         //event handlers for main menu buttons
 
@@ -171,11 +177,13 @@ public class Main extends Application {
         //about button adds stuff on top of the screen
         //getOutOfAboutMenu gets rid of it
         Button getOutOfAboutMenu = new Button("Back to main menu");
+        getOutOfAboutMenu.setFont(new Font(FONT_SIZE));
         getOutOfAboutMenu.setLayoutX(50);
-        getOutOfAboutMenu.setLayoutY(100);
+        getOutOfAboutMenu.setLayoutY(150);
 
 
         Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!");
+        aboutText.setFont(new Font(FONT_SIZE));
         aboutText.setLayoutX(50);
         aboutText.setLayoutY(50);
 
@@ -193,29 +201,36 @@ public class Main extends Application {
         //settings menu stuff
 
         Text settingsText = new Text("Settings\nRestart the game in order for the changes to take effect.");
+        settingsText.setFont(new Font(FONT_SIZE));
         settingsText.setLayoutX(50);
         settingsText.setLayoutY(50);
         Button getOutOfSettingsMenu = new Button("Back to main menu");
+        getOutOfSettingsMenu.setFont(new Font(FONT_SIZE));
         getOutOfSettingsMenu.setLayoutX(50);
-        getOutOfSettingsMenu.setLayoutY(400);
+        getOutOfSettingsMenu.setLayoutY(600);
 
         //controls settings
         Text controlsText = new Text("Controls:");
+        controlsText.setFont(new Font(FONT_SIZE));
         controlsText.setLayoutX(50);
-        controlsText.setLayoutY(100);
+        controlsText.setLayoutY(150);
         Button keyboardControlsButton = new Button("Keyboard");
+        keyboardControlsButton.setFont(new Font(FONT_SIZE));
         keyboardControlsButton.setLayoutX(100);
-        keyboardControlsButton.setLayoutY(100);
+        keyboardControlsButton.setLayoutY(200);
         Button touchscreenControlsButton = new Button("Touchscreen");
-        touchscreenControlsButton.setLayoutX(200);
-        touchscreenControlsButton.setLayoutY(100);
+        touchscreenControlsButton.setFont(new Font(FONT_SIZE));
+        touchscreenControlsButton.setLayoutX(300);
+        touchscreenControlsButton.setLayoutY(200);
         Text currentControlsText = new Text("Current controls: ");
+        currentControlsText.setFont(new Font(FONT_SIZE));
         currentControlsText.setLayoutX(50);
-        currentControlsText.setLayoutY(150);
+        currentControlsText.setLayoutY(350);
         String controlsStatus = getControlStatus();
         Text controlsStatusFromFile = new Text(controlsStatus);
-        controlsStatusFromFile.setLayoutX(150);
-        controlsStatusFromFile.setLayoutY(150);
+        controlsStatusFromFile.setFont(new Font(FONT_SIZE));
+        controlsStatusFromFile.setLayoutX(300);
+        controlsStatusFromFile.setLayoutY(350);
 
         //control buttons event handlers
         keyboardControlsButton.setOnAction(e -> {
@@ -227,21 +242,26 @@ public class Main extends Application {
 
         //window mode settings
         Text windowModeText = new Text("Window mode: ");
+        windowModeText.setFont(new Font(FONT_SIZE));
         windowModeText.setLayoutX(50);
-        windowModeText.setLayoutY(200);
+        windowModeText.setLayoutY(400);
         Button fullscreenWindowModeButton = new Button("Fullscreen");
+        fullscreenWindowModeButton.setFont(new Font(FONT_SIZE));
         fullscreenWindowModeButton.setLayoutX(100);
-        fullscreenWindowModeButton.setLayoutY(250);
+        fullscreenWindowModeButton.setLayoutY(450);
         Button windowedWindowModeButton = new Button("Windowed");
-        windowedWindowModeButton.setLayoutX(200);
-        windowedWindowModeButton.setLayoutY(250);
+        windowedWindowModeButton.setFont(new Font(FONT_SIZE));
+        windowedWindowModeButton.setLayoutX(300);
+        windowedWindowModeButton.setLayoutY(450);
         Text currentWindowModeText = new Text("Current window mode: ");
+        currentWindowModeText.setFont(new Font(FONT_SIZE));
         currentWindowModeText.setLayoutX(50);
-        currentWindowModeText.setLayoutY(300);
+        currentWindowModeText.setLayoutY(550);
         String windowModeStatus = getWindowModeStatus();
         Text windowModeStatusFromFile = new Text(windowModeStatus);
-        windowModeStatusFromFile.setLayoutX(200);
-        windowModeStatusFromFile.setLayoutY(300);
+        windowModeStatusFromFile.setFont(new Font(FONT_SIZE));
+        windowModeStatusFromFile.setLayoutX(400);
+        windowModeStatusFromFile.setLayoutY(550);
 
         //window mode button event handlers
         fullscreenWindowModeButton.setOnAction(e -> {
@@ -269,9 +289,11 @@ public class Main extends Application {
 
         //controls info menu
         Text controlsMenuText = new Text("Controls\nThis is where the controls will be listed once the game is developed more.");
+        controlsMenuText.setFont(new Font(FONT_SIZE));
         controlsMenuText.setLayoutX(50);
         controlsMenuText.setLayoutY(50);
         Button getOutOfControlsMenu = new Button("Return to main menu");
+        getOutOfControlsMenu.setFont(new Font(FONT_SIZE));
         getOutOfControlsMenu.setLayoutX(50);
         getOutOfControlsMenu.setLayoutY(300);
 
