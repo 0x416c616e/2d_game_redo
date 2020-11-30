@@ -10,7 +10,70 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+//if you want to see where most stuff happens, scroll down to the init() method
 public class Main extends Application {
+
+    //methods getting or setting controls status (keyboard or touchscreen)
+    public String getControlStatus(){
+        File controlSettingsFile = new File("settings/controls.txt");
+        Scanner controlSettingsIn;
+        try {
+            controlSettingsIn = new Scanner(controlSettingsFile);
+            String status = controlSettingsIn.next();
+            controlSettingsIn.close();
+            return status;
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return "error";
+    }
+
+    public void setControlStatus(String status) {
+        File controlsFile = new File("settings/controls.txt");
+        try {
+            PrintWriter fileOut = new PrintWriter(controlsFile);
+
+            fileOut.write(status);
+
+            fileOut.close();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public String getWindowModeStatus() {
+        File windowModeSettingsFile = new File("settings/window_mode.txt");
+        Scanner windowModeSettingsIn;
+        try {
+            windowModeSettingsIn = new Scanner(windowModeSettingsFile);
+            String status = windowModeSettingsIn.next();
+            windowModeSettingsIn.close();
+            return status;
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return "error";
+    }
+
+    public void setWindowModeStatus(String status) {
+        File windowModeSettingsFile = new File("settings/window_mode.txt");
+        try {
+            PrintWriter fileOut = new PrintWriter(windowModeSettingsFile);
+
+            fileOut.write(status);
+
+            fileOut.close();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     //what happens in JavaFX before the window is opened
     @Override
     public void init() throws Exception {
@@ -20,10 +83,18 @@ public class Main extends Application {
     //what happens during window opening etc.
     @Override
     public void start(Stage stage) throws Exception {
+
+        //getting settings for controls and window mode from config files
+        String controls = getControlStatus();
+        String windowMode = getWindowModeStatus();
+        if (windowMode.equals("fullscreen")) {
+            stage.setFullScreen(true);
+        }
         //Basic window stuff
         stage.setTitle("2D RPG written in Java");
         stage.setWidth(1280);
         stage.setHeight(800);
+        stage.setResizable(false);
         //root stackpane used for stacking stuff on top i.e. a menu on top of something else in the window
         StackPane root = new StackPane();
         //main menu has the buttons for new game, continue, about, settings, and quit
@@ -79,26 +150,97 @@ public class Main extends Application {
 
         Image tempBackground = new Image("file:assets/blank.png");
         ImageView tempBackgroundView = new ImageView(tempBackground);
-        Text aboutText = new Text("This game was made by a computer science student.\nThis game is not finished yet!");
+        Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!");
         aboutText.setLayoutX(50);
         aboutText.setLayoutY(50);
 
+        //lambdas for opening and closing the about menu
         aboutButton.setOnAction(e -> {
-            System.out.println("Got here");
-
             mainMenu.getChildren().addAll(tempBackgroundView, aboutText, getOutOfAboutMenu);
         });
 
         getOutOfAboutMenu.setOnAction(e -> {
-            System.out.println("test123");
             mainMenu.getChildren().removeAll(tempBackgroundView, aboutText, getOutOfAboutMenu);
         });
 
         //^end of about button events
 
-        settingsButton.setOnAction(e -> {
+        //settings menu stuff
 
+        Text settingsText = new Text("Settings\nRestart the game in order for the changes to take effect.");
+        settingsText.setLayoutX(50);
+        settingsText.setLayoutY(50);
+        Button getOutOfSettingsMenu = new Button("Back to main menu");
+        getOutOfSettingsMenu.setLayoutX(50);
+        getOutOfSettingsMenu.setLayoutY(400);
+
+        //controls settings
+        Text controlsText = new Text("Controls:");
+        controlsText.setLayoutX(50);
+        controlsText.setLayoutY(100);
+        Button keyboardControlsButton = new Button("Keyboard");
+        keyboardControlsButton.setLayoutX(100);
+        keyboardControlsButton.setLayoutY(100);
+        Button touchscreenControlsButton = new Button("Touchscreen");
+        touchscreenControlsButton.setLayoutX(200);
+        touchscreenControlsButton.setLayoutY(100);
+        Text currentControlsText = new Text("Current controls: ");
+        currentControlsText.setLayoutX(50);
+        currentControlsText.setLayoutY(150);
+        String controlsStatus = getControlStatus();
+        Text controlsStatusFromFile = new Text(controlsStatus);
+        controlsStatusFromFile.setLayoutX(150);
+        controlsStatusFromFile.setLayoutY(150);
+
+        //control buttons event handlers
+        keyboardControlsButton.setOnAction(e -> {
+            setControlStatus("keyboard");
         });
+        touchscreenControlsButton.setOnAction(e -> {
+            setControlStatus("touchscreen");
+        });
+
+        //window mode settings
+        Text windowModeText = new Text("Window mode: ");
+        windowModeText.setLayoutX(50);
+        windowModeText.setLayoutY(200);
+        Button fullscreenWindowModeButton = new Button("Fullscreen");
+        fullscreenWindowModeButton.setLayoutX(100);
+        fullscreenWindowModeButton.setLayoutY(250);
+        Button windowedWindowModeButton = new Button("Windowed");
+        windowedWindowModeButton.setLayoutX(200);
+        windowedWindowModeButton.setLayoutY(250);
+        Text currentWindowModeText = new Text("Current window mode: ");
+        currentWindowModeText.setLayoutX(50);
+        currentWindowModeText.setLayoutY(300);
+        String windowModeStatus = getWindowModeStatus();
+        Text windowModeStatusFromFile = new Text(windowModeStatus);
+        windowModeStatusFromFile.setLayoutX(200);
+        windowModeStatusFromFile.setLayoutY(300);
+
+        //window mode button event handlers
+        fullscreenWindowModeButton.setOnAction(e -> {
+            setWindowModeStatus("fullscreen");
+        });
+        windowedWindowModeButton.setOnAction(e -> {
+            setWindowModeStatus("windowed");
+        });
+
+
+
+        settingsButton.setOnAction(e -> {
+            mainMenu.getChildren().addAll(tempBackgroundView, settingsText, getOutOfSettingsMenu);
+            mainMenu.getChildren().addAll(controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, controlsStatusFromFile);
+            mainMenu.getChildren().addAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
+        });
+
+        getOutOfSettingsMenu.setOnAction(e -> {
+            mainMenu.getChildren().removeAll(tempBackgroundView, settingsText, getOutOfSettingsMenu);
+            mainMenu.getChildren().removeAll(controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, controlsStatusFromFile);
+            mainMenu.getChildren().removeAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
+        });
+
+        //^end of settings events
 
 
         //quit button, very simple
