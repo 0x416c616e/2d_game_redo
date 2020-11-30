@@ -2,11 +2,13 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import javafx.scene.text.Text;
 
 public class Main extends Application {
     @Override
@@ -24,7 +26,12 @@ public class Main extends Application {
         StackPane root = new StackPane();
         //main menu has the buttons for new game, continue, about, settings, and quit
         Pane mainMenu = new Pane();
+        Image menuBackground = new Image("file:assets/background.png");
+        ImageView menuBackgroundView = new ImageView(menuBackground);
+        mainMenu.getChildren().add(menuBackgroundView);
         Label label1 = new Label("This game isn't finished yet!");
+
+        //buttons
         Button newButton = new Button();
         newButton.setText("New Game");
         newButton.setLayoutX(50);
@@ -49,12 +56,61 @@ public class Main extends Application {
         quitButton.setText("Quit");
         quitButton.setLayoutX(50);
         quitButton.setLayoutY(250);
-        
+
+        //event handlers for main menu buttons
+
+        newButton.setOnAction(e -> {
+
+        });
+
+        continueButton.setOnAction(e -> {
+
+        });
+
+        //about button stuff
+
+        //about button adds stuff on top of the screen
+        //getOutOfAboutMenu gets rid of it
+        Button getOutOfAboutMenu = new Button("Back to main menu");
+        getOutOfAboutMenu.setLayoutX(50);
+        getOutOfAboutMenu.setLayoutY(100);
+
+        Image tempBackground = new Image("file:assets/blank.png");
+        ImageView tempBackgroundView = new ImageView(tempBackground);
+        Text aboutText = new Text("This game was made by a computer science student.\nThis game is not finished yet!");
+        aboutText.setLayoutX(50);
+        aboutText.setLayoutY(50);
+
+        aboutButton.setOnAction(e -> {
+            System.out.println("Got here");
+
+            mainMenu.getChildren().addAll(tempBackgroundView, aboutText, getOutOfAboutMenu);
+        });
+
+        getOutOfAboutMenu.setOnAction(e -> {
+            System.out.println("test123");
+            mainMenu.getChildren().removeAll(tempBackgroundView, aboutText, getOutOfAboutMenu);
+        });
+
+        //^end of about button events
+
+        settingsButton.setOnAction(e -> {
+
+        });
+
+        quitButton.setOnAction(e -> {
+
+        });
+
+        //adding menu items to the menu
         mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, quitButton);
         root.getChildren().add(mainMenu);
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        //displaying the window
         stage.show();
+
+
     }
 
     @Override
