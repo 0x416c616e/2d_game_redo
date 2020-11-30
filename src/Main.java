@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
@@ -83,6 +84,8 @@ public class Main extends Application {
     //what happens during window opening etc.
     @Override
     public void start(Stage stage) throws Exception {
+        //size for fonts (this is intended for small tablets with high DPI so big text is necessary)
+        final double FONT_SIZE = 30.0;
 
         //getting settings for controls and window mode from config files
         String controls = getControlStatus();
@@ -103,7 +106,7 @@ public class Main extends Application {
         ImageView menuBackgroundView = new ImageView(menuBackground);
         mainMenu.getChildren().add(menuBackgroundView);
         Label label1 = new Label("This game isn't finished yet!");
-
+        
         //buttons
         Button newButton = new Button();
         newButton.setText("New Game");
@@ -136,13 +139,32 @@ public class Main extends Application {
 
         //event handlers for main menu buttons
 
-        newButton.setOnAction(e -> {
+        //overlay to cover up other stuff on the screen
+        Image tempBackground = new Image("file:assets/blank.png");
+        ImageView tempBackgroundView = new ImageView(tempBackground);
 
+
+
+        //New game
+        Label enterNameLabel = new Label("Enter name");
+        enterNameLabel.setFont(new Font(FONT_SIZE));
+        enterNameLabel.setLayoutX(100);
+        enterNameLabel.setLayoutY(100);
+
+        newButton.setOnAction(e -> {
+            mainMenu.getChildren().addAll(tempBackgroundView, enterNameLabel);
         });
 
+        //^end of new game stuff
+
+
+
+        //Continue an existing game
         continueButton.setOnAction(e -> {
 
         });
+        //^end of continue game stuff
+
 
         //about button stuff
 
@@ -152,8 +174,7 @@ public class Main extends Application {
         getOutOfAboutMenu.setLayoutX(50);
         getOutOfAboutMenu.setLayoutY(100);
 
-        Image tempBackground = new Image("file:assets/blank.png");
-        ImageView tempBackgroundView = new ImageView(tempBackground);
+
         Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!");
         aboutText.setLayoutX(50);
         aboutText.setLayoutY(50);
