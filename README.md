@@ -1,19 +1,22 @@
-# 2d_game_redo
-2D game written in Java/OpenJFX
+# 2D Game Redo
 
-# Requirements
+2D game written in Java/OpenJFX. Intended for Windows. 
+
+## Requirements
 
 You need to have Java 15 installed in order to run this game. This game is intended for Windows. The game has a fixed resolution of 1280x800.
 
-# How to run it
+## How to run it
 
 Double click on run.vbs in order to run the game
 
-# About
+## About
 
 This is a 2D RPG. It's not finished yet.
 
-# Creating JAR when working on this project
+The map is 1280x800, with 80x80 pixel tiles. It has a tile-based movement system. That means it's 16x10 tiles on the screen.
+
+### Creating JAR when working on this project
 
 See my repo about the JavaFX 15 template for more info.
 
@@ -25,5 +28,3 @@ In order to edit the JAR, meaning you can change the game and then run it with t
 4. Build -> Build Artifacts -> Build
 5. Double click the run.vbs script
 6. You are now running the JAR
-
-
