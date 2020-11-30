@@ -11,11 +11,13 @@ import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
 public class Main extends Application {
+    //what happens in JavaFX before the window is opened
     @Override
     public void init() throws Exception {
         super.init();
     }
 
+    //what happens during window opening etc.
     @Override
     public void start(Stage stage) throws Exception {
         //Basic window stuff
@@ -98,8 +100,11 @@ public class Main extends Application {
 
         });
 
-        quitButton.setOnAction(e -> {
 
+        //quit button, very simple
+        quitButton.setOnAction(e -> {
+            //return code 0 means no errors, any other number means something went wrong
+            System.exit(0);
         });
 
         //adding menu items to the menu
@@ -113,11 +118,13 @@ public class Main extends Application {
 
     }
 
+    //what happens in JavaFX after the window is closed
     @Override
     public void stop() throws Exception {
         super.stop();
     }
 
+    //JavaFX boilerplate main
     public static void main(String[] args) {
         launch(args);
     }
