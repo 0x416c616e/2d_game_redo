@@ -26,5 +26,6 @@ In order to edit the JAR, meaning you can change the game and then run it with t
 2. Write your code in the Main class
 3. Run to make sure it works
 4. Build -> Build Artifacts -> Build
-5. Double click the run.vbs script
-6. You are now running the JAR
+5. Double click on copy_new_artifact.bat
+6. Double click the run.vbs script
+7. You are now running the JAR
