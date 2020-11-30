@@ -125,10 +125,14 @@ public class Main extends Application {
         settingsButton.setLayoutX(50);
         settingsButton.setLayoutY(200);
 
+        Button controlsButton = new Button("Controls");
+        controlsButton.setLayoutX(50);
+        controlsButton.setLayoutY(250);
+
         Button quitButton = new Button();
         quitButton.setText("Quit");
         quitButton.setLayoutX(50);
-        quitButton.setLayoutY(250);
+        quitButton.setLayoutY(300);
 
         //event handlers for main menu buttons
 
@@ -242,6 +246,23 @@ public class Main extends Application {
 
         //^end of settings events
 
+        //controls info menu
+        Text controlsMenuText = new Text("Controls\nThis is where the controls will be listed once the game is developed more.");
+        controlsMenuText.setLayoutX(50);
+        controlsMenuText.setLayoutY(50);
+        Button getOutOfControlsMenu = new Button("Return to main menu");
+        getOutOfControlsMenu.setLayoutX(50);
+        getOutOfControlsMenu.setLayoutY(300);
+
+        //displays controls (not yet implemented)
+        controlsButton.setOnAction(e -> {
+            mainMenu.getChildren().addAll(tempBackgroundView, controlsMenuText, getOutOfControlsMenu);
+        });
+        getOutOfControlsMenu.setOnAction(e -> {
+            mainMenu.getChildren().removeAll(tempBackgroundView, controlsMenuText, getOutOfControlsMenu);
+        });
+
+        //^end of controls info menu
 
         //quit button, very simple
         quitButton.setOnAction(e -> {
@@ -250,7 +271,7 @@ public class Main extends Application {
         });
 
         //adding menu items to the menu
-        mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, quitButton);
+        mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton);
         root.getChildren().add(mainMenu);
         Scene scene = new Scene(root);
         stage.setScene(scene);
