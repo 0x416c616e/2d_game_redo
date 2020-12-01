@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -242,22 +243,111 @@ public class Main extends Application {
 
 
         //New game
+        //Get name for new save
         Label enterNameLabel = new Label("Enter name");
         dbgAlert("new Label enterNameLabel");
         enterNameLabel.setFont(standardFont);
         enterNameLabel.setLayoutX(100);
         enterNameLabel.setLayoutY(100);
 
+        TextField nameField = new TextField();
+        dbgAlert("new TextField nameField");
+        nameField.setLayoutX(100);
+        nameField.setLayoutY(150);
+        nameField.setFont(standardFont);
+        Button submitNameButton = new Button("OK");
+        dbgAlert("new Button submitNameButton");
+        submitNameButton.setFont(standardFont);
+        submitNameButton.setLayoutX(500);
+        submitNameButton.setLayoutY(150);
+
+        Button[] newSaveKeyboard = new Button[26];
+        dbgAlert("new Button[] newSaveKeyboard");
+
+        if (controls.equals("touchscreen")) {
+            dbgAlert("You are playing with touchscreen controls");
+            //adding touchscreen keyboard to the screen
+            String[] alphabet = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
+                                 "A", "S", "D", "F", "G", "H", "J", "K", "L",
+                                 "Z", "X", "C", "V", "B", "N", "M"};
+            //making the buttons for the onscreen keyboard
+            for (int i = 0; i < 26; i++) {
+                newSaveKeyboard[i] = new Button(alphabet[i]);
+                newSaveKeyboard[i].setFont(standardFont);
+                dbgAlert("new Button newSaveKeyboard[" + i + "]");
+            }
+            //setting positions for first row of keys (qwerty row)
+            for (int i = 0; i < 10; i++) {
+                newSaveKeyboard[i].setLayoutY(300);
+                newSaveKeyboard[i].setLayoutX((70 * i) + 50);
+            }
+
+            //setting positions for the second row of keys (asdf row)
+            for (int i = 10; i < 19; i++) {
+                newSaveKeyboard[i].setLayoutY(400);
+                newSaveKeyboard[i].setLayoutX((70 * (i - 10)) + 85);
+            }
+
+            //setting positions for the third row of keys (zxcv row)
+            for (int i = 19; i < 26; i++) {
+                newSaveKeyboard[i].setLayoutY(500);
+                newSaveKeyboard[i].setLayoutX((70 * (i - 19)) + 140);
+            }
+
+            //touchscreen keyboard event handlers
+            for (int i = 0; i < 26; i++) {
+                final int x = i;
+                newSaveKeyboard[i].setOnAction(e -> {
+                    dbgAlert("running event handler for newSaveKeyboard[" + x + "]");
+                    if (nameField.getCharacters().length() < 10) {
+                        nameField.appendText(alphabet[x]);
+                    }
+
+                    dbgAlert("ran event handler for newSaveKeyboard[" + x + "]");
+                    System.gc();
+                });
+
+            }
+
+        } else {
+            dbgAlert("You are playing with keyboard controls");
+        }
+
+        Button getOutOfNewMenu = new Button("Cancel");
+        dbgAlert("new Button getOutOfNewMenu");
+        getOutOfNewMenu.setFont(standardFont);
+        getOutOfNewMenu.setLayoutX(600);
+        getOutOfNewMenu.setLayoutY(150);
+
+        getOutOfNewMenu.setOnAction(e -> {
+            dbgAlert("running getOutOfNewMenu event handler");
+            mainMenu.getChildren().removeAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
+            if (controls.equals("touchscreen")) {
+                for (int i = 0; i < 26; i++) {
+                    mainMenu.getChildren().removeAll(newSaveKeyboard[i]);
+                }
+            }
+            dbgAlert("ran getOutOfNewMenu event handler");
+        });
+
         newButton.setOnAction(e -> {
             dbgAlert("Running newButton event handler");
-            mainMenu.getChildren().addAll(tempBackgroundView, enterNameLabel);
-            dbgAlert("tempBackgroundView, enterNameLabel added to mainMenu");
+            mainMenu.getChildren().addAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
+            if (controls.equals("touchscreen")) {
+                for (int i = 0; i < 26; i++) {
+                    mainMenu.getChildren().add(newSaveKeyboard[i]);
+                }
+
+            }
+            dbgAlert("tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu added to mainMenu");
             //this method is not finished yet
 
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("Ran newButton event handler");
         });
+
+
 
         //^end of new game stuff
 
