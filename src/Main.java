@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.security.cert.Extension;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -329,6 +330,7 @@ public class Main extends Application {
                 }
             }
             dbgAlert("ran getOutOfNewMenu event handler");
+            System.gc();
         });
 
         newButton.setOnAction(e -> {
@@ -356,15 +358,18 @@ public class Main extends Application {
 
         //Continue an existing game
         dbgAlert("got to continueButton code");
+        FileChooser saveChooser = new FileChooser();
+        dbgAlert("new FileChooser saveChooser");
+        FileChooser.ExtensionFilter saveFilter = new FileChooser.ExtensionFilter("Game saves", "*.save");
+        dbgAlert("new FileChooser.ExtensionFilter saveFilter");
+
         continueButton.setOnAction(e -> {
             dbgAlert("Running continueButton event handler");
 
             //not yet implemented event handler
-            FileChooser saveChooser = new FileChooser();
             dbgAlert("new FileChooser saveChooser");
             saveChooser.setTitle("Open Existing Game Save");
-            saveChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Game saves", "*.save"));
+            saveChooser.getExtensionFilters().add(saveFilter);
             File selectedGameSave = saveChooser.showOpenDialog(stage);
             if (selectedGameSave == null) {
                 dbgAlert("Player did not select a game save to load");
