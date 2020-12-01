@@ -15,10 +15,9 @@ import javafx.scene.text.Text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.security.cert.Extension;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 //if you want to see where most stuff happens, scroll down to the init() method
 public class Main extends Application {
@@ -272,6 +271,7 @@ public class Main extends Application {
         nameField.setLayoutY(150);
         nameField.setFont(standardFont);
         Button submitNameButton = new Button("OK");
+
         dbgAlert("new Button submitNameButton");
         submitNameButton.setFont(standardFont);
         submitNameButton.setLayoutX(500);
@@ -322,13 +322,62 @@ public class Main extends Application {
                     dbgAlert("ran event handler for newSaveKeyboard[" + x + "]");
                     System.gc();
                 });
-
-
             }
 
         } else {
             dbgAlert("You are playing with keyboard controls");
         }
+
+        //pattern matching for name input
+        //can be 1-10 characters long for player's name (which is also the name of the save
+        //i.e. Joe.save
+        Pattern namePattern = Pattern.compile("^[A-Za-z]{1,10}$");
+        dbgAlert("new Pattern namePattern");
+
+        //assets for the name error screen
+        ImageView nameErrorBackground = new ImageView(tempBackground);
+        dbgAlert("new ImageView nameErrorBackground");
+        Text nameErrorText = new Text("The name you entered is not valid.\nNames can only contain numbers and must be 1-10 characters long.");
+        dbgAlert("new Text nameErrorText");
+        nameErrorText.setFont(standardFont);
+        nameErrorText.setLayoutX(50);
+        nameErrorText.setLayoutY(100);
+
+        Button closeNameErrorButton = new Button("OK");
+        dbgAlert("new Button closeNameErrorButton");
+        closeNameErrorButton.setFont(standardFont);
+        closeNameErrorButton.setLayoutX(50);
+        closeNameErrorButton.setLayoutY(150);
+
+        closeNameErrorButton.setOnAction(e -> {
+            dbgAlert("Running closeNameErrorButton event handler");
+            mainMenu.getChildren().removeAll(nameErrorBackground, nameErrorText, closeNameErrorButton);
+            dbgAlert("nameErrorBackground, nameErrorText, and closeNameErrorButton removed from mainMenu");
+            dbgAlert("Ran closeNameErrorButton event handler");
+            System.gc();
+        });
+
+        //clicking button to submit new save game with desired name
+        submitNameButton.setOnAction(e -> {
+            dbgAlert("Running submitNameButton event handler");
+            Matcher nameMatcher = namePattern.matcher(nameField.getText());
+            dbgAlert("new Matcher nameMatcher");
+            dbgAlert("nameField.getText():" + nameField.getText());
+            dbgAlert("Does the user-entered name match the regex? " + nameMatcher.matches());
+            if (!nameMatcher.matches()) {
+                mainMenu.getChildren().addAll(nameErrorBackground, nameErrorText, closeNameErrorButton);
+                dbgAlert("added nameErrorBackground, nameErrorText, and closeNameErrorButton to mainMenu");
+            } else {
+                //name matched regex, so here's where I can implement the additional save stuff and eventually loading a new game
+                dbgAlert("Name matched regex, proceeding with further new game stuff");
+                
+            }
+
+            dbgAlert("Ran submitNameButton event handler");
+            System.gc();
+        });
+
+
 
         Button getOutOfNewMenu = new Button("Cancel");
         dbgAlert("new Button getOutOfNewMenu");
@@ -360,6 +409,7 @@ public class Main extends Application {
                 }
 
             }
+
             //this method is not finished yet
 
             //try to force garbage collection because clicking menus increases memory usage
