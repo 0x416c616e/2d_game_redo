@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
@@ -359,6 +360,21 @@ public class Main extends Application {
             dbgAlert("Running continueButton event handler");
 
             //not yet implemented event handler
+            FileChooser saveChooser = new FileChooser();
+            dbgAlert("new FileChooser saveChooser");
+            saveChooser.setTitle("Open Existing Game Save");
+            saveChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Game saves", "*.save"));
+            File selectedGameSave = saveChooser.showOpenDialog(stage);
+            if (selectedGameSave == null) {
+                dbgAlert("Player did not select a game save to load");
+            } else {
+                dbgAlert("Proceeding with loading game save");
+                dbgAlert("Game save selected: " + selectedGameSave.getName());
+            }
+            dbgAlert("This feature is not finished yet");
+
+
             System.gc();
             dbgAlert("Ran continueButton event handler");
         });
