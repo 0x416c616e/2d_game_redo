@@ -155,10 +155,24 @@ public class Main extends Application {
         super.init();
     }
 
+    //if changes are made in the settings menu, the user has to restart the game
+    public void settingsChange(Pane mainMenu, Button restartToApplyChangesButton, Button getOutOfSettingsMenu) {
+        //if they make changes to settings, they have to restart the program
+        dbgAlert("running settingsChange() method");
+        if (!mainMenu.getChildren().contains(restartToApplyChangesButton)) {
+            mainMenu.getChildren().add(restartToApplyChangesButton);
+            dbgAlert("restartToApplyChangesButton added to mainMenu");
+        }
+        if (mainMenu.getChildren().contains(getOutOfSettingsMenu)) {
+            mainMenu.getChildren().remove(getOutOfSettingsMenu);
+            dbgAlert("getOutOfSettingsMenu removed from mainMenu");
+        }
+    }
+
     //what happens during window opening etc.
     @Override
     public void start(Stage stage) throws Exception {
-        dbgAlert("ran start() method");
+        dbgAlert("running start() method");
         //size for fonts (this is intended for small tablets with high DPI so big text is necessary)
         final double FONT_SIZE = 30.0;
         //this font is used for menu text and whatnot
@@ -309,6 +323,7 @@ public class Main extends Application {
                     System.gc();
                 });
 
+
             }
 
         } else {
@@ -324,6 +339,7 @@ public class Main extends Application {
         getOutOfNewMenu.setOnAction(e -> {
             dbgAlert("running getOutOfNewMenu event handler");
             mainMenu.getChildren().removeAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
+            dbgAlert("tempBackgroundView, enterNameLavel, nameField, submitNameButton, and getOutOfNewMenu removed from mainMenu");
             if (controls.equals("touchscreen")) {
                 for (int i = 0; i < 26; i++) {
                     mainMenu.getChildren().removeAll(newSaveKeyboard[i]);
@@ -336,13 +352,14 @@ public class Main extends Application {
         newButton.setOnAction(e -> {
             dbgAlert("Running newButton event handler");
             mainMenu.getChildren().addAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
+            dbgAlert("tempBackgroundView, enterNameLabel, nameField, submitNameButton, and getOutOfNewMenu added to mainMenu");
             if (controls.equals("touchscreen")) {
                 for (int i = 0; i < 26; i++) {
                     mainMenu.getChildren().add(newSaveKeyboard[i]);
+                    dbgAlert("newSaveKeyboard[" + i + "] added to mainMenu");
                 }
 
             }
-            dbgAlert("tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu added to mainMenu");
             //this method is not finished yet
 
             //try to force garbage collection because clicking menus increases memory usage
@@ -367,15 +384,16 @@ public class Main extends Application {
             dbgAlert("Running continueButton event handler");
 
             //not yet implemented event handler
-            dbgAlert("new FileChooser saveChooser");
             saveChooser.setTitle("Open Existing Game Save");
             saveChooser.getExtensionFilters().add(saveFilter);
             File selectedGameSave = saveChooser.showOpenDialog(stage);
+            dbgAlert("new File selectedGameSave");
             if (selectedGameSave == null) {
                 dbgAlert("Player did not select a game save to load");
             } else {
                 dbgAlert("Proceeding with loading game save");
                 dbgAlert("Game save selected: " + selectedGameSave.getName());
+                //loading game is not yet implemented
             }
             dbgAlert("This feature is not finished yet");
 
@@ -482,20 +500,43 @@ public class Main extends Application {
         controlsStatusFromFile.setLayoutX(300);
         controlsStatusFromFile.setLayoutY(350);
 
+        //force the user to close the program and reopen it after they make changes
+        Button restartToApplyChangesButton = new Button("Quit to apply changes");
+        dbgAlert("new Button restartToApplyChangesButton");
+        restartToApplyChangesButton.setFont(standardFont);
+        restartToApplyChangesButton.setLayoutX(50);
+        restartToApplyChangesButton.setLayoutY(600);
+
+        restartToApplyChangesButton.setOnAction(e -> {
+            dbgAlert("running restartToApplyChangesButton event handler");
+            System.exit(0);
+        });
+
         //control buttons event handlers
         keyboardControlsButton.setOnAction(e -> {
             dbgAlert("running keyboardControlsbutton event handler");
             setControlStatus("keyboard");
+
+            //if they make changes to settings, they have to restart the program
+            settingsChange(mainMenu, restartToApplyChangesButton, getOutOfSettingsMenu);
+
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran keyboardControlsButton event handler");
+
         });
         touchscreenControlsButton.setOnAction(e -> {
             dbgAlert("running touchscreenControlsButton event handler");
+
             setControlStatus("touchscreen");
+
+            //if they make changes to settings, they have to restart the program
+            settingsChange(mainMenu, restartToApplyChangesButton, getOutOfSettingsMenu);
+
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran touchscreenControlsButton event handler");
+
         });
 
         //window mode settings
@@ -540,6 +581,10 @@ public class Main extends Application {
         fullscreenWindowModeButton.setOnAction(e -> {
             dbgAlert("running fullscreenWindowModeButton event handler");
             setWindowModeStatus("fullscreen");
+
+            //if they make changes to settings, they have to restart the program
+            settingsChange(mainMenu, restartToApplyChangesButton, getOutOfSettingsMenu);
+
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran fullscreenWindowModebutton event handler");
@@ -547,6 +592,10 @@ public class Main extends Application {
         windowedWindowModeButton.setOnAction(e -> {
             dbgAlert("running windowedModebutton event handler");
             setWindowModeStatus("windowed");
+
+            //if they make changes to settings, they have to restart the program
+            settingsChange(mainMenu, restartToApplyChangesButton, getOutOfSettingsMenu);
+
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran windowedWindowModeButton event handler");
@@ -650,6 +699,7 @@ public class Main extends Application {
         root.getChildren().add(mainMenu);
         dbgAlert("added mainMenu to root");
         Scene scene = new Scene(root);
+        dbgAlert("new Scene scene");
         dbgAlert("added root to scene");
         stage.setScene(scene);
         dbgAlert("set stage scene to scene");
