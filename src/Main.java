@@ -370,7 +370,21 @@ public class Main extends Application {
             } else {
                 //name matched regex, so here's where I can implement the additional save stuff and eventually loading a new game
                 dbgAlert("Name matched regex, proceeding with further new game stuff");
-                
+
+                //!!!!!!!!!!!!!!!!THIS IS WHERE I LEFT OFF LAST TIME!!!!!!!!!!!!!!!
+                //to-do:
+                //1. Change capitalization of name to first letter being uppercase and all other letters are lowercase
+                //2. check if a save with that name already exists
+                //3. if not, try to make a new save
+                //4. if able to write a new save file, save it as name.save, i.e. Joe.save
+                //5. let player know where the save file is (saves/name.save)
+                //6. the save file will eventually be structured as XML
+                //7. think about making different java classes for the player, and for the world map
+                //8. also need to make a world map XML file that can be loaded
+                //9. and some basic images for grass (passable), rocks (can't be moved through), and the player
+                //loading can't be hard-coded into the "new" menu feature because it also needs to apply to the "continue" menu feature
+                //JAR build/artifact stuff might be more complicated with multiple classes but I'll have to sort that out
+
             }
 
             dbgAlert("Ran submitNameButton event handler");
