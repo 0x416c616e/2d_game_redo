@@ -723,7 +723,6 @@ public class Main extends Application {
                 //name matched regex, so here's where I can implement the additional save stuff and eventually loading a new game
                 dbgAlert("Name matched regex, proceeding with further new game stuff");
 
-                //!!!!!!!!!!!!!!!!THIS IS WHERE I LEFT OFF LAST TIME!!!!!!!!!!!!!!!
                 //1. Change capitalization of name to first letter being uppercase and all other letters are lowercase
                 String playerName = nameField.getText().toLowerCase();
                 playerName = playerName.toUpperCase().charAt(0) + playerName.substring(1, playerName.length());
@@ -751,7 +750,7 @@ public class Main extends Application {
                         dbgAlert("new Player player");
                         dbgAlert("player.getName(): " + player.getName());
 
-                        //4.5 parse XML and set the Player name
+                        //5. parse XML and set the Player name
                         //game.save files are all just xml but with a different extension
                         updateUniquePlayerXMLField(player, "playerName", player.getName());
 
@@ -761,13 +760,12 @@ public class Main extends Application {
                     }
                 }
 
-                //5. let player know where the save file is (saves/name.save)
-                //6. the save file will eventually be structured as XML
+                //!!!!!!!!!!!!!!!!!!!!!!!!!THIS IS WHERE I LEFT OFF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //6. let player know where the save file is (saves/name.save)
                 //7. think about making different java classes for the player, and for the world map
                 //8. also need to make a world map XML file that can be loaded
                 //9. and some basic images for grass (passable), rocks (can't be moved through), and the player
                 //loading can't be hard-coded into the "new" menu feature because it also needs to apply to the "continue" menu feature
-                //JAR build/artifact stuff might be more complicated with multiple classes but I'll have to sort that out
 
             }
 
