@@ -1,6 +1,9 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -223,6 +226,26 @@ public class Main extends Application {
         }
     }
 
+    //load the resolution setting from settings/resolution.txt
+    public String getResolution() {
+        dbgAlert("running getResolution() method");
+        File resolutionSettingsfile = new File("settings/resolution.txt");
+        dbgAlert("new File resolutionSettingsFile");
+        Scanner resolutionSettingsIn;
+        try {
+            resolutionSettingsIn = new Scanner(resolutionSettingsfile);
+            dbgAlert("new Scanner resolutionSettingsIn");
+            String resolutionSetting = resolutionSettingsIn.next();
+            return resolutionSetting;
+        } catch (FileNotFoundException ex) {
+            dbgAlert("FileNotFoundException for getResolution");
+            ex.printStackTrace();
+        }
+        dbgAlert("error with getResolution()");
+        return "error";
+
+    }
+
 
     //what happens in JavaFX before the window is opened
     @Override
@@ -277,7 +300,7 @@ public class Main extends Application {
         //size for fonts (this is intended for small tablets with high DPI so big text is necessary)
         final double FONT_SIZE = 30.0;
         //this font is used for menu text and whatnot
-        Font standardFont = new Font(FONT_SIZE);
+        Font standardFont = new Font("Arial", FONT_SIZE);
         dbgAlert("new Font standardFont");
         //getting settings for controls and window mode from config files
         String controls = getControlStatus();
@@ -287,8 +310,28 @@ public class Main extends Application {
         }
         //Basic window stuff
         stage.setTitle("2D RPG written in Java");
-        stage.setWidth(1280);
-        stage.setHeight(800);
+        String currentResolution = getResolution();
+        switch (currentResolution) {
+            case "1280x720":
+                stage.setWidth(1280);
+                stage.setHeight(720);
+                dbgAlert("resolution is 1280x720");
+                break;
+            case "1280x800":
+                stage.setWidth(1280);
+                stage.setHeight(800);
+                dbgAlert("resolution is 1280x800");
+                break;
+            case "1920x1080":
+                stage.setWidth(1920);
+                stage.setHeight(1080);
+                dbgAlert("resolution is 1920x1080");
+                break;
+            default:
+                dbgAlert("resolution configuration error with value: " + currentResolution);
+                break;
+        }
+
         stage.setResizable(false);
         //root stackpane used for stacking stuff on top i.e. a menu on top of something else in the window
         StackPane root = new StackPane();
@@ -813,6 +856,39 @@ public class Main extends Application {
         });
 
 
+        //resolution options
+        Label resolutionLabel = new Label("Resolution");
+        dbgAlert("new Label resolutionLabel");
+        resolutionLabel.setLayoutX(700);
+        resolutionLabel.setLayoutY(150);
+        resolutionLabel.setFont(standardFont);
+
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "1280x720",
+                        "1280x800",
+                        "1920x1080"
+                );
+        final ComboBox resolutionComboBox = new ComboBox(options);
+        resolutionComboBox.setStyle("-fx-font: 30px \"Arial\";");
+        dbgAlert("new ComboBox resolutionComboBox");
+        resolutionComboBox.setLayoutX(700);
+        resolutionComboBox.setLayoutY(200);
+        switch (currentResolution) {
+            case "1280x720":
+                resolutionComboBox.getSelectionModel().select(0);
+                break;
+            case "1280x800":
+                resolutionComboBox.getSelectionModel().select(1);
+                break;
+            case "1920x1080":
+                resolutionComboBox.getSelectionModel().select(2);
+                break;
+            default:
+                dbgAlert("error with fetching resolution for combobox");
+                break;
+        }
+
 
         settingsButton.setOnAction(e -> {
             dbgAlert("running settingsButton event handler");
@@ -822,6 +898,8 @@ public class Main extends Application {
             dbgAlert("controlsText, keyboardControlsbutton, touchscreenControlsbutton, currentControlsText, and controlsStatusFromFile added to mainMenu");
             mainMenu.getChildren().addAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
             dbgAlert("windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, and windowModeStatusFromFile added to mainMenu");
+            mainMenu.getChildren().addAll(resolutionLabel, resolutionComboBox);
+            dbgAlert("resolutionLabel and resolutionComboBox added to mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran settingsButton event handler");
@@ -835,6 +913,8 @@ public class Main extends Application {
             dbgAlert("controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, and controlsStatusFromFile removed from mainMenu");
             mainMenu.getChildren().removeAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
             dbgAlert("windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, and windowModeStatusFromFile removed from mainMenu");
+            mainMenu.getChildren().removeAll(resolutionLabel, resolutionComboBox);
+            dbgAlert("resolutionLabel and resolutionComboBox removed from mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran getOutOfSettingsMenu event handler");
