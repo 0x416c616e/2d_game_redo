@@ -76,6 +76,16 @@ public class Main extends Application {
         //itself change anything
     }
 
+    //pseudo-breakpoint functionality to pause program for user-specified duration
+    //because otherwise you'll see the debug feed go by super fast
+    public void setBreakpoint(int duration){
+        try {
+            Thread.sleep(duration);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     //methods getting or setting controls status (keyboard or touchscreen)
 
     //get whether the controls are touchscreen or keyboard

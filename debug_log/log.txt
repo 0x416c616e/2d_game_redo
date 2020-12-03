@@ -1659,3 +1659,118 @@ newSaveKeyboard[25] removed from mainMenu
 touchscreenNameBackspcaeButton removed from mainMenu
 ran getOutOfNewMenu event handler
 running quitButton event handler
+new Font standardFont
+ran getControlStatus()
+new File controlSettingsFile
+Opened File settings/controls.txt
+new Scanner controlSettingsIn
+Successfully get controlStatus with controlSettingsIn
+status value is: touchscreen
+ran getWindowModeStatus() method
+new File windowModeSettingsFile
+Opening file settings/window_mode.txt
+new Scanner windowModeSettingsIn
+successfully got windowModeStatus
+windowModeStatus is windowed
+new StackPane root
+new Pane mainMenu
+new Image menuBackground
+new ImageView menuBackgroundView
+menuBackgroundView added to mainMenu
+new Label label1
+new Button newButton
+new Button continueButton
+new button aboutButton
+new Button settingsButton
+new Button controlsButton
+new Button quitButton
+Moving on to event handler code
+trying to open assets/blank.png
+new Image tempBackground
+new ImageView tempBackgroundView
+opened assets/blank.png
+new Label enterNameLabel
+new TextField nameField
+new Button submitNameButton
+new Button[] newSaveKeyboard
+You are playing with touchscreen controls
+new Button newSaveKeyboard[0]
+new Button newSaveKeyboard[1]
+new Button newSaveKeyboard[2]
+new Button newSaveKeyboard[3]
+new Button newSaveKeyboard[4]
+new Button newSaveKeyboard[5]
+new Button newSaveKeyboard[6]
+new Button newSaveKeyboard[7]
+new Button newSaveKeyboard[8]
+new Button newSaveKeyboard[9]
+new Button newSaveKeyboard[10]
+new Button newSaveKeyboard[11]
+new Button newSaveKeyboard[12]
+new Button newSaveKeyboard[13]
+new Button newSaveKeyboard[14]
+new Button newSaveKeyboard[15]
+new Button newSaveKeyboard[16]
+new Button newSaveKeyboard[17]
+new Button newSaveKeyboard[18]
+new Button newSaveKeyboard[19]
+new Button newSaveKeyboard[20]
+new Button newSaveKeyboard[21]
+new Button newSaveKeyboard[22]
+new Button newSaveKeyboard[23]
+new Button newSaveKeyboard[24]
+new Button newSaveKeyboard[25]
+new Pattern namePattern
+new ImageView nameErrorBackground
+new Text nameErrorText
+new Button closeNameErrorButton
+new Button getOutOfNewMenu
+new Button touchscreenNameBackspacebutton
+got to continueButton code
+new FileChooser saveChooser
+new FileChooser.ExtensionFilter saveFilter
+Got to about button code
+new Button getOutOfAboutMenu
+new Text aboutText
+Got to settings menu code
+new Text settingsText
+new Text settingsNoteText
+new Button getOutOfSettingsMenu
+new Text controlText
+new Button keyboardControlsButton
+new Border activeBorder
+new Button touchscreenControlsButton
+new Text currentControlsText
+ran getControlStatus()
+new File controlSettingsFile
+Opened File settings/controls.txt
+new Scanner controlSettingsIn
+Successfully get controlStatus with controlSettingsIn
+status value is: touchscreen
+new Text controlsStatusFromFile
+new Button restartToApplyChangesButton
+new Text windowModeText
+new Button fulscreenWindowModeButton
+new Button windowedWindowModeButton
+new Text currentWindowModeText
+ran getWindowModeStatus() method
+new File windowModeSettingsFile
+Opening file settings/window_mode.txt
+new Scanner windowModeSettingsIn
+successfully got windowModeStatus
+windowModeStatus is windowed
+new Text windowModeStatusFromFile
+new Text controlsMenuText
+new Button getOutOfControlsMenu
+new Label debugModeLabel
+new Button debugModeButton
+new Button clearDebugLogButton
+new button enableDebugLogButton
+label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, and quitButton added to mainMenu
+added debugModeButton clearDebugLogbutton, and enableDebugLogButton to mainMenu
+added mainMenu to root
+new Scene scene
+added root to scene
+set stage scene to scene
+stage.show()
+running quitButton event handler
