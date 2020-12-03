@@ -11,6 +11,8 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import org.apache.commons.io.FileUtils;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -598,6 +600,17 @@ public class Main extends Application {
                     mainMenu.getChildren().addAll(newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, newGameNameAlreadyExistsButton);
                 } else {
                     dbgAlert("Save with that name doesn't already exist, therefore it can be made");
+                    File saveTemplateSource = new File("templates/save_template.xml");
+                    dbgAlert("new File saveTemplateSource");
+                    dbgAlert("attempting to create new game save");
+                    try {
+                        //from Apache Commons IO library
+                        FileUtils.copyFile(saveTemplateSource, newSaveFile);
+                        dbgAlert("copied save template to new game save");
+                    } catch (IOException ex) {
+                        dbgAlert("error with creating new save file");
+                        ex.printStackTrace();
+                    }
                 }
                 //3. if not, try to make a new save
                 //4. if able to write a new save file, save it as name.save, i.e. Joe.save
