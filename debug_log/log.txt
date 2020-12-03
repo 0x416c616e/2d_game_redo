@@ -1,0 +1,24 @@
+debug log has been cleared
+ran clearDebugLogButton event handler
+running controlsButton event handler
+tempBackgroundView, controlsMenuText, and getOutOfControlsmenu added to mainMenu
+ran controlsButton event handler
+running getOutOfControlsMenu event handler
+tempBackgroundView, controlsMenuText, and getOutOfControlsMenu removed from mainMenu
+ran getOutOfControlsMenu event handler
+running settingsButton event handler
+tempBackgroundView, settingsText, settingsNoteText, and getOutOfSettingsMenu added to mainMenu
+controlsText, keyboardControlsbutton, touchscreenControlsbutton, currentControlsText, and controlsStatusFromFile added to mainMenu
+windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, and windowModeStatusFromFile added to mainMenu
+ran settingsButton event handler
+running getOutOfSettingsMenu event handler
+tempBackgroundView, settingsText, settingsNoteText, and getOutOfSettingsMenu removed from mainMenu
+controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, and controlsStatusFromFile removed from mainMenu
+windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, and windowModeStatusFromFile removed from mainMenu
+ran getOutOfSettingsMenu event handler
+Running continueButton event handler
+new File selectedGameSave
+Player did not select a game save to load
+This feature is not finished yet
+Ran continueButton event handler
+running quitButton event handler

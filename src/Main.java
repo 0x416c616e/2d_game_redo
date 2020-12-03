@@ -12,9 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -22,7 +20,10 @@ import java.util.regex.Matcher;
 //if you want to see where most stuff happens, scroll down to the init() method
 public class Main extends Application {
     //this prints out helpful information if enabled
-    boolean debugMode = false;
+    boolean debugMode = true;
+    //if this is true, it will log debugging info to a file called debug_log.txt
+    boolean logDebugging = false;
+    //both of the above booleans should be false, unless you want to see debug info about the STARTUP of the program
 
     //if debug mode is enabled, dbgAlert will print a message
     //containing info about the code that either is about to run
@@ -32,8 +33,23 @@ public class Main extends Application {
     public void dbgAlert(String message) {
         if (debugMode) {
             System.out.println(message);
-            message = null;
             System.gc();
+        }
+        //logging debug info to file
+        if (logDebugging == true) {
+            File debugLogFile = new File("debug_log/log.txt");
+            FileWriter myfileWriter = null;
+            try {
+                FileWriter myFileWriter = new FileWriter(debugLogFile, true);
+                //the second boolean argument means appending mode is true
+                PrintWriter debugFileOut = new PrintWriter(myFileWriter);
+                debugFileOut.write(message + "\n");
+                debugFileOut.close();
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            } catch (IOException ioex) {
+                ioex.printStackTrace();
+            }
         }
     }
     //use dbgAlert for the following:
@@ -172,6 +188,28 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         dbgAlert("running start() method");
+
+        //check if debug logging is enabled or not
+        Scanner loggingSettingsIn = null;
+        dbgAlert("new Scanner loggingSettingsIn");
+        File debugLoggingFile = new File("settings/debug_logging_option.txt");
+        dbgAlert("new File debugLoggingFile");
+        try {
+            dbgAlert("opened debug_logging_option.txt");
+            loggingSettingsIn = new Scanner(debugLoggingFile);
+            dbgAlert("new Scanner controlSettingsIn");
+            String debugLoggingOption = loggingSettingsIn.next();
+            dbgAlert("value of debugLoggingOption: " + debugLoggingOption);
+            if (debugLoggingOption.equals("true")) {
+                dbgAlert("Logging debug info to debug_log/log.txt");
+                logDebugging = true;
+            }
+            loggingSettingsIn.close();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+
         //size for fonts (this is intended for small tablets with high DPI so big text is necessary)
         final double FONT_SIZE = 30.0;
         //this font is used for menu text and whatnot
@@ -245,7 +283,10 @@ public class Main extends Application {
         quitButton.setLayoutX(50);
         quitButton.setLayoutY(550);
 
+
+
         dbgAlert("Moving on to event handler code");
+
         //event handlers for main menu buttons
 
         //overlay to cover up other stuff on the screen
@@ -789,15 +830,42 @@ public class Main extends Application {
             System.gc();
             dbgAlert("ran debugModeButton event handler");
         });
+
         //^end of debug mode button
+
+        //clear debug log button
+        Button clearDebugLogButton = new Button("Clear Debug Log");
+        dbgAlert("new Button clearDebugLogButton");
+        clearDebugLogButton.setFont(standardFont);
+        clearDebugLogButton.setLayoutX(900);
+        clearDebugLogButton.setLayoutY(275);
+        clearDebugLogButton.setOnAction(e -> {
+            dbgAlert("Running clearDebugLogButton event handler");
+            try {
+                dbgAlert("Clearing debug log");
+                File debugFile = new File("debug_log/log.txt");
+
+                PrintWriter debugOut = new PrintWriter(debugFile);
+                //overwrites the contents of debug_log/log.txt but doesn't add anything new to it
+                //effectively just clearing it out
+                debugOut.write("");
+
+                debugOut.close();
+                dbgAlert("debug log has been cleared");
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            dbgAlert("ran clearDebugLogButton event handler");
+        });
+        //^end of debug log button
 
         //adding menu items to the menu
         mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton);
         dbgAlert("label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, and quitButton added to mainMenu");
 
         //debug button, take this out before publishing the game
-        mainMenu.getChildren().add(debugModeButton);
-        dbgAlert("added debugModeButton to mainMenu");
+        mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton);
+        dbgAlert("added debugModeButton and clearDebugLogbutton to mainMenu");
 
         //adding stuff to the window
         root.getChildren().add(mainMenu);
