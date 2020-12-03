@@ -2,10 +2,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -709,22 +706,37 @@ public class Main extends Application {
         dbgAlert("new Button getOutOfAboutMenu");
         getOutOfAboutMenu.setFont(standardFont);
         getOutOfAboutMenu.setLayoutX(50);
-        getOutOfAboutMenu.setLayoutY(300);
+        getOutOfAboutMenu.setLayoutY(400);
 
 
         Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!" +
                 "\nThis game has big text and the option to use touchscreen controls because it's intended\n" +
-                "for small tablets with 1280x800 resolution screens, though you can also play in\nwindowed mode with keyboard controls.");
+                "for small tablets with 1280x800 resolution screens, though you can also play with keyboard\ncontrols, " +
+                "and the game also supports 720p and 1080p, all either windowed or fullscreen.\n\nThe creator's website is here:");
         dbgAlert("new Text aboutText");
         aboutText.setFont(standardFont);
         aboutText.setLayoutX(50);
         aboutText.setLayoutY(50);
 
+
+        //the about page also has a link to my website
+        Hyperlink websiteLink = new Hyperlink();
+        dbgAlert("new Hyperlink websiteLink");
+        websiteLink.setLayoutX(50);
+        websiteLink.setLayoutY(300);
+        websiteLink.setFont(standardFont);
+        websiteLink.setText("https://saintlouissoftware.com");
+        websiteLink.setOnAction(e -> {
+            dbgAlert("running websiteLink event handler");
+            getHostServices().showDocument(websiteLink.getText());
+            dbgAlert("ran website:ink event handler");
+        });
+
         //lambdas for opening and closing the about menu
         aboutButton.setOnAction(e -> {
             dbgAlert("Running aboutButton event handler");
-            mainMenu.getChildren().addAll(tempBackgroundView, aboutText, getOutOfAboutMenu);
-            dbgAlert("tempBackgroundView, aboutText, and getOutOfAboutMenu added to mainMenu");
+            mainMenu.getChildren().addAll(tempBackgroundView, aboutText, websiteLink, getOutOfAboutMenu);
+            dbgAlert("tempBackgroundView, aboutText, websiteLink, and getOutOfAboutMenu added to mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("Ran aboutButton event handler");
@@ -732,8 +744,8 @@ public class Main extends Application {
 
         getOutOfAboutMenu.setOnAction(e -> {
             dbgAlert("Running getOutOfAboutMenu event handler");
-            mainMenu.getChildren().removeAll(tempBackgroundView, aboutText, getOutOfAboutMenu);
-            dbgAlert("tempBackgroundView, aboutText, and getOutOfAboutMenu removed from mainMenu");
+            mainMenu.getChildren().removeAll(tempBackgroundView, aboutText, websiteLink, getOutOfAboutMenu);
+            dbgAlert("tempBackgroundView, aboutText, websiteLink, and getOutOfAboutMenu removed from mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("Ran getOutOfAboutMenu event handler");
