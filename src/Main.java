@@ -550,6 +550,26 @@ public class Main extends Application {
 
 
 
+
+        //these are assets for if the player enters in a name for a new game
+        //but a game save with that name already exists, and thus they can't proceed
+        ImageView newGameNameAlreadyExistsImageView = new ImageView(tempBackground);
+        dbgAlert("new ImageView newGameNameAlreadyExistsImageView");
+        Text newGameNameAlreadyExistsText = new Text("Error: a save with that name already exists. Try another name.");
+        dbgAlert("new Text newGameNameAlreadyExistsText");
+        newGameNameAlreadyExistsText.setFont(standardFont);
+        newGameNameAlreadyExistsText.setLayoutX(50);
+        newGameNameAlreadyExistsText.setLayoutY(50);
+        Button newGameNameAlreadyExistsButton = new Button("OK");
+        dbgAlert("new Button newGameNameAlreadyExistsButton");
+        newGameNameAlreadyExistsButton.setFont(standardFont);
+        newGameNameAlreadyExistsButton.setLayoutX(50);
+        newGameNameAlreadyExistsButton.setLayoutY(100);
+        newGameNameAlreadyExistsButton.setOnAction(e -> {
+            mainMenu.getChildren().removeAll(newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, newGameNameAlreadyExistsButton);
+            dbgAlert("newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, and newGameNameAlreadyExistsButton removed from mainMenu");
+        });
+
         //clicking button to submit new save game with desired name
         submitNameButton.setOnAction(e -> {
             dbgAlert("Running submitNameButton event handler");
@@ -575,6 +595,7 @@ public class Main extends Application {
                 Boolean saveAlreadyExists = newSaveFile.exists();
                 if (saveAlreadyExists) {
                     dbgAlert("Save with that name already exists, therefore can't make it with that name");
+                    mainMenu.getChildren().addAll(newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, newGameNameAlreadyExistsButton);
                 } else {
                     dbgAlert("Save with that name doesn't already exist, therefore it can be made");
                 }
