@@ -1,4 +1,9 @@
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.util.Scanner;
@@ -492,6 +498,10 @@ public class Main extends Application {
 
         newButton.setOnAction(e -> {
             dbgAlert("Running newButton event handler");
+
+
+
+
             mainMenu.getChildren().addAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
             dbgAlert("tempBackgroundView, enterNameLabel, nameField, submitNameButton, and getOutOfNewMenu added to mainMenu");
             if (controls.equals("touchscreen")) {
@@ -818,6 +828,13 @@ public class Main extends Application {
 
         //^end of quit button
 
+        //Label for info about debug mode
+        Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
+        dbgAlert("new Label debugModeLabel");
+        debugModeLabel.setFont(standardFont);
+        debugModeLabel.setLayoutX(900);
+        debugModeLabel.setLayoutY(100);
+
         //debug mode button
         Button debugModeButton = new Button("Enable Debug Mode");
         dbgAlert("new Button debugModeButton");
@@ -829,6 +846,10 @@ public class Main extends Application {
             enableDebugMode();
             System.gc();
             dbgAlert("ran debugModeButton event handler");
+            if (!mainMenu.getChildren().contains(debugModeLabel)) {
+                mainMenu.getChildren().add(debugModeLabel);
+                dbgAlert("debugModeLabel added to mainMenu");
+            }
         });
 
         //^end of debug mode button
@@ -859,13 +880,29 @@ public class Main extends Application {
         });
         //^end of debug log button
 
+        //enable debug log button for toggling debug logging on or off
+        //logs debug info to debug_log/log.txt
+        Button enableDebugLogButton = new Button("Enable Debug Logging");
+        dbgAlert("new button enableDebugLogButton");
+        enableDebugLogButton.setFont(standardFont);
+        enableDebugLogButton.setLayoutX(900);
+        enableDebugLogButton.setLayoutY(350);
+        enableDebugLogButton.setOnAction(e -> {
+            dbgAlert("Running enableDebugLogButton event handler");
+
+
+            dbgAlert("Ran enableDebugLogButton event handler");
+        });
+
+        //^end of debug log button
+
         //adding menu items to the menu
         mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton);
         dbgAlert("label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, and quitButton added to mainMenu");
 
         //debug button, take this out before publishing the game
-        mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton);
-        dbgAlert("added debugModeButton and clearDebugLogbutton to mainMenu");
+        mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton, enableDebugLogButton);
+        dbgAlert("added debugModeButton clearDebugLogbutton, and enableDebugLogButton to mainMenu");
 
         //adding stuff to the window
         root.getChildren().add(mainMenu);
