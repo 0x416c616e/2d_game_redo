@@ -357,6 +357,10 @@ public class Main extends Application {
             System.gc();
         });
 
+
+
+
+
         //clicking button to submit new save game with desired name
         submitNameButton.setOnAction(e -> {
             dbgAlert("Running submitNameButton event handler");
@@ -372,8 +376,10 @@ public class Main extends Application {
                 dbgAlert("Name matched regex, proceeding with further new game stuff");
 
                 //!!!!!!!!!!!!!!!!THIS IS WHERE I LEFT OFF LAST TIME!!!!!!!!!!!!!!!
-                //to-do:
                 //1. Change capitalization of name to first letter being uppercase and all other letters are lowercase
+                String playerName = nameField.getText().toLowerCase();
+                playerName = playerName.toUpperCase().charAt(0) + playerName.substring(1, playerName.length());
+                dbgAlert("playerName: " + playerName);
                 //2. check if a save with that name already exists
                 //3. if not, try to make a new save
                 //4. if able to write a new save file, save it as name.save, i.e. Joe.save
