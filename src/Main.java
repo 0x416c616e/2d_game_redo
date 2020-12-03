@@ -15,6 +15,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -226,6 +229,45 @@ public class Main extends Application {
         }
     }
 
+    //this is a helper function for setResolution to make its body less repetitive
+    public void writeResolution(String res) {
+        dbgAlert("running writeResolution method");
+        File resolutionModeSettingsFile = new File("settings/resolution.txt");
+        dbgAlert("new File resolutionModeSettingsFile");
+        try {
+            PrintWriter resolutionFileOut = new PrintWriter(resolutionModeSettingsFile);
+            dbgAlert("new PrintWriter resolutionFileOut");
+            List<String> resolutionList = List.of("1280x720", "1280x800", "1920x1080");
+            //check if provided resolution is one of the three valid ones
+            if (resolutionList.contains(res)) {
+                dbgAlert("valid resolution arg provided for writeResolution");
+                resolutionFileOut.write(res);
+            }
+            resolutionFileOut.close();
+
+            } catch (IOException ioex) {
+            dbgAlert("IOException with writeResolution");
+            ioex.printStackTrace();
+        }
+        dbgAlert("ran writeResolution method");
+    }
+
+    //change the resolution setting in settings/resolution.txt
+    public void setResolution(String res) {
+        dbgAlert("running setResolution method");
+        switch (res) {
+            case "1280x720":
+            case "1280x800":
+            case "1920x1080":
+                writeResolution(res);
+                break;
+            default:
+                dbgAlert("error with setResolution method with res arg: " + res);
+                break;
+        }
+        dbgAlert("ran setResolution method");
+    }
+
     //load the resolution setting from settings/resolution.txt
     public String getResolution() {
         dbgAlert("running getResolution() method");
@@ -243,8 +285,9 @@ public class Main extends Application {
         }
         dbgAlert("error with getResolution()");
         return "error";
-
     }
+
+
 
 
     //what happens in JavaFX before the window is opened
@@ -888,6 +931,33 @@ public class Main extends Application {
                 dbgAlert("error with fetching resolution for combobox");
                 break;
         }
+        resolutionComboBox.setOnAction(e -> {
+            //all this does is log that it got clicked, but for UI purposes, it lets the user change the active resolution choice
+            //but the way the resolution is changed is through clicking the changeResolutionButton, which then gets the selected item in
+            //the resolutionComboBox
+            dbgAlert("running resolutionComboBox event handler");
+            dbgAlert("ran resolutionComboBox event handler");
+            System.gc();
+        });
+
+        Button changeResolutionButton = new Button("Change Resolution");
+        dbgAlert("new button changeResolutionButton");
+        changeResolutionButton.setFont(standardFont);
+        changeResolutionButton.setLayoutX(700);
+        changeResolutionButton.setLayoutY(300);
+        changeResolutionButton.setOnAction(e -> {
+            dbgAlert("running changeResolutionButton event handler");
+            String newResolutionSelection = resolutionComboBox.getSelectionModel().getSelectedItem().toString();
+            dbgAlert("Resolution string: " + newResolutionSelection);
+            setResolution(newResolutionSelection);
+            if (mainMenu.getChildren().contains(getOutOfSettingsMenu)) {
+                mainMenu.getChildren().remove(getOutOfSettingsMenu);
+                mainMenu.getChildren().add(restartToApplyChangesButton);
+            }
+            dbgAlert("ran changeResolutionButton event handler");
+            System.gc();
+        });
+
 
 
         settingsButton.setOnAction(e -> {
@@ -898,8 +968,8 @@ public class Main extends Application {
             dbgAlert("controlsText, keyboardControlsbutton, touchscreenControlsbutton, currentControlsText, and controlsStatusFromFile added to mainMenu");
             mainMenu.getChildren().addAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
             dbgAlert("windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, and windowModeStatusFromFile added to mainMenu");
-            mainMenu.getChildren().addAll(resolutionLabel, resolutionComboBox);
-            dbgAlert("resolutionLabel and resolutionComboBox added to mainMenu");
+            mainMenu.getChildren().addAll(resolutionLabel, resolutionComboBox, changeResolutionButton);
+            dbgAlert("resolutionLabel, resolutionComboBox, and changeResolutionButton added to mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran settingsButton event handler");
@@ -913,8 +983,8 @@ public class Main extends Application {
             dbgAlert("controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, and controlsStatusFromFile removed from mainMenu");
             mainMenu.getChildren().removeAll(windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, windowModeStatusFromFile);
             dbgAlert("windowModeText, fullscreenWindowModeButton, windowedWindowModeButton, currentWindowModeText, and windowModeStatusFromFile removed from mainMenu");
-            mainMenu.getChildren().removeAll(resolutionLabel, resolutionComboBox);
-            dbgAlert("resolutionLabel and resolutionComboBox removed from mainMenu");
+            mainMenu.getChildren().removeAll(resolutionLabel, resolutionComboBox, changeResolutionButton);
+            dbgAlert("resolutionLabel, resolutionComboBox, and changeResolutionButton removed from mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
             System.gc();
             dbgAlert("ran getOutOfSettingsMenu event handler");
