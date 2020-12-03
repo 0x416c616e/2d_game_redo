@@ -14,13 +14,10 @@ import javafx.scene.text.Text;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-
-import javax.xml.crypto.dsig.TransformException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -138,22 +135,28 @@ public class Main extends Application {
 
 
     //if there is a uniquely-named field in an XML file, then this method can replace the contents with a new value
-    //example: updateUniqueXMLField(player, playerName, "Bob") will update the player's save file to say "bob"
-    public void updateUniquePlayerXMLField(Player player, String fieldToUpdate, String newValue) {
+    //example: updateUniqueXMLField(player, playerName, "Bob", "saves/Test.save") will update the player's save file to say "bob"
+    public void updateUniquePlayerXMLField(Player player, String fieldToUpdate, String newValue, String filename) {
+        dbgAlert("running updateUniquePlayerXMLField");
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         try {
-            String saveFileName = "saves/" + player.getName() + ".save";
+            String saveFileName = filename;
             DocumentBuilder b = f.newDocumentBuilder();
+            dbgAlert("new DocumentBuilder b");
             //it's an XML document but ends in .save instead of .xml
             Document doc = b.parse(new File(saveFileName));
             dbgAlert("new Document doc");
             Node playerNameInSaveFile = doc.getElementsByTagName(fieldToUpdate).item(0);
+            dbgAlert("new Bode playerNameInSaveFile");
             playerNameInSaveFile.setTextContent(newValue);
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            dbgAlert("new TransformerFactory transformerFactory");
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
+            dbgAlert("new DOMSource source");
             StreamResult result = new StreamResult(new File(saveFileName));
+            dbgAlert("new StreamResult result");
             transformer.transform(source, result);
 
         } catch(ParserConfigurationException pc) {
@@ -169,6 +172,7 @@ public class Main extends Application {
             dbgAlert("IOException with");
             ioe.printStackTrace();
         }
+        dbgAlert("ran updateUniquePlayerXMLField");
     }
 
     //if debug mode is enabled, dbgAlert will print a message
@@ -210,6 +214,7 @@ public class Main extends Application {
 
     //debugMode is only useful for developing and seeing additional info printed out to the console
     public void enableDebugMode() {
+        dbgAlert("running enableDebugMode");
         debugMode = true;
         System.out.println("Debug mode has been enabled.");
         System.out.println("To turn it off, just restart the game.");
@@ -289,8 +294,6 @@ public class Main extends Application {
             dbgAlert("new Scanner controlSettingsIn");
             String status = controlSettingsIn.next();
             controlSettingsIn.close();
-            controlSettingsIn = null;
-            controlSettingsFile = null;
             dbgAlert("Successfully get controlStatus with controlSettingsIn");
             dbgAlert("status value is: " + status);
             return status;
@@ -757,7 +760,8 @@ public class Main extends Application {
 
                         //5. parse XML and set the Player name
                         //game.save files are all just xml but with a different extension
-                        updateUniquePlayerXMLField(player, "playerName", player.getName());
+                        String saveFileName = "saves/" + player.getName() + ".save";
+                        updateUniquePlayerXMLField(player, "playerName", player.getName(), saveFileName);
 
                     } catch (IOException ex) {
                         dbgAlert("error with creating new save file");
@@ -1359,8 +1363,11 @@ public class Main extends Application {
 
     //JavaFX boilerplate main
     public static void main(String[] args) {
-        System.out.println(args.length);
+        //System.out.println(args.length);
         if (args.length > 0 && args[0].equals("--debug")) {
+            //debugModeFlag does not mean debug mode is enabled
+            //it means you have the CAPABILITY to enable debug mode
+            //because a normal player doesn't want to see developer options
             debugModeFlag = true;
             System.out.println("debugModeFlag = true");
         }
