@@ -280,6 +280,7 @@ public class Main extends Application {
         Button[] newSaveKeyboard = new Button[26];
         dbgAlert("new Button[] newSaveKeyboard");
 
+        //adding touchscreen buttons for player name input
         if (controls.equals("touchscreen")) {
             dbgAlert("You are playing with touchscreen controls");
             //adding touchscreen keyboard to the screen
@@ -381,6 +382,7 @@ public class Main extends Application {
                 playerName = playerName.toUpperCase().charAt(0) + playerName.substring(1, playerName.length());
                 dbgAlert("playerName: " + playerName);
                 //2. check if a save with that name already exists
+                
                 //3. if not, try to make a new save
                 //4. if able to write a new save file, save it as name.save, i.e. Joe.save
                 //5. let player know where the save file is (saves/name.save)
@@ -405,14 +407,36 @@ public class Main extends Application {
         getOutOfNewMenu.setLayoutX(600);
         getOutOfNewMenu.setLayoutY(150);
 
+        Button touchscreenNameBackspaceButton = new Button("Backspace");
+        dbgAlert("new Button touchscreenNameBackspacebutton");
+        touchscreenNameBackspaceButton.setFont(standardFont);
+        touchscreenNameBackspaceButton.setLayoutX(750);
+        touchscreenNameBackspaceButton.setLayoutY(300);
+
+
+        //touchscreen backspace button gets rid of last character in name textfield
+        touchscreenNameBackspaceButton.setOnAction(e -> {
+            //don't try to remove a character if there are no characters in the name field
+            if (nameField.getText().length() > 0) {
+                nameField.setText(nameField.getText().substring(0, nameField.getText().length() - 1));
+                dbgAlert("nameField: " + nameField.getText());
+            } else {
+                dbgAlert("nameField is empty, therefore can't use backspace");
+            }
+        });
+
         getOutOfNewMenu.setOnAction(e -> {
             dbgAlert("running getOutOfNewMenu event handler");
             mainMenu.getChildren().removeAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
             dbgAlert("tempBackgroundView, enterNameLavel, nameField, submitNameButton, and getOutOfNewMenu removed from mainMenu");
             if (controls.equals("touchscreen")) {
                 for (int i = 0; i < 26; i++) {
-                    mainMenu.getChildren().removeAll(newSaveKeyboard[i]);
+                    mainMenu.getChildren().remove(newSaveKeyboard[i]);
+                    dbgAlert("newSaveKeyboard[" + i + "] removed from mainMenu");
+
                 }
+                mainMenu.getChildren().remove(touchscreenNameBackspaceButton);
+                dbgAlert("touchscreenNameBackspcaeButton removed from mainMenu");
             }
             dbgAlert("ran getOutOfNewMenu event handler");
             System.gc();
@@ -427,6 +451,9 @@ public class Main extends Application {
                     mainMenu.getChildren().add(newSaveKeyboard[i]);
                     dbgAlert("newSaveKeyboard[" + i + "] added to mainMenu");
                 }
+                mainMenu.getChildren().add(touchscreenNameBackspaceButton);
+                dbgAlert("touchscreenNameBackspaceButton added to mainMenu");
+
 
             }
 
