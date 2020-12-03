@@ -18,6 +18,8 @@ This is a 2D RPG. It's not finished yet.
 
 The map is 1280x800, with 80x80 pixel tiles. It has a tile-based movement system. That means it's 16x10 tiles on the screen.
 
+All you need in order to run this program is Java. But this game itself has two dependencies (aside from Java, that is): OpenJFX and the Apache Commons IO library. However, it contains both of those dependencies within it, so there is no need to install them separately.
+
 ### Creating JAR when working on this project
 
 See my repo about the JavaFX 15 template for more info.

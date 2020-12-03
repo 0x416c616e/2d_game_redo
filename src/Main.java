@@ -11,13 +11,14 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
-import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -28,6 +29,99 @@ public class Main extends Application {
     //if this is true, it will log debugging info to a file called debug_log.txt
     boolean logDebugging = false;
     //both of the above booleans should be false, unless you want to see debug info about the STARTUP of the program
+
+
+    //Apache Commons IO makes it easier for me to copy templates to saves and whatnot
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //APACHE COMMONS IO METHODS (not made by me)
+    //I had trouble setting up apache commons normally so I had to put them here in order to get it to work at all
+    //source: https://commons.apache.org/proper/commons-io/download_io.cgi
+    //License: https://www.apache.org/licenses/LICENSE-2.0
+    //I made the other code in this program, just not the Apache Commons methods
+    //but I only took a small portion out of the whole big apache commons IO library
+
+    //ACIO, not made by me
+    private static void checkFileRequirements(final File source, final File destination) throws FileNotFoundException {
+        Objects.requireNonNull(source, "source");
+        Objects.requireNonNull(destination, "target");
+        if (!source.exists()) {
+            throw new FileNotFoundException("Source '" + source + "' does not exist");
+        }
+    }
+
+    //ACIO, not made by me
+    private static void checkEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen)
+            throws IOException {
+        if (srcLen != dstLen) {
+            throw new IOException("Failed to copy full contents from '" + srcFile + "' to '" + destFile
+                    + "' Expected length: " + srcLen + " Actual: " + dstLen);
+        }
+    }
+
+    //ACIO, not made by me
+    private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
+        if (!targetFile.setLastModified(sourceFile.lastModified())) {
+            throw new IOException("Failed setLastModified on " + sourceFile);
+        }
+    }
+
+    //ACIO, not made by me
+    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
+            throws IOException {
+        if (destFile.exists() && destFile.isDirectory()) {
+            throw new IOException("Destination '" + destFile + "' exists but is a directory");
+        }
+
+        final Path srcPath = srcFile.toPath();
+        final Path destPath = destFile.toPath();
+        // On Windows, the last modified time is copied by default.
+        Files.copy(srcPath, destPath, copyOptions);
+
+        // TODO IO-386: Do we still need this check?
+        checkEqualSizes(srcFile, destFile, Files.size(srcPath), Files.size(destPath));
+        // TODO IO-386: Do we still need this check?
+        checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
+
+        if (preserveFileDate) {
+            setLastModified(srcFile, destFile);
+        }
+    }
+
+    //ACIO, not made by me
+    public static void copyFile(final File srcFile, final File destFile) throws IOException {
+        copyFile(srcFile, destFile, true);
+    }
+
+    //ACIO, not made by me
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
+            throws IOException {
+        checkFileRequirements(srcFile, destFile);
+        if (srcFile.isDirectory()) {
+            throw new IOException("Source '" + srcFile + "' exists but is a directory");
+        }
+        if (srcFile.getCanonicalPath().equals(destFile.getCanonicalPath())) {
+            throw new IOException("Source '" + srcFile + "' and destination '" + destFile + "' are the same");
+        }
+        final File parentFile = destFile.getParentFile();
+        if (parentFile != null) {
+            if (!parentFile.mkdirs() && !parentFile.isDirectory()) {
+                throw new IOException("Destination '" + parentFile + "' directory cannot be created");
+            }
+        }
+        if (destFile.exists() && destFile.canWrite() == false) {
+            throw new IOException("Destination '" + destFile + "' exists but is read-only");
+        }
+        doCopyFile(srcFile, destFile, preserveFileDate, copyOptions);
+    }
+
+    //END OF APACHE COMMONS IO STUFF (I did not write them, but I couldn't get it to work by having it as a module dependency
+    //so I had to put it here instead
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    //now on to the game code
+
+
+
 
     //if debug mode is enabled, dbgAlert will print a message
     //containing info about the code that either is about to run
@@ -605,7 +699,7 @@ public class Main extends Application {
                     dbgAlert("attempting to create new game save");
                     try {
                         //from Apache Commons IO library
-                        FileUtils.copyFile(saveTemplateSource, newSaveFile);
+                        copyFile(saveTemplateSource, newSaveFile);
                         dbgAlert("copied save template to new game save");
                     } catch (IOException ex) {
                         dbgAlert("error with creating new save file");
