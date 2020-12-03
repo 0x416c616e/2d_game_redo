@@ -1,9 +1,4 @@
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,8 +11,6 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
-
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -26,7 +19,7 @@ import java.util.regex.Matcher;
 //if you want to see where most stuff happens, scroll down to the init() method
 public class Main extends Application {
     //this prints out helpful information if enabled
-    boolean debugMode = true;
+    boolean debugMode = false;
     //if this is true, it will log debugging info to a file called debug_log.txt
     boolean logDebugging = false;
     //both of the above booleans should be false, unless you want to see debug info about the STARTUP of the program
@@ -51,9 +44,12 @@ public class Main extends Application {
                 PrintWriter debugFileOut = new PrintWriter(myFileWriter);
                 debugFileOut.write(message + "\n");
                 debugFileOut.close();
+                myFileWriter.close();
             } catch (FileNotFoundException ex) {
+                System.out.println("FileNotFoundException for dbgAlert");
                 ex.printStackTrace();
             } catch (IOException ioex) {
+                System.out.println("IOException for dbgAlert");
                 ioex.printStackTrace();
             }
         }
@@ -74,16 +70,20 @@ public class Main extends Application {
         //variables that are final or effectively final.
         //a workaround for this limitation is by calling methods rather than having the lambda expression
         //itself change anything
+        dbgAlert("ran enableDebugMode");
     }
 
     //pseudo-breakpoint functionality to pause program for user-specified duration
     //because otherwise you'll see the debug feed go by super fast
     public void setBreakpoint(int duration){
+        dbgAlert("running getBreakpoint() method");
         try {
             Thread.sleep(duration);
         } catch (InterruptedException ex) {
+            dbgAlert("InterruptedException for setBreakpoint()");
             ex.printStackTrace();
         }
+        dbgAlert("ran getBreakpoint() method");
     }
 
     //methods getting or setting controls status (keyboard or touchscreen)
@@ -91,7 +91,7 @@ public class Main extends Application {
     //get whether the controls are touchscreen or keyboard
     public String getControlStatus(){
         //when debug mode is enabled, dbgAlert displays the message, otherwise nothing happens
-        dbgAlert("ran getControlStatus()");
+        dbgAlert("running getControlStatus()");
 
         File controlSettingsFile = new File("settings/controls.txt");
         dbgAlert("new File controlSettingsFile");
@@ -108,6 +108,7 @@ public class Main extends Application {
             dbgAlert("status value is: " + status);
             return status;
         } catch (FileNotFoundException ex) {
+            dbgAlert("FileNotFoundException for getControlStatus");
             ex.printStackTrace();
         }
         controlSettingsIn = null;
@@ -118,7 +119,7 @@ public class Main extends Application {
 
     //set controls to either touchscreen or keyboard
     public void setControlStatus(String status) {
-        dbgAlert("ran setControlStatus() method with status=" + status);
+        dbgAlert("running setControlStatus() method with status=" + status);
         File controlsFile = new File("settings/controls.txt");
         dbgAlert("new File controlsFile");
         dbgAlert("Opening settings/controls.txt");
@@ -131,13 +132,14 @@ public class Main extends Application {
             fileOut = null;
             controlsFile = null;
         } catch (FileNotFoundException ex) {
+            dbgAlert("FileNotFoundException for setControlStatus");
             ex.printStackTrace();
         }
     }
 
     //get whether the game is windowed or fullscreen
     public String getWindowModeStatus() {
-        dbgAlert("ran getWindowModeStatus() method");
+        dbgAlert("running getWindowModeStatus() method");
         File windowModeSettingsFile = new File("settings/window_mode.txt");
         dbgAlert("new File windowModeSettingsFile");
         dbgAlert("Opening file settings/window_mode.txt");
@@ -153,14 +155,16 @@ public class Main extends Application {
             dbgAlert("windowModeStatus is " + status);
             return status;
         } catch (FileNotFoundException ex) {
+            dbgAlert("FileNotFoundException for getWindowModeStatus");
             ex.printStackTrace();
         }
+        dbgAlert("getWindowModeStatus error");
         return "error";
     }
 
     //set the window mode to windowed or fullscreen
     public void setWindowModeStatus(String status) {
-        dbgAlert("ran setWindowModeStatus() method with status=" + status);
+        dbgAlert("running setWindowModeStatus() method with status=" + status);
         File windowModeSettingsFile = new File("settings/window_mode.txt");
         dbgAlert("new File windowModeSettingsFile");
         dbgAlert("Opening file settings/window_mode.txt");
@@ -174,6 +178,7 @@ public class Main extends Application {
             windowModeSettingsFile = null;
             dbgAlert("successfully updated WindowStatus with fileOut/windowModeSettingsFile");
         } catch (FileNotFoundException ex) {
+            dbgAlert("FileNotFoundException for setWindowModeStatus");
             ex.printStackTrace();
         }
     }
@@ -184,6 +189,7 @@ public class Main extends Application {
     public void init() throws Exception {
         dbgAlert("running init() method");
         super.init();
+        dbgAlert("ran init() method");
     }
 
     //if changes are made in the settings menu, the user has to restart the game
@@ -198,6 +204,7 @@ public class Main extends Application {
             mainMenu.getChildren().remove(getOutOfSettingsMenu);
             dbgAlert("getOutOfSettingsMenu removed from mainMenu");
         }
+        dbgAlert("ran settingsChange");
     }
 
     //what happens during window opening etc.
@@ -222,6 +229,7 @@ public class Main extends Application {
             }
             loggingSettingsIn.close();
         } catch (FileNotFoundException ex) {
+            dbgAlert("FileNotFoundException for start() opening debug_logging_option.txt");
             ex.printStackTrace();
         }
 
@@ -480,6 +488,7 @@ public class Main extends Application {
 
         //touchscreen backspace button gets rid of last character in name textfield
         touchscreenNameBackspaceButton.setOnAction(e -> {
+            dbgAlert("running touchscreenNameBackspaceButton event handler");
             //don't try to remove a character if there are no characters in the name field
             if (nameField.getText().length() > 0) {
                 nameField.setText(nameField.getText().substring(0, nameField.getText().length() - 1));
@@ -487,6 +496,8 @@ public class Main extends Application {
             } else {
                 dbgAlert("nameField is empty, therefore can't use backspace");
             }
+            dbgAlert("ran touchscreenNameBackspaceButton event handler");
+            System.gc();
         });
 
         getOutOfNewMenu.setOnAction(e -> {
@@ -508,10 +519,6 @@ public class Main extends Application {
 
         newButton.setOnAction(e -> {
             dbgAlert("Running newButton event handler");
-
-
-
-
             mainMenu.getChildren().addAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
             dbgAlert("tempBackgroundView, enterNameLabel, nameField, submitNameButton, and getOutOfNewMenu added to mainMenu");
             if (controls.equals("touchscreen")) {
@@ -521,8 +528,6 @@ public class Main extends Application {
                 }
                 mainMenu.getChildren().add(touchscreenNameBackspaceButton);
                 dbgAlert("touchscreenNameBackspaceButton added to mainMenu");
-
-
             }
 
             //this method is not finished yet
@@ -561,6 +566,7 @@ public class Main extends Application {
                 //loading game is not yet implemented
             }
             dbgAlert("This feature is not finished yet");
+
 
 
             System.gc();
@@ -679,7 +685,7 @@ public class Main extends Application {
 
         //control buttons event handlers
         keyboardControlsButton.setOnAction(e -> {
-            dbgAlert("running keyboardControlsbutton event handler");
+            dbgAlert("running keyboardControlsButton event handler");
             setControlStatus("keyboard");
 
             //if they make changes to settings, they have to restart the program
@@ -855,11 +861,13 @@ public class Main extends Application {
             dbgAlert("running debugModeButton event handler");
             enableDebugMode();
             System.gc();
-            dbgAlert("ran debugModeButton event handler");
+
             if (!mainMenu.getChildren().contains(debugModeLabel)) {
                 mainMenu.getChildren().add(debugModeLabel);
                 dbgAlert("debugModeLabel added to mainMenu");
             }
+            dbgAlert("ran debugModeButton event handler");
+
         });
 
         //^end of debug mode button
@@ -884,9 +892,11 @@ public class Main extends Application {
                 debugOut.close();
                 dbgAlert("debug log has been cleared");
             } catch (FileNotFoundException ex) {
+                dbgAlert("FileNotFoundException for clearDebugLogbutton event handler");
                 ex.printStackTrace();
             }
             dbgAlert("ran clearDebugLogButton event handler");
+            System.gc();
         });
         //^end of debug log button
 
@@ -900,8 +910,11 @@ public class Main extends Application {
         enableDebugLogButton.setOnAction(e -> {
             dbgAlert("Running enableDebugLogButton event handler");
 
+            //where I left off
+            //not yet implemented
 
             dbgAlert("Ran enableDebugLogButton event handler");
+            System.gc();
         });
 
         //^end of debug log button
@@ -925,6 +938,7 @@ public class Main extends Application {
         //displaying the window
         stage.show();
         dbgAlert("stage.show()");
+        dbgAlert("ran start()");
 
     }
 
@@ -933,6 +947,7 @@ public class Main extends Application {
     public void stop() throws Exception {
         dbgAlert("running stop() method");
         super.stop();
+        dbgAlert("ran stop() method");
     }
 
     //JavaFX boilerplate main
