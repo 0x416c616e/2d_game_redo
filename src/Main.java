@@ -694,7 +694,49 @@ public class Main extends Application {
         });
 
 
+        Button getOutOfNewMenu = new Button("Cancel");
+        dbgAlert("new Button getOutOfNewMenu");
+        getOutOfNewMenu.setFont(standardFont);
+        getOutOfNewMenu.setLayoutX(600);
+        getOutOfNewMenu.setLayoutY(150);
 
+        Button touchscreenNameBackspaceButton = new Button("Backspace");
+        dbgAlert("new Button touchscreenNameBackspacebutton");
+        touchscreenNameBackspaceButton.setFont(standardFont);
+        touchscreenNameBackspaceButton.setLayoutX(750);
+        touchscreenNameBackspaceButton.setLayoutY(300);
+
+
+        //touchscreen backspace button gets rid of last character in name textfield
+        touchscreenNameBackspaceButton.setOnAction(e -> {
+            dbgAlert("running touchscreenNameBackspaceButton event handler");
+            //don't try to remove a character if there are no characters in the name field
+            if (nameField.getText().length() > 0) {
+                nameField.setText(nameField.getText().substring(0, nameField.getText().length() - 1));
+                dbgAlert("nameField: " + nameField.getText());
+            } else {
+                dbgAlert("nameField is empty, therefore can't use backspace");
+            }
+            dbgAlert("ran touchscreenNameBackspaceButton event handler");
+            System.gc();
+        });
+
+        getOutOfNewMenu.setOnAction(e -> {
+            dbgAlert("running getOutOfNewMenu event handler");
+            mainMenu.getChildren().removeAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
+            dbgAlert("tempBackgroundView, enterNameLavel, nameField, submitNameButton, and getOutOfNewMenu removed from mainMenu");
+            if (controls.equals("touchscreen")) {
+                for (int i = 0; i < 26; i++) {
+                    mainMenu.getChildren().remove(newSaveKeyboard[i]);
+                    dbgAlert("newSaveKeyboard[" + i + "] removed from mainMenu");
+
+                }
+                mainMenu.getChildren().remove(touchscreenNameBackspaceButton);
+                dbgAlert("touchscreenNameBackspaceButton removed from mainMenu");
+            }
+            dbgAlert("ran getOutOfNewMenu event handler");
+            System.gc();
+        });
 
 
 
@@ -716,6 +758,134 @@ public class Main extends Application {
             mainMenu.getChildren().removeAll(newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, newGameNameAlreadyExistsButton);
             dbgAlert("newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, and newGameNameAlreadyExistsButton removed from mainMenu");
         });
+
+        //some assets used in case the player makes a new game
+        ImageView newSaveGameSuccessImageView = new ImageView(tempBackground);
+        //this Text needs to be appended because you can't get the name from this scope
+        Text newSaveGameSuccessText = new Text("New game successfully created." +
+                "\nIt is located in the game folder's saves subfolder, and it's saved as: ");
+        newSaveGameSuccessText.setFont(standardFont);
+        newSaveGameSuccessText.setLayoutX(50);
+        newSaveGameSuccessText.setLayoutY(50);
+        Button newSaveGameSuccessButton = new Button("Continue");
+        newSaveGameSuccessButton.setFont(standardFont);
+        newSaveGameSuccessButton.setLayoutX(50);
+        newSaveGameSuccessButton.setLayoutY(100);
+        newSaveGameSuccessButton.setOnAction(e -> {
+            mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
+            dbgAlert("newSaveGameSuccessImageView, newSaveGameSuccessText, and newSaveGameSuccessButton removed from mainMenu");
+
+        });
+
+
+        //had to put this here so it'd be in scope for the submitNameButton
+        //so that the submitNameButton can get rid of it
+        //because after making a new game save, then the main menu nodes are removed
+        Label buildNumberLabel = new Label("Build: 0.0042");
+
+        //Label for info about debug mode
+        Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
+        dbgAlert("new Label debugModeLabel");
+        debugModeLabel.setFont(standardFont);
+        debugModeLabel.setLayoutX(900);
+        debugModeLabel.setLayoutY(100);
+
+        //debug mode button
+        Button debugModeButton = new Button("Enable Debug Mode");
+        dbgAlert("new Button debugModeButton");
+        debugModeButton.setFont(standardFont);
+        debugModeButton.setLayoutX(900);
+        debugModeButton.setLayoutY(200);
+        debugModeButton.setOnAction(e -> {
+            dbgAlert("running debugModeButton event handler");
+            enableDebugMode();
+            System.gc();
+
+            if (!mainMenu.getChildren().contains(debugModeLabel)) {
+                mainMenu.getChildren().add(debugModeLabel);
+                dbgAlert("debugModeLabel added to mainMenu");
+            }
+            dbgAlert("ran debugModeButton event handler");
+
+        });
+
+        //^end of debug mode button
+
+        //clear debug log button
+        Button clearDebugLogButton = new Button("Clear Debug Log");
+        dbgAlert("new Button clearDebugLogButton");
+        clearDebugLogButton.setFont(standardFont);
+        clearDebugLogButton.setLayoutX(900);
+        clearDebugLogButton.setLayoutY(275);
+        clearDebugLogButton.setOnAction(e -> {
+            dbgAlert("Running clearDebugLogButton event handler");
+            try {
+                dbgAlert("Clearing debug log");
+                File debugFile = new File("debug_log/log.txt");
+
+                PrintWriter debugOut = new PrintWriter(debugFile);
+                //overwrites the contents of debug_log/log.txt but doesn't add anything new to it
+                //effectively just clearing it out
+                debugOut.write("");
+
+                debugOut.close();
+                dbgAlert("debug log has been cleared");
+            } catch (FileNotFoundException ex) {
+                dbgAlert("FileNotFoundException for clearDebugLogbutton event handler");
+                ex.printStackTrace();
+            }
+            dbgAlert("ran clearDebugLogButton event handler");
+            System.gc();
+        });
+        //^end of debug log button
+
+        //enable debug log button for toggling debug logging on or off
+        //logs debug info to debug_log/log.txt
+        Button enableDebugLogButton = new Button("Enable Debug Logging");
+        dbgAlert("new button enableDebugLogButton");
+        enableDebugLogButton.setFont(standardFont);
+        enableDebugLogButton.setLayoutX(900);
+        enableDebugLogButton.setLayoutY(350);
+        enableDebugLogButton.setOnAction(e -> {
+            dbgAlert("Running enableDebugLogButton event handler");
+
+            toggleDebugLogMode("true");
+
+
+            dbgAlert("Ran enableDebugLogButton event handler");
+            System.gc();
+        });
+
+        //^end of enable debug log button
+
+
+
+        //disable debug log button
+        Button disableDebugLogButton = new Button("Disable Debug Logging");
+        dbgAlert("new button disableDebugLogButton");
+        disableDebugLogButton.setFont(standardFont);
+        disableDebugLogButton.setLayoutX(900);
+        disableDebugLogButton.setLayoutY(425);
+        disableDebugLogButton.setOnAction(e -> {
+            dbgAlert("Running enableDebugLogButton event handler");
+
+            toggleDebugLogMode("false");
+
+            dbgAlert("Ran enableDebugLogButton event handler");
+            System.gc();
+        });
+        //^end of disable debug log button
+
+        //adding menu items to the menu
+        mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton, buildNumberLabel);
+        dbgAlert("label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton, and buildNumberLabel added to mainMenu");
+
+        //debug button, these will only show up if you run run_debug_mode.bat or just use --debug as an arg for the jar
+
+        if (debugModeFlag) {
+            mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton, enableDebugLogButton, disableDebugLogButton);
+            dbgAlert("added debugModeButton clearDebugLogbutton, enableDebugLogButton, and disableDebugLogButton to mainMenu");
+        }
 
         //clicking button to submit new save game with desired name
         submitNameButton.setOnAction(e -> {
@@ -763,6 +933,41 @@ public class Main extends Application {
                         String saveFileName = "saves/" + player.getName() + ".save";
                         updateUniquePlayerXMLField(player, "playerName", player.getName(), saveFileName);
 
+                        //6. let player know where the save file is (saves/name.save)
+                        newSaveGameSuccessText.setText(newSaveGameSuccessText.getText() + saveFileName);
+                        mainMenu.getChildren().addAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
+
+                        //6.1 Remove the new game save stuff from the screen, get rid of the other main menu buttons, put a new ImageView
+                        mainMenu.getChildren().removeAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
+                        dbgAlert("removed tempBackgroundView, enterNameLabel, nameField, submitNameButton, and getOutOfNewMenu from mainMenu");
+                        if (controls.equals("touchscreen")) {
+                            dbgAlert("need to get rid of touchscreen controls");
+                            for (int i = 0; i < 26; i++) {
+                                mainMenu.getChildren().remove(newSaveKeyboard[i]);
+                                dbgAlert("newSaveKeyboard[" + i + "] removed from mainMenu");
+
+                            }
+                            mainMenu.getChildren().remove(touchscreenNameBackspaceButton);
+                            dbgAlert("touchscreenNameBackspaceButton removed from mainMenu");
+                        } else {
+                            dbgAlert("playing with keyboard");
+                        }
+                        //6.12 get rid of the other main menu buttons, put a new ImageView
+                        mainMenu.getChildren().removeAll(newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton, buildNumberLabel, label1);
+                        dbgAlert("newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton, buildNumberLabel, label1 removed from mainMenu");
+                        //6.13 still need to get rid of the debug buttons, but need to check if debug mode is true first
+                        if (debugModeFlag) {
+                            dbgAlert("*****NEED TO GET RID OF DEBUG BUTTONS*******");
+                            mainMenu.getChildren().removeAll(debugModeButton, clearDebugLogButton, disableDebugLogButton, enableDebugLogButton);
+                            if (debugMode) {
+                                dbgAlert("*****NEED TO GET RID OF DEBUG MODE LABEL********");
+                                mainMenu.getChildren().remove(debugModeLabel);
+                            }
+                        }
+                        //6.2 Then load the data from the map XML and put it into tiles on the screen
+                        //6.25 tiles should be: 40x40 pixels
+                        //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
+
                     } catch (IOException ex) {
                         dbgAlert("error with creating new save file");
                         ex.printStackTrace();
@@ -770,8 +975,10 @@ public class Main extends Application {
                 }
 
                 //!!!!!!!!!!!!!!!!!!!!!!!!!THIS IS WHERE I LEFT OFF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //6. let player know where the save file is (saves/name.save)
+
                 //7. think about making different java classes for the player, and for the world map
+
+
                 //8. also need to make a world map XML file that can be loaded
                 //9. and some basic images for grass (passable), rocks (can't be moved through), and the player
                 //loading can't be hard-coded into the "new" menu feature because it also needs to apply to the "continue" menu feature
@@ -784,49 +991,7 @@ public class Main extends Application {
 
 
 
-        Button getOutOfNewMenu = new Button("Cancel");
-        dbgAlert("new Button getOutOfNewMenu");
-        getOutOfNewMenu.setFont(standardFont);
-        getOutOfNewMenu.setLayoutX(600);
-        getOutOfNewMenu.setLayoutY(150);
 
-        Button touchscreenNameBackspaceButton = new Button("Backspace");
-        dbgAlert("new Button touchscreenNameBackspacebutton");
-        touchscreenNameBackspaceButton.setFont(standardFont);
-        touchscreenNameBackspaceButton.setLayoutX(750);
-        touchscreenNameBackspaceButton.setLayoutY(300);
-
-
-        //touchscreen backspace button gets rid of last character in name textfield
-        touchscreenNameBackspaceButton.setOnAction(e -> {
-            dbgAlert("running touchscreenNameBackspaceButton event handler");
-            //don't try to remove a character if there are no characters in the name field
-            if (nameField.getText().length() > 0) {
-                nameField.setText(nameField.getText().substring(0, nameField.getText().length() - 1));
-                dbgAlert("nameField: " + nameField.getText());
-            } else {
-                dbgAlert("nameField is empty, therefore can't use backspace");
-            }
-            dbgAlert("ran touchscreenNameBackspaceButton event handler");
-            System.gc();
-        });
-
-        getOutOfNewMenu.setOnAction(e -> {
-            dbgAlert("running getOutOfNewMenu event handler");
-            mainMenu.getChildren().removeAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
-            dbgAlert("tempBackgroundView, enterNameLavel, nameField, submitNameButton, and getOutOfNewMenu removed from mainMenu");
-            if (controls.equals("touchscreen")) {
-                for (int i = 0; i < 26; i++) {
-                    mainMenu.getChildren().remove(newSaveKeyboard[i]);
-                    dbgAlert("newSaveKeyboard[" + i + "] removed from mainMenu");
-
-                }
-                mainMenu.getChildren().remove(touchscreenNameBackspaceButton);
-                dbgAlert("touchscreenNameBackspcaeButton removed from mainMenu");
-            }
-            dbgAlert("ran getOutOfNewMenu event handler");
-            System.gc();
-        });
 
         newButton.setOnAction(e -> {
             dbgAlert("Running newButton event handler");
@@ -1234,109 +1399,18 @@ public class Main extends Application {
 
         //^end of quit button
 
-        //Label for info about debug mode
-        Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
-        dbgAlert("new Label debugModeLabel");
-        debugModeLabel.setFont(standardFont);
-        debugModeLabel.setLayoutX(900);
-        debugModeLabel.setLayoutY(100);
+        //Label for build number to show which version the player is playing
+        //build number is the current number of commits + 1 because this will be in the next commit
+        //ex: if there are 555 commits on github, then it will be build 0.0556
 
-        //debug mode button
-        Button debugModeButton = new Button("Enable Debug Mode");
-        dbgAlert("new Button debugModeButton");
-        debugModeButton.setFont(standardFont);
-        debugModeButton.setLayoutX(900);
-        debugModeButton.setLayoutY(200);
-        debugModeButton.setOnAction(e -> {
-            dbgAlert("running debugModeButton event handler");
-            enableDebugMode();
-            System.gc();
+        dbgAlert("new Label buildNumber");
+        buildNumberLabel.setFont(standardFont);
+        buildNumberLabel.setLayoutX(900);
+        buildNumberLabel.setLayoutY(500);
 
-            if (!mainMenu.getChildren().contains(debugModeLabel)) {
-                mainMenu.getChildren().add(debugModeLabel);
-                dbgAlert("debugModeLabel added to mainMenu");
-            }
-            dbgAlert("ran debugModeButton event handler");
-
-        });
-
-        //^end of debug mode button
-
-        //clear debug log button
-        Button clearDebugLogButton = new Button("Clear Debug Log");
-        dbgAlert("new Button clearDebugLogButton");
-        clearDebugLogButton.setFont(standardFont);
-        clearDebugLogButton.setLayoutX(900);
-        clearDebugLogButton.setLayoutY(275);
-        clearDebugLogButton.setOnAction(e -> {
-            dbgAlert("Running clearDebugLogButton event handler");
-            try {
-                dbgAlert("Clearing debug log");
-                File debugFile = new File("debug_log/log.txt");
-
-                PrintWriter debugOut = new PrintWriter(debugFile);
-                //overwrites the contents of debug_log/log.txt but doesn't add anything new to it
-                //effectively just clearing it out
-                debugOut.write("");
-
-                debugOut.close();
-                dbgAlert("debug log has been cleared");
-            } catch (FileNotFoundException ex) {
-                dbgAlert("FileNotFoundException for clearDebugLogbutton event handler");
-                ex.printStackTrace();
-            }
-            dbgAlert("ran clearDebugLogButton event handler");
-            System.gc();
-        });
-        //^end of debug log button
-
-        //enable debug log button for toggling debug logging on or off
-        //logs debug info to debug_log/log.txt
-        Button enableDebugLogButton = new Button("Enable Debug Logging");
-        dbgAlert("new button enableDebugLogButton");
-        enableDebugLogButton.setFont(standardFont);
-        enableDebugLogButton.setLayoutX(900);
-        enableDebugLogButton.setLayoutY(350);
-        enableDebugLogButton.setOnAction(e -> {
-            dbgAlert("Running enableDebugLogButton event handler");
-
-            toggleDebugLogMode("true");
+        //^end of label for build number
 
 
-            dbgAlert("Ran enableDebugLogButton event handler");
-            System.gc();
-        });
-
-        //^end of enable debug log button
-
-
-
-        //disable debug log button
-        Button disableDebugLogButton = new Button("Disable Debug Logging");
-        dbgAlert("new button disableDebugLogButton");
-        disableDebugLogButton.setFont(standardFont);
-        disableDebugLogButton.setLayoutX(900);
-        disableDebugLogButton.setLayoutY(425);
-        disableDebugLogButton.setOnAction(e -> {
-            dbgAlert("Running enableDebugLogButton event handler");
-
-            toggleDebugLogMode("false");
-
-            dbgAlert("Ran enableDebugLogButton event handler");
-            System.gc();
-        });
-        //^end of disable debug log button
-
-        //adding menu items to the menu
-        mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton);
-        dbgAlert("label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, and quitButton added to mainMenu");
-
-        //debug button, these will only show up if you run run_debug_mode.bat or just use --debug as an arg for the jar
-
-        if (debugModeFlag) {
-            mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton, enableDebugLogButton, disableDebugLogButton);
-            dbgAlert("added debugModeButton clearDebugLogbutton, enableDebugLogButton, and disableDebugLogButton to mainMenu");
-        }
 
         //adding stuff to the window
         root.getChildren().add(mainMenu);
