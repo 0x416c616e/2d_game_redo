@@ -35,12 +35,17 @@ import java.util.regex.Matcher;
 
 //if you want to see where most stuff happens, scroll down to the init() method
 public class Main extends Application {
+
     //this prints out helpful information if enabled
     boolean debugMode = false;
     //if this is true, it will log debugging info to a file called debug_log.txt
     boolean logDebugging = false;
     //both of the above booleans should be false, unless you want to see debug info about the STARTUP of the program
 
+    //if program is run with --debug command line arg, then the debug buttons will show up
+    //otherwise, they won't
+    //args[] is static, therefore this has to be static too
+    static boolean debugModeFlag = false;
 
     //Apache Commons IO makes it easier for me to copy templates to saves and whatnot
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1322,9 +1327,12 @@ public class Main extends Application {
         mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton);
         dbgAlert("label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, and quitButton added to mainMenu");
 
-        //debug button, take this out before publishing the game
-        mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton, enableDebugLogButton, disableDebugLogButton);
-        dbgAlert("added debugModeButton clearDebugLogbutton, enableDebugLogButton, and disableDebugLogButton to mainMenu");
+        //debug button, these will only show up if you run run_debug_mode.bat or just use --debug as an arg for the jar
+
+        if (debugModeFlag) {
+            mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton, enableDebugLogButton, disableDebugLogButton);
+            dbgAlert("added debugModeButton clearDebugLogbutton, enableDebugLogButton, and disableDebugLogButton to mainMenu");
+        }
 
         //adding stuff to the window
         root.getChildren().add(mainMenu);
@@ -1351,6 +1359,13 @@ public class Main extends Application {
 
     //JavaFX boilerplate main
     public static void main(String[] args) {
+        System.out.println(args.length);
+        if (args.length > 0 && args[0].equals("--debug")) {
+            debugModeFlag = true;
+            System.out.println("debugModeFlag = true");
+        }
+
+
         launch(args);
     }
 }
