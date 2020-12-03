@@ -382,7 +382,14 @@ public class Main extends Application {
                 playerName = playerName.toUpperCase().charAt(0) + playerName.substring(1, playerName.length());
                 dbgAlert("playerName: " + playerName);
                 //2. check if a save with that name already exists
-                
+                File newSaveFile = new File("saves/" + playerName + ".save");
+                dbgAlert("new File newSaveFile");
+                Boolean saveAlreadyExists = newSaveFile.exists();
+                if (saveAlreadyExists) {
+                    dbgAlert("Save with that name already exists, therefore can't make it with that name");
+                } else {
+                    dbgAlert("Save with that name doesn't already exist, therefore it can be made");
+                }
                 //3. if not, try to make a new save
                 //4. if able to write a new save file, save it as name.save, i.e. Joe.save
                 //5. let player know where the save file is (saves/name.save)
