@@ -11,14 +11,25 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
+import javax.xml.crypto.dsig.TransformException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -121,7 +132,39 @@ public class Main extends Application {
     //now on to the game code
 
 
+    //if there is a uniquely-named field in an XML file, then this method can replace the contents with a new value
+    //example: updateUniqueXMLField(player, playerName, "Bob") will update the player's save file to say "bob"
+    public void updateUniquePlayerXMLField(Player player, String fieldToUpdate, String newValue) {
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        try {
+            String saveFileName = "saves/" + player.getName() + ".save";
+            DocumentBuilder b = f.newDocumentBuilder();
+            //it's an XML document but ends in .save instead of .xml
+            Document doc = b.parse(new File(saveFileName));
+            dbgAlert("new Document doc");
+            Node playerNameInSaveFile = doc.getElementsByTagName(fieldToUpdate).item(0);
+            playerNameInSaveFile.setTextContent(newValue);
 
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(saveFileName));
+            transformer.transform(source, result);
+
+        } catch(ParserConfigurationException pc) {
+            dbgAlert("ParserConfigurationException in replaceUniqueXMLField");
+            pc.printStackTrace();
+        } catch (SAXException se) {
+            dbgAlert("SAXException with editing player name in XML save in submitNameButton lambda");
+            se.printStackTrace();
+        } catch (TransformerException te) {
+            dbgAlert("TransformException with editing player name in XML save in submitNameButton lambda");
+            te.printStackTrace();
+        } catch (IOException ioe) {
+            dbgAlert("IOException with");
+            ioe.printStackTrace();
+        }
+    }
 
     //if debug mode is enabled, dbgAlert will print a message
     //containing info about the code that either is about to run
@@ -698,16 +741,26 @@ public class Main extends Application {
                     dbgAlert("new File saveTemplateSource");
                     dbgAlert("attempting to create new game save");
                     try {
+                        //3. if not, try to make a new save
+                        //4. if able to write a new save file, save it as name.save, i.e. Joe.save
                         //from Apache Commons IO library
                         copyFile(saveTemplateSource, newSaveFile);
                         dbgAlert("copied save template to new game save");
+                        //made a Player class but there isn't much in it yet
+                        Player player = new Player(playerName);
+                        dbgAlert("new Player player");
+                        dbgAlert("player.getName(): " + player.getName());
+
+                        //4.5 parse XML and set the Player name
+                        //game.save files are all just xml but with a different extension
+                        updateUniquePlayerXMLField(player, "playerName", player.getName());
+
                     } catch (IOException ex) {
                         dbgAlert("error with creating new save file");
                         ex.printStackTrace();
                     }
                 }
-                //3. if not, try to make a new save
-                //4. if able to write a new save file, save it as name.save, i.e. Joe.save
+
                 //5. let player know where the save file is (saves/name.save)
                 //6. the save file will eventually be structured as XML
                 //7. think about making different java classes for the player, and for the world map
