@@ -16,7 +16,7 @@ Double click on run.vbs in order to run the game
 
 This is a 2D RPG. It's not finished yet.
 
-The map is 1280x800, with 80x80 pixel tiles. It has a tile-based movement system. That means it's 16x10 tiles on the screen.
+The game supports 1280x720, 1280x800, and 1920x1080 resolutions, with 40x40 pixel tiles. It has a tile-based movement system. 
 
 All you need in order to run this program is Java. But this game itself has two dependencies (aside from Java, that is): OpenJFX and the Apache Commons IO library. However, it contains both of those dependencies within it, so there is no need to install them separately.
 
