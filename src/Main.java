@@ -73,6 +73,46 @@ public class Main extends Application {
         dbgAlert("ran enableDebugMode");
     }
 
+    //this method is used for either enabling or disabling the debug logging
+    //arg should be either "true" or "false" Strings, as per the text file
+    //this is used with the event handlers for the buttons on the main menu
+    //for enabling or disabling debug logging
+    //note: debug LOGGING, not debug MODE, which is a different setting
+    public void toggleDebugLogMode(String trueOrFalse) {
+        dbgAlert("running toggleDebugLogMode method");
+        String enabledOrDisabled = "";
+        if (trueOrFalse.equals("true")) {
+            logDebugging = true;
+            enabledOrDisabled = "enabled";
+        } else {
+            logDebugging = false;
+            enabledOrDisabled = "disabled";
+        }
+
+        File debugLogFile = new File("settings/debug_logging_option.txt");
+        dbgAlert("new File debugLogFile");
+        FileWriter debugFileWriter = null;
+        try {
+            debugFileWriter = new FileWriter(debugLogFile);
+            dbgAlert("new FileWriter debugFileWriter");
+            //the second boolean argument means appending mode is true
+            PrintWriter debugFileOut = new PrintWriter(debugFileWriter);
+            dbgAlert("new PrintWriter debugFileOut");
+            debugFileOut.write(trueOrFalse);
+            debugFileOut.close();
+            debugFileWriter.close();
+
+            dbgAlert(enabledOrDisabled + " debug logging in debug_logging_option.txt");
+        } catch (FileNotFoundException ex) {
+            dbgAlert("FileNotFoundException for toggleDebugLogMode");
+            ex.printStackTrace();
+        } catch (IOException ioex) {
+            dbgAlert("IOException for toggleDebugLogMode");
+            ioex.printStackTrace();
+        }
+        dbgAlert("ran toggleDebugLogMode method");
+    }
+
     //pseudo-breakpoint functionality to pause program for user-specified duration
     //because otherwise you'll see the debug feed go by super fast
     public void setBreakpoint(int duration){
@@ -814,7 +854,7 @@ public class Main extends Application {
         getOutOfControlsMenu.setLayoutX(50);
         getOutOfControlsMenu.setLayoutY(300);
 
-        //displays controls (not yet implemented)
+        //displays controls
         controlsButton.setOnAction(e -> {
             dbgAlert("running controlsButton event handler");
             mainMenu.getChildren().addAll(tempBackgroundView, controlsMenuText, getOutOfControlsMenu);
@@ -910,22 +950,40 @@ public class Main extends Application {
         enableDebugLogButton.setOnAction(e -> {
             dbgAlert("Running enableDebugLogButton event handler");
 
-            //where I left off
-            //not yet implemented
+            toggleDebugLogMode("true");
+
 
             dbgAlert("Ran enableDebugLogButton event handler");
             System.gc();
         });
 
-        //^end of debug log button
+        //^end of enable debug log button
+
+
+
+        //disable debug log button
+        Button disableDebugLogButton = new Button("Disable Debug Logging");
+        dbgAlert("new button disableDebugLogButton");
+        disableDebugLogButton.setFont(standardFont);
+        disableDebugLogButton.setLayoutX(900);
+        disableDebugLogButton.setLayoutY(425);
+        disableDebugLogButton.setOnAction(e -> {
+            dbgAlert("Running enableDebugLogButton event handler");
+
+            toggleDebugLogMode("false");
+
+            dbgAlert("Ran enableDebugLogButton event handler");
+            System.gc();
+        });
+        //^end of disable debug log button
 
         //adding menu items to the menu
         mainMenu.getChildren().addAll(label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton);
         dbgAlert("label1, newButton, continueButton, aboutButton, settingsButton, controlsButton, and quitButton added to mainMenu");
 
         //debug button, take this out before publishing the game
-        mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton, enableDebugLogButton);
-        dbgAlert("added debugModeButton clearDebugLogbutton, and enableDebugLogButton to mainMenu");
+        mainMenu.getChildren().addAll(debugModeButton, clearDebugLogButton, enableDebugLogButton, disableDebugLogButton);
+        dbgAlert("added debugModeButton clearDebugLogbutton, enableDebugLogButton, and disableDebugLogButton to mainMenu");
 
         //adding stuff to the window
         root.getChildren().add(mainMenu);
