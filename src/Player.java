@@ -1,5 +1,8 @@
 public class Player {
     private String name;
+    int x;
+    int y;
+
     public Player(String name){
         setName(name);
     }

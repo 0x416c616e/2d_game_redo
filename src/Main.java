@@ -181,10 +181,12 @@ public class Main extends Application {
     //calling it dbgAlert instead of debugAlert means my IDE won't
     //auto-suggest other vars with debug at the beginning
     public void dbgAlert(String message) {
+
         if (debugMode) {
             System.out.println(message);
             System.gc();
         }
+
         //logging debug info to file
         if (logDebugging == true) {
             File debugLogFile = new File("debug_log/log.txt");
@@ -781,7 +783,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0042");
+        Label buildNumberLabel = new Label("Build: 0.0044");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -957,16 +959,88 @@ public class Main extends Application {
                         dbgAlert("newButton, continueButton, aboutButton, settingsButton, controlsButton, quitButton, buildNumberLabel, label1 removed from mainMenu");
                         //6.13 still need to get rid of the debug buttons, but need to check if debug mode is true first
                         if (debugModeFlag) {
-                            dbgAlert("*****NEED TO GET RID OF DEBUG BUTTONS*******");
+                            dbgAlert("removing debug buttons from mainMenu");
                             mainMenu.getChildren().removeAll(debugModeButton, clearDebugLogButton, disableDebugLogButton, enableDebugLogButton);
                             if (debugMode) {
-                                dbgAlert("*****NEED TO GET RID OF DEBUG MODE LABEL********");
+                                dbgAlert("removing debug label from mainMenu");
                                 mainMenu.getChildren().remove(debugModeLabel);
                             }
                         }
                         //6.2 Then load the data from the map XML and put it into tiles on the screen
+
+                        //6.2b firstly I need to generate a map template
+                              //take this out later
+
+                        //<?xml version="1.0" encoding="UTF-8" standalone="no"?><map>
+                        //<mapName>Map1</mapName>
+                        //    <tiles>
+                        //        <row_X>
+                        //            <tile_X_Y>
+                        //                <event_X_Y></event_X_Y>
+                        //                <npc_layer_X_Y></npc_layer_X_Y>
+                        //                <middle_layer_X_Y></middle_layer_X_Y>
+                        //                <bottom_layer_X_Y>grass.png</bottom_layer_X_Y>
+                        //                <collision_X_Y>false</collision_X_Y>
+                        //            </tile_X_Y>
+                        //        </row_X>
+                        //    </tiles>
+                        //</map>
+
+                        //generating a 200x200 XML map
+                        //but 50 on each side are rocks with collision detection
+                        //so that you can't go off the map and also can always have something to display on-screen
+                        /*
+                        dbgAlert("***************BEGINNING OF 100X100 MAP***************");
+                        dbgAlert("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><map>");
+                        dbgAlert("<mapName>Map1</mapName>");
+                        dbgAlert("    <tiles>");
+                        for (int i = 0; i < 200; i++) {
+                            dbgAlert("        <row_" + i + ">");
+                            //elements within a row
+                            for (int j = 0; j < 200; j++) {
+                                //50 tile barrier on all sides for rocks and collision detection
+                                //j is x and i is y
+                                //tile name is tile_x_y basically to describe location
+                                //and coords start from the upper left and go down from there for positive values
+                                String x_y = j + "_" + i;
+                                dbgAlert("            <tile_" + x_y + ">");
+                                dbgAlert("                <event_" + x_y + "></event_" + x_y + ">");
+                                dbgAlert("                <npc_layer_" + x_y + "></npc_layer_" + x_y + ">");
+                                dbgAlert("                <middle_layer_" + x_y + "></middle_layer_" + x_y + ">");
+                                boolean shouldBeRocks = ( (j < 50) || (j > 150) ) || ( (i < 50) || (i > 150) );
+                                String tileImageName = "";
+                                String collisionValue = ""; //Str instead of bool because it's text being printed
+                                if (shouldBeRocks) {
+                                    //if should be rocks for border, use rocks.png and set collision detection for the tile
+                                    tileImageName = "rocks.png";
+                                    collisionValue = "true"; //means you can't pass through it
+                                } else {
+                                    //otherwise, make it grass and make it able to be passed through
+                                    tileImageName = "grass.png";
+                                    collisionValue = "false"; //means you can pass through it
+                                }
+                                dbgAlert("                <bottom_layer_" + x_y + ">" + tileImageName + "</bottom_layer_" + x_y + ">");
+                                dbgAlert("                <collision_" + x_y + ">" + collisionValue + "</collision_" + x_y + ">");
+                                dbgAlert("            </tile_" + x_y + ">");
+                            }
+                            dbgAlert("        </row_" + i + ">");
+                        }
+                        dbgAlert("    </tiles>");
+                        dbgAlert("</map>");
+                        dbgAlert("***************END OF 100X100 MAP***************");
+
+                         */
+                        //I used the above commented out code in order to generate a 200x200 XML file containing data for a world map
+                        //now it is no longer needed right now
+                        //*********WHERE I LEFT OFF*********************
+                        dbgAlert("got back to where I left off");
+
+                        //PUT STUFF INTO A WORLD-LOADING METHOD IN THE WORLDMAP CLASS?
+                        //SO IT'S REUSABLE FOR THE "CONTINUE" FEATURE, NOT JUST FOR NEW GAMES
                         //6.25 tiles should be: 40x40 pixels
+                            //tiles for now: rocks, grass, and player
                         //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
+                        //6.4 make the game load the player to
 
                     } catch (IOException ex) {
                         dbgAlert("error with creating new save file");
@@ -976,11 +1050,9 @@ public class Main extends Application {
 
                 //!!!!!!!!!!!!!!!!!!!!!!!!!THIS IS WHERE I LEFT OFF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                //7. think about making different java classes for the player, and for the world map
+                //7. think about making different java classes for the player, tiles, and for the world map
 
 
-                //8. also need to make a world map XML file that can be loaded
-                //9. and some basic images for grass (passable), rocks (can't be moved through), and the player
                 //loading can't be hard-coded into the "new" menu feature because it also needs to apply to the "continue" menu feature
 
             }
