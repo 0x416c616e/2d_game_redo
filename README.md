@@ -1,6 +1,6 @@
-# 2D Game Redo
+# 2D Game Redo (Work in Progress)
 
-2D game written in Java/OpenJFX. Intended for Windows. 
+2D game written in Java/OpenJFX. Intended for Windows. It isn't finished yet.
 
 ## Requirements
 
