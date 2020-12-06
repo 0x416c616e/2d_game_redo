@@ -4,7 +4,7 @@
 
 ## Requirements
 
-You need to have Java 15 installed in order to run this game. This game is intended for Windows. The game has a fixed resolution of 1280x800 because it's intended to be run on a particular tablet computer. It can be run in either fullscreen or windowed mode.
+You need to have Java 15 installed in order to run this game. This game is intended for Windows. It can be run in either fullscreen or windowed mode.
 
 You can play the game with either the keyboard or touchscreen controls, configurable in the settings menu. 
 
