@@ -10,15 +10,21 @@ You can play the game with either the keyboard or touchscreen controls, configur
 
 ## How to run it
 
-Double click on run.vbs in order to run the game
+1. Install Java.
+
+2. Clone or download this repo.
+
+3. Double click on run.vbs in order to run the game in the normal mode.
 
 ## About
 
 This is a 2D RPG. It's not finished yet.
 
-The game supports 1280x720, 1280x800, and 1920x1080 resolutions, with 40x40 pixel tiles. It has a tile-based movement system. 
+The game supports 1280x720 and 1920x1080 resolutions, with 40x40 pixel tiles. It has a tile-based movement system. 
 
 All you need in order to run this program is Java. But this game itself has two dependencies (aside from Java, that is): OpenJFX and the Apache Commons IO library. However, it contains both of those dependencies within it, so there is no need to install them separately.
+
+-------
 
 ### Creating JAR when working on this project
 
@@ -33,3 +39,7 @@ In order to edit the JAR, meaning you can change the game and then run it with t
 5. Double click on copy_new_artifact.bat
 6. Double click the run.vbs script
 7. You are now running the JAR
+
+### Debug mode
+
+Double click on run_debug_mode.bat if you want to run the game with the debug mode flag, which will allow you to enable debug mode and/or debug mode logging.
