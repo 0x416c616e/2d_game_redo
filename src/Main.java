@@ -44,6 +44,93 @@ public class Main extends Application {
     //args[] is static, therefore this has to be static too
     static boolean debugModeFlag = false;
 
+
+
+
+
+    //==================================================================================================================
+    //start of current working area
+
+    //NOT YET IMPLEMENTED
+    //TODO
+    //UNFINISHED
+    //this method will load the map for the "new game" and "continue" features
+    public void loadMap() {
+        dbgAlert("*****This is the method for initially loading the map*****");
+        dbgAlert("to resume working on the project, go to the loadMap() method");
+        //PUT STUFF INTO A WORLD-LOADING METHOD IN THE WORLDMAP CLASS?
+        //SO IT'S REUSABLE FOR THE "CONTINUE" FEATURE, NOT JUST FOR NEW GAMES
+        //6.25 tiles should be: 40x40 pixels
+        //tiles for now: rocks, grass, and player
+        //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
+        //6.4 make the game load the player to
+
+        //1. load XML map data into a WorldMap object (need to finish the WorldMap class)
+        //2. get player info for their location (x, y) in the player save file (also need to edit the player save template so that it includes x,y
+            //2b. also need to have the XML save include a default x,y starting position
+        //3. make a TileImageSet object
+        //4. have the world map load the images for the tiles using the Tile array in a WorldMap object
+
+        //******************************WHERE I LEFT OFF 12/6/2020******************************
+        //loading a copy of every single tile for each 576 tiles (32x18) is CPU intensive and uses a lot of RAM
+        //maybe make a TileImageSet class which has methods for getting Images and ImageViews?
+        //then have a singleton TileImageSet and then each tile can do something like this:
+        //updateTile will be called by a lambda for WASD
+        //TileImageSet only contains images, not tile data
+        //WorldMap contains an array of Tile objects, as well as ONE TileImageSet to reduce RAM usage
+        //but it also means you don't have to open it from a file every single time you want to access a new tile iamge
+        /*
+         * public void updateTile(TileImageSet ts, Player p, WorldMap wm, String direction) {
+         *     //keep in mind that x,y 0,0 in this game is actually in the upper left-hand corner
+         *     int xOffset = 0;
+         *     int yOffset = 0;
+         *     switch (direction) {
+         *         case "UP":
+         *              yOffset -= 1;
+         *              break;
+         *         case "DOWN":
+         *              yOffset += 1;
+         *              break;
+         *         case "LEFT":
+         *              xOffset -= 1;
+         *              break;
+         *         case "RIGHT":
+         *              xOffset += 1;
+         *              break;
+         *         default:
+         *             System.out.println("error");
+         *             break;
+         *     }
+         *     int newX = p.getPositionX() + xOffset;
+         *     int newY = p.getPositionY() + yOffset;
+         *     String npcImage = wm.getTileInfoNpcImagePath(newX, newY);
+         *     String middleLayerImage = wm.getTileInfoMiddleLayerImagePath(newX, newY);
+         *     String bottomLayerImage = wm.getTileInfoBottomLayerImagePath();
+         *
+         *
+         *     if (!npcImage.equals("") && !npcImage.equals(null)) {
+         *         this.npcImageView = ts.getImageView(npcImage);
+         *     }
+         *
+         *     if (!middleLayerImage.equals("") && !middleLayerImage.equals(null)) {
+         *         this.middleLayerImageView = ts.getImageView(middleLayer);
+         *     }
+         *
+         *     if (!bottomLayerImage.equals("") && !bottomLayerImage.equals(null)) {
+         *         this.bottomLayerImageView = ts.getImageView(bottomLayer);
+         *     }
+         *
+         *
+         *
+         * }
+         *
+         */
+
+    }
+
+    //end of current working area
+    //==================================================================================================================
+
     //Apache Commons IO makes it easier for me to copy templates to saves and whatnot
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //APACHE COMMONS IO METHODS (not made by me)
@@ -52,6 +139,13 @@ public class Main extends Application {
     //License: https://www.apache.org/licenses/LICENSE-2.0
     //I made the other code in this program, just not the Apache Commons methods
     //but I only took a small portion out of the whole big apache commons IO library
+
+
+
+
+
+
+
 
     //ACIO, not made by me
     private static void checkFileRequirements(final File source, final File destination) throws FileNotFoundException {
@@ -776,6 +870,8 @@ public class Main extends Application {
         newSaveGameSuccessButton.setOnAction(e -> {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
             dbgAlert("newSaveGameSuccessImageView, newSaveGameSuccessText, and newSaveGameSuccessButton removed from mainMenu");
+            //this is where the map is put onto the screen
+            loadMap();
 
         });
 
@@ -783,7 +879,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0044");
+        Label buildNumberLabel = new Label("Build: 0.0047");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -968,79 +1064,7 @@ public class Main extends Application {
                         }
                         //6.2 Then load the data from the map XML and put it into tiles on the screen
 
-                        //6.2b firstly I need to generate a map template
-                              //take this out later
 
-                        //<?xml version="1.0" encoding="UTF-8" standalone="no"?><map>
-                        //<mapName>Map1</mapName>
-                        //    <tiles>
-                        //        <row_X>
-                        //            <tile_X_Y>
-                        //                <event_X_Y></event_X_Y>
-                        //                <npc_layer_X_Y></npc_layer_X_Y>
-                        //                <middle_layer_X_Y></middle_layer_X_Y>
-                        //                <bottom_layer_X_Y>grass.png</bottom_layer_X_Y>
-                        //                <collision_X_Y>false</collision_X_Y>
-                        //            </tile_X_Y>
-                        //        </row_X>
-                        //    </tiles>
-                        //</map>
-
-                        //generating a 200x200 XML map
-                        //but 50 on each side are rocks with collision detection
-                        //so that you can't go off the map and also can always have something to display on-screen
-                        /*
-                        dbgAlert("***************BEGINNING OF 100X100 MAP***************");
-                        dbgAlert("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><map>");
-                        dbgAlert("<mapName>Map1</mapName>");
-                        dbgAlert("    <tiles>");
-                        for (int i = 0; i < 200; i++) {
-                            dbgAlert("        <row_" + i + ">");
-                            //elements within a row
-                            for (int j = 0; j < 200; j++) {
-                                //50 tile barrier on all sides for rocks and collision detection
-                                //j is x and i is y
-                                //tile name is tile_x_y basically to describe location
-                                //and coords start from the upper left and go down from there for positive values
-                                String x_y = j + "_" + i;
-                                dbgAlert("            <tile_" + x_y + ">");
-                                dbgAlert("                <event_" + x_y + "></event_" + x_y + ">");
-                                dbgAlert("                <npc_layer_" + x_y + "></npc_layer_" + x_y + ">");
-                                dbgAlert("                <middle_layer_" + x_y + "></middle_layer_" + x_y + ">");
-                                boolean shouldBeRocks = ( (j < 50) || (j > 150) ) || ( (i < 50) || (i > 150) );
-                                String tileImageName = "";
-                                String collisionValue = ""; //Str instead of bool because it's text being printed
-                                if (shouldBeRocks) {
-                                    //if should be rocks for border, use rocks.png and set collision detection for the tile
-                                    tileImageName = "rocks.png";
-                                    collisionValue = "true"; //means you can't pass through it
-                                } else {
-                                    //otherwise, make it grass and make it able to be passed through
-                                    tileImageName = "grass.png";
-                                    collisionValue = "false"; //means you can pass through it
-                                }
-                                dbgAlert("                <bottom_layer_" + x_y + ">" + tileImageName + "</bottom_layer_" + x_y + ">");
-                                dbgAlert("                <collision_" + x_y + ">" + collisionValue + "</collision_" + x_y + ">");
-                                dbgAlert("            </tile_" + x_y + ">");
-                            }
-                            dbgAlert("        </row_" + i + ">");
-                        }
-                        dbgAlert("    </tiles>");
-                        dbgAlert("</map>");
-                        dbgAlert("***************END OF 100X100 MAP***************");
-
-                         */
-                        //I used the above commented out code in order to generate a 200x200 XML file containing data for a world map
-                        //now it is no longer needed right now
-                        //*********WHERE I LEFT OFF*********************
-                        dbgAlert("got back to where I left off");
-
-                        //PUT STUFF INTO A WORLD-LOADING METHOD IN THE WORLDMAP CLASS?
-                        //SO IT'S REUSABLE FOR THE "CONTINUE" FEATURE, NOT JUST FOR NEW GAMES
-                        //6.25 tiles should be: 40x40 pixels
-                            //tiles for now: rocks, grass, and player
-                        //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
-                        //6.4 make the game load the player to
 
                     } catch (IOException ex) {
                         dbgAlert("error with creating new save file");
@@ -1048,12 +1072,6 @@ public class Main extends Application {
                     }
                 }
 
-                //!!!!!!!!!!!!!!!!!!!!!!!!!THIS IS WHERE I LEFT OFF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                //7. think about making different java classes for the player, tiles, and for the world map
-
-
-                //loading can't be hard-coded into the "new" menu feature because it also needs to apply to the "continue" menu feature
 
             }
 
