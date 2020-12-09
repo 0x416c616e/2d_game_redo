@@ -55,14 +55,46 @@ public class Main extends Application {
     //TODO
     //UNFINISHED
     //this method will load the map for the "new game" and "continue" features
-    public void loadMap(Pane mainMenu, Player player, String resolution) {
-        dbgAlert("*****This is the method for initially loading the map*****");
-        dbgAlert("to resume working on the project, go to the loadMap() method");
-        //tiles for now: rocks, grass, and player
+    public void loadMap(Pane mainMenu, Player player, String resolution, TileImageSet imageSet, String mapName) {
+        dbgAlert("Running loadMap() method");
         //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
         //6.4 make the game load the player to their x, y position
 
+        //number of rows and columns
+        //-1 means it hasn't been initialized yet
+        int numberOfTilesX = -1;
+        int numberOfTilesY = -1;
 
+        switch (resolution) {
+            case "1280x720":
+                dbgAlert("setting 720p loadMap()");
+                numberOfTilesX = 32;
+                numberOfTilesY = 18;
+                break;
+            case "1280x800":
+                dbgAlert("setting 800p loadMap()");
+                numberOfTilesX = 32;
+                numberOfTilesY = 20;
+                break;
+            case "1920x1080":
+                dbgAlert("setting 1080p loadMap()");
+                numberOfTilesX = 48;
+                numberOfTilesY = 27;
+                break;
+            default:
+                System.out.println("Error with resolution in loadMap method");
+                break;
+        }
+
+        String playerFileName = "saves/" + player.getName() + ".save";
+        String xStringFromXML = getUniqueXMLField("playerXposition", playerFileName);
+        String yStringFromXML = getUniqueXMLField("playerYposition", playerFileName);
+        dbgAlert("Player position is: (" + xStringFromXML + ", " + yStringFromXML + ")");
+        int x = Integer.parseInt(xStringFromXML);
+        int y = Integer.parseInt(yStringFromXML);
+
+
+        //where I left off!!!
 
         //1. load XML map data into a WorldMap object (need to finish the WorldMap class)
         //2. get player info for their location (x, y) in the player save file (also need to edit the player save template so that it includes x,y
@@ -127,6 +159,7 @@ public class Main extends Application {
 
         //IMAGE LOADING TEST FOR TABLET
 
+        /*
         dbgAlert("tablet performance benchmark for ImageViews");
         Image rocksImage = new Image("file:assets/tiles/rock.png");
         ImageView rocksImageViewArray[][] = new ImageView[32][20];
@@ -140,7 +173,9 @@ public class Main extends Application {
                 mainMenu.getChildren().add(rocksImageViewArray[i][j]);
                 dbgAlert("adding rocksImageViewArray[" + i + "][" + j + "] at x,y: " + (i * 40) + (j * 40));
             }
-        }
+        }*/
+
+        dbgAlert("ran loadMap() method");
 
         //end of current working area
         //==================================================================================================================
@@ -245,6 +280,32 @@ public class Main extends Application {
 
     //now on to the game code
 
+
+    //gets a uniquely-named field from an XML file
+    public String getUniqueXMLField(String fieldToGet, String filename) {
+        dbgAlert("running getUniqueXMLField");
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        try {
+            String saveFileName = filename;
+            DocumentBuilder b = f.newDocumentBuilder();
+            dbgAlert("new DocumentBuilder b");
+            Document doc = b.parse(new File(saveFileName));
+            dbgAlert("new Document doc");
+            String valueOfXMLField = doc.getElementsByTagName(fieldToGet).item(0).getTextContent();
+            return valueOfXMLField;
+        } catch(ParserConfigurationException pc) {
+            dbgAlert("ParserConfigurationException 123");
+            pc.printStackTrace();
+        } catch (SAXException se) {
+            dbgAlert("SAXException 123");
+            se.printStackTrace();
+        } catch (IOException ioe) {
+            dbgAlert("IOException 123");
+            ioe.printStackTrace();
+        }
+        dbgAlert("ran getUniqueXMLField");
+        return "errorGUPXML";
+    }
 
     //if there is a uniquely-named field in an XML file, then this method can replace the contents with a new value
     //example: updateUniqueXMLField(player, playerName, "Bob", "saves/Test.save") will update the player's save file to say "bob"
@@ -896,11 +957,18 @@ public class Main extends Application {
         newSaveGameSuccessButton.setLayoutX(50);
         newSaveGameSuccessButton.setLayoutY(100);
         Player player = new Player();
+        dbgAlert("new Player player");
         newSaveGameSuccessButton.setOnAction(e -> {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
             dbgAlert("newSaveGameSuccessImageView, newSaveGameSuccessText, and newSaveGameSuccessButton removed from mainMenu");
+            dbgAlert("LOADING GAME");
+
+            //this singleton object has a copy of each Image and ImageView used by Tiles
+            TileImageSet imageSet = new TileImageSet();
+            dbgAlert("new TileImageSet imageSet");
+
             //this is where the map is put onto the screen
-            loadMap(mainMenu, player, getResolution());
+            loadMap(mainMenu, player, getResolution(), imageSet, "map1.map");
 
         });
 
@@ -908,7 +976,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0058");
+        Label buildNumberLabel = new Label("Build: 0.0059");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");

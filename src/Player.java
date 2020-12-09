@@ -11,6 +11,7 @@ public class Player {
 
     public Player(String name){
         setName(name);
+        //default starting position is 60, 60 for a new game save
         int x = 60;
         int y = 60;
     }
@@ -30,6 +31,7 @@ public class Player {
     public String getName(){
         return this.name;
     }
+
 
     public int getX() {
         return this.x;

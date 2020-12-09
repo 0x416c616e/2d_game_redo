@@ -6,7 +6,7 @@ public class WorldMap {
     }
 
     public WorldMap() {
-        setFilename("maps/map1.save");
+        setFilename("maps/map1.map");
     }
 
     public void setFilename(String filaname) {
