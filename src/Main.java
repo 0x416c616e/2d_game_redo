@@ -477,7 +477,7 @@ public class Main extends Application {
         try {
             PrintWriter resolutionFileOut = new PrintWriter(resolutionModeSettingsFile);
             dbgAlert("new PrintWriter resolutionFileOut");
-            List<String> resolutionList = List.of("1280x720", "1920x1080"); //removed 1280x800
+            List<String> resolutionList = List.of("1280x720", "1280x800", "1920x1080");
             //check if provided resolution is one of the three valid ones
             if (resolutionList.contains(res)) {
                 dbgAlert("valid resolution arg provided for writeResolution");
@@ -497,7 +497,7 @@ public class Main extends Application {
         dbgAlert("running setResolution method");
         switch (res) {
             case "1280x720":
-            /*case "1280x800":*/
+            case "1280x800":
             case "1920x1080":
                 writeResolution(res);
                 break;
@@ -600,11 +600,11 @@ public class Main extends Application {
                 stage.setHeight(720);
                 dbgAlert("resolution is 1280x720");
                 break;
-            //case "1280x800":
-            //    stage.setWidth(1280);
-            //    stage.setHeight(800);
-            //    dbgAlert("resolution is 1280x800");
-            //    break;
+            case "1280x800":
+                stage.setWidth(1280);
+                stage.setHeight(800);
+                dbgAlert("resolution is 1280x800");
+                break;
             case "1920x1080":
                 stage.setWidth(1920);
                 stage.setHeight(1080);
@@ -769,7 +769,7 @@ public class Main extends Application {
         //assets for the name error screen
         ImageView nameErrorBackground = new ImageView(tempBackground);
         dbgAlert("new ImageView nameErrorBackground");
-        Text nameErrorText = new Text("The name you entered is not valid.\nNames can only contain numbers and must be 1-10 characters long.");
+        Text nameErrorText = new Text("The name you entered is not valid.\nNames can only contain letters and must be 1-10 characters long.");
         dbgAlert("new Text nameErrorText");
         nameErrorText.setFont(standardFont);
         nameErrorText.setLayoutX(50);
@@ -879,7 +879,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0048");
+        Label buildNumberLabel = new Label("Build: 0.0050");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -1154,8 +1154,8 @@ public class Main extends Application {
 
         Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!" +
                 "\nThis game has big text and the option to use touchscreen controls because it's intended\n" +
-                "for small touchscreen tablets, though you can also play with keyboard\ncontrols, " +
-                "and the game supports 720p and 1080p, either windowed or fullscreen.\n\nThe creator's website is here:");
+                "for small touchscreen tablets, though you can also play with keyboard\ncontrols." +
+                "The game supports 720p, 1280x800, and 1080p,\neither windowed or fullscreen.\nThe creator's website is here:");
         dbgAlert("new Text aboutText");
         aboutText.setFont(standardFont);
         aboutText.setLayoutX(50);
@@ -1364,9 +1364,9 @@ public class Main extends Application {
         ObservableList<String> options =
                 FXCollections.observableArrayList(
                         "1280x720",
-
+                        "1280x800",
                         "1920x1080"
-                ); //removed "1280x800",
+                );
         final ComboBox resolutionComboBox = new ComboBox(options);
         resolutionComboBox.setStyle("-fx-font: 30px \"Arial\";");
         dbgAlert("new ComboBox resolutionComboBox");
@@ -1376,11 +1376,11 @@ public class Main extends Application {
             case "1280x720":
                 resolutionComboBox.getSelectionModel().select(0);
                 break;
-            //case "1280x800":
-            //    resolutionComboBox.getSelectionModel().select(1);
-            //    break;
+            case "1280x800":
+                resolutionComboBox.getSelectionModel().select(1);
+                break;
             case "1920x1080":
-                resolutionComboBox.getSelectionModel().select(1); //used to be selec(2)
+                resolutionComboBox.getSelectionModel().select(2);
                 break;
             default:
                 dbgAlert("error with fetching resolution for combobox");
