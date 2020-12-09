@@ -404,6 +404,11 @@ public class Main extends Application {
             dbgAlert("new Document doc");
 
             DoubleProperty progressAmount = new SimpleDoubleProperty(.0);
+
+            //this loads the entire map data into RAM
+            //screw it, I need to only load enough to show what is on screen
+            //then additional loading happens when player moves
+            //that is how I should redo this!!!
             new Thread(new Runnable() {
                 public void run() {
                     double progressAmount = 0;
@@ -413,9 +418,12 @@ public class Main extends Application {
                             String collisionValue = doc.getElementsByTagName(collisionField).item(0).getTextContent();
                             Boolean collisionBoolean = Boolean.parseBoolean(collisionValue);
                             mapData.tiles[x][y].setCollision(collisionBoolean);
-                            String bottomLayerField = "bottom_layer" + x + "_" + y;
-                            String bottomLayerValue = doc.getElementsByTagName(collisionField).item(0).getTextContent();
+                            //System.out.println("tiles[" + x + "][" + y + "] collision: " + collisionBoolean);
+
+                            String bottomLayerField = "bottom_layer_" + x + "_" + y;
+                            String bottomLayerValue = doc.getElementsByTagName(bottomLayerField).item(0).getTextContent();
                             mapData.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
+                            //System.out.println("tiles[" + x + "][" + y + "] bottomLayer: " + bottomLayerValue);
 
                         }
                         //progressAmount = (progressAmount + x)/xDimension;
@@ -1132,7 +1140,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0063");
+        Label buildNumberLabel = new Label("Build: 0.0064");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
