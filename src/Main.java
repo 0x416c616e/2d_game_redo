@@ -55,15 +55,14 @@ public class Main extends Application {
     //TODO
     //UNFINISHED
     //this method will load the map for the "new game" and "continue" features
-    public void loadMap(Pane mainMenu) {
+    public void loadMap(Pane mainMenu, Player player, String resolution) {
         dbgAlert("*****This is the method for initially loading the map*****");
         dbgAlert("to resume working on the project, go to the loadMap() method");
-        //PUT STUFF INTO A WORLD-LOADING METHOD IN THE WORLDMAP CLASS?
-        //SO IT'S REUSABLE FOR THE "CONTINUE" FEATURE, NOT JUST FOR NEW GAMES
-        //6.25 tiles should be: 40x40 pixels
         //tiles for now: rocks, grass, and player
         //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
-        //6.4 make the game load the player to
+        //6.4 make the game load the player to their x, y position
+
+
 
         //1. load XML map data into a WorldMap object (need to finish the WorldMap class)
         //2. get player info for their location (x, y) in the player save file (also need to edit the player save template so that it includes x,y
@@ -896,12 +895,12 @@ public class Main extends Application {
         newSaveGameSuccessButton.setFont(standardFont);
         newSaveGameSuccessButton.setLayoutX(50);
         newSaveGameSuccessButton.setLayoutY(100);
+        Player player = new Player();
         newSaveGameSuccessButton.setOnAction(e -> {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
             dbgAlert("newSaveGameSuccessImageView, newSaveGameSuccessText, and newSaveGameSuccessButton removed from mainMenu");
             //this is where the map is put onto the screen
-            setResolution("1280x800");
-            loadMap(mainMenu);
+            loadMap(mainMenu, player, getResolution());
 
         });
 
@@ -909,7 +908,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0057");
+        Label buildNumberLabel = new Label("Build: 0.0058");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -1052,7 +1051,7 @@ public class Main extends Application {
                         copyFile(saveTemplateSource, newSaveFile);
                         dbgAlert("copied save template to new game save");
                         //made a Player class but there isn't much in it yet
-                        Player player = new Player(playerName);
+                        player.setName(playerName);
                         dbgAlert("new Player player");
                         dbgAlert("player.getName(): " + player.getName());
 
