@@ -10,7 +10,7 @@ You can play the game with either the keyboard or touchscreen controls, configur
 
 ## How to run it
 
-1. Install Java.
+1. Install Java **JDK 15**. This will *not* work with Java 8.
 
 2. Clone or download this repo.
 
@@ -20,7 +20,9 @@ You can play the game with either the keyboard or touchscreen controls, configur
 
 This is a 2D RPG. It's not finished yet.
 
-The game supports 1280x720 and 1920x1080 resolutions, with 40x40 pixel tiles. It has a tile-based movement system. 
+The game supports 1280x720, 1280x800, and 1920x1080 resolutions, with 40x40 pixel tiles. It has a tile-based movement system. 
+
+**Please note**: if you are using a laptop or tablet, please put the display scaling to 100%, or else things will be spaced out incorrectly.
 
 All you need in order to run this program is Java. But this game itself has two dependencies (aside from Java, that is): OpenJFX and the Apache Commons IO library. However, it contains both of those dependencies within it, so there is no need to install them separately.
 
