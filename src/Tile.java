@@ -8,21 +8,70 @@ public class Tile {
     String npcImageFileName;
     String middleLayerFileName;
     String bottomLayerFileName;
-    Image npcImage;
     ImageView npcImageView;
-    Image middleLayerImage;
     ImageView middleLayerImageView;
-    Image bottomLayerImage;
     ImageView bottomLayerImageView;
 
     boolean collision;
     int x;
     int y;
     public Tile() {
-        //not implemented yet
+        //not finished yet
     }
 
-    public void update() {
-        //how a tile will be updated once the player moves on the map
+    public TileEvent getTileEvent() {
+        return tileEvent;
+    }
+
+    public void setTileEvent(TileEvent tileEvent) {
+        this.tileEvent = tileEvent;
+    }
+
+    public String getNpcImageFileName() {
+        return npcImageFileName;
+    }
+
+    public void setNpcImageFileName(String npcImageFileName) {
+        this.npcImageFileName = npcImageFileName;
+    }
+
+    public void setMiddleLayerFileName(String middleLayerFileName) {
+        this.middleLayerFileName = middleLayerFileName;
+    }
+
+    public String getMiddleLayerFileName() {
+        return middleLayerFileName;
+    }
+
+    public String getBottomLayerFileName() {
+        return bottomLayerFileName;
+    }
+
+    public void setBottomLayerFileName(String bottomLayerFileName) {
+        this.bottomLayerFileName = bottomLayerFileName;
+    }
+
+    public ImageView getNpcImageView() {
+        return npcImageView;
+    }
+
+    public void setNpcImageView(ImageView npcImageView) {
+        this.npcImageView = npcImageView;
+    }
+
+    public ImageView getMiddleLayerImageView() {
+        return middleLayerImageView;
+    }
+
+    public void setMiddleLayerImageView(ImageView middleLayerImageView) {
+        this.middleLayerImageView = middleLayerImageView;
+    }
+
+    public ImageView getBottomLayerImageView() {
+        return bottomLayerImageView;
+    }
+
+    public void setBottomLayerImageView(ImageView bottomLayerImageView) {
+        this.bottomLayerImageView = bottomLayerImageView;
     }
 }

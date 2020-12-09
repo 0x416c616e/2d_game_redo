@@ -87,15 +87,63 @@ public class Main extends Application {
         }
 
         String playerFileName = "saves/" + player.getName() + ".save";
-        String xStringFromXML = getUniqueXMLField("playerXposition", playerFileName);
-        String yStringFromXML = getUniqueXMLField("playerYposition", playerFileName);
-        dbgAlert("Player position is: (" + xStringFromXML + ", " + yStringFromXML + ")");
-        int x = Integer.parseInt(xStringFromXML);
-        int y = Integer.parseInt(yStringFromXML);
+        String playerXpositionStringFromXML = getUniqueXMLField("playerXposition", playerFileName);
+        String playerYpositionStringFromXML = getUniqueXMLField("playerYposition", playerFileName);
+        dbgAlert("Player position is: (" + playerXpositionStringFromXML + ", " + playerYpositionStringFromXML + ")");
+        int playerXposition = Integer.parseInt(playerXpositionStringFromXML);
+        int playerYposition = Integer.parseInt(playerYpositionStringFromXML);
 
+        //getting the xDimension and yDimension from the map so that the WorldMap XML so that it can be properly instantiated
+        //because the 2-dimensional array of Tiles has a different size based on the size of the overall map
+        //this has nothing to do with graphics yet, just the overall map data
+
+
+        String mapPath = "maps/" + mapName;
+        dbgAlert("mapPath: " + mapPath);
+        String mapXdimension = getUniqueXMLField("xDimension", mapPath);
+        String mapYdimension = getUniqueXMLField("yDimension", mapPath);
+        dbgAlert("x,y size of map being loaded: (" + mapXdimension + ", " + mapYdimension + ")");
+        int mapXdimensionInt = Integer.parseInt(mapXdimension);
+        int mapYdimensionInt = Integer.parseInt(mapYdimension);
+
+
+
+        WorldMap map = new WorldMap(mapXdimensionInt, mapYdimensionInt, mapPath);
+        dbgAlert("new WorldMap map: " + mapXdimensionInt + "x" + mapYdimensionInt + " on map " + mapPath);
+        String mapThePlayerIsOn = getUniqueXMLField("playerCurrentMapName", playerFileName);
+        String fileNameOfMapPlayerIsOn = "maps/" + mapThePlayerIsOn + ".map"; //i.e. maps/map1.map for the first world map the player will be on
+        dbgAlert(fileNameOfMapPlayerIsOn);
 
         //where I left off!!!
+        //now need to load the map XML to a WorldMap object, but first, need to make the WorldMap class
+        //should be generalizable for maps of many different sizes -- map1 is 200x200 but I could have other dimensions for other future maps
+        
 
+        //now that I have the player x,y coordinates, I need to know which map to load, i.e. map1
+        //and then calculate which tiles need to be loaded from the XML's <playerCurrentMapName>
+        //by figuring out where the player will be on-screen, then an offset for a number of tiles for the whole screen
+        //but this depends on the resolution
+        //I also need to make the WorldMap class and give it an array of Tiles
+        //then each tile will update using the TileImageSet singleton, imageSet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //the following notes are kinda older compared to the above notes;
         //1. load XML map data into a WorldMap object (need to finish the WorldMap class)
         //2. get player info for their location (x, y) in the player save file (also need to edit the player save template so that it includes x,y
             //2b. also need to have the XML save include a default x,y starting position
@@ -976,7 +1024,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0059");
+        Label buildNumberLabel = new Label("Build: 0.0060");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
