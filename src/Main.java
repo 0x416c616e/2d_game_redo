@@ -118,6 +118,8 @@ public class Main extends Application {
 
         //where I left off!!!
         //load entire map XML into WorldMap object's Tile[][] array
+
+        /*
         dbgAlert("this might be problematic for resource usage");
         for (int x = 0; x < mapXdimensionInt; x++) {
             for (int y = 0; y < mapYdimensionInt; y++) {
@@ -136,7 +138,12 @@ public class Main extends Application {
                 System.out.println(x + ", " + y);
                 System.gc();
             }
-        }
+        }*/
+
+        //potentially faster way of achieving what I commented out above?
+        loadMapDataXML(mapPath, mapXdimensionInt, mapYdimensionInt, mapData);
+        //(String filename, int xDimension, int yDimension, WorldMapData mapData)
+
         System.out.println("finally finished");
 
 
@@ -378,6 +385,63 @@ public class Main extends Application {
         }
         dbgAlert("ran getUniqueXMLField");
         return "errorGUPXML";
+    }
+
+    //load the map XML file to RAM -- this is just map DATA, not graphics
+    public void loadMapDataXML(String filename, int xDimension, int yDimension, WorldMapData mapData) {
+        dbgAlert("running loadMapDataXML");
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        try {
+            //only getting collision and bottom_layer at the moment, for collision detection and filename of tile image
+            //collision_X_Y
+            //bottom_layer_X_Y
+            String saveFileName = filename;
+            DocumentBuilder b = f.newDocumentBuilder();
+            dbgAlert("new DocumentBuilder b");
+            Document doc = b.parse(new File(saveFileName));
+            dbgAlert("new Document doc");
+
+
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    double progressAmount = 0;
+                    for (int x = 0; x < xDimension; x++) {
+                        for (int y = 0; y < yDimension; y++) {
+                            String collisionField = "collision_" + x + "_" + y;
+                            String collisionValue = doc.getElementsByTagName(collisionField).item(0).getTextContent();
+                            Boolean collisionBoolean = Boolean.parseBoolean(collisionValue);
+                            mapData.tiles[x][y].setCollision(collisionBoolean);
+                            String bottomLayerField = "bottom_layer" + x + "_" + y;
+                            String bottomLayerValue = doc.getElementsByTagName(collisionField).item(0).getTextContent();
+                            mapData.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
+
+                        }
+                    }
+                }
+
+            });
+
+            t.join();
+            t.stop();
+
+
+        } catch(ParserConfigurationException pc) {
+            dbgAlert("ParserConfigurationException 33333");
+            pc.printStackTrace();
+        } catch (SAXException se) {
+            dbgAlert("SAXException 33333");
+            se.printStackTrace();
+        } catch (IOException ioe) {
+            dbgAlert("IOException 33333");
+            ioe.printStackTrace();
+        } catch (InterruptedException intex) {
+            dbgAlert("InterruptedException 33333");
+            intex.printStackTrace();
+        }
+
+
+
+        dbgAlert("ran loadMapDataXML");
     }
 
     //if there is a uniquely-named field in an XML file, then this method can replace the contents with a new value
@@ -1028,7 +1092,9 @@ public class Main extends Application {
         Button newSaveGameSuccessButton = new Button("Continue");
         newSaveGameSuccessButton.setFont(standardFont);
         newSaveGameSuccessButton.setLayoutX(50);
-        newSaveGameSuccessButton.setLayoutY(100);
+        newSaveGameSuccessButton.setLayoutY(200);
+
+
         Player player = new Player();
         dbgAlert("new Player player");
         newSaveGameSuccessButton.setOnAction(e -> {
@@ -1158,6 +1224,7 @@ public class Main extends Application {
         //clicking button to submit new save game with desired name
         submitNameButton.setOnAction(e -> {
             dbgAlert("Running submitNameButton event handler");
+
             Matcher nameMatcher = namePattern.matcher(nameField.getText());
             dbgAlert("new Matcher nameMatcher");
             dbgAlert("nameField.getText():" + nameField.getText());
@@ -1233,6 +1300,7 @@ public class Main extends Application {
                             }
                         }
                         //6.2 Then load the data from the map XML and put it into tiles on the screen
+
 
 
 
