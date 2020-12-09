@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -55,7 +57,7 @@ public class Main extends Application {
     //TODO
     //UNFINISHED
     //this method will load the map for the "new game" and "continue" features
-    public void loadMap(Pane mainMenu, Player player, String resolution, TileImageSet imageSet, String mapName) {
+    public void loadMap(Pane mainMenu, Player player, String resolution, TileImageSet imageSet, String mapName, ProgressBar progressBar) {
         dbgAlert("Running loadMap() method");
         //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
         //6.4 make the game load the player to their x, y position
@@ -141,10 +143,10 @@ public class Main extends Application {
         }*/
 
         //potentially faster way of achieving what I commented out above?
-        loadMapDataXML(mapPath, mapXdimensionInt, mapYdimensionInt, mapData);
+        loadMapDataXML(mapPath, mapXdimensionInt, mapYdimensionInt, mapData, progressBar);
         //(String filename, int xDimension, int yDimension, WorldMapData mapData)
 
-        System.out.println("finally finished");
+
 
 
         //WORLDMAP CLASS AND TILES NO LONGER CONTAIN IMAGES OR IMAGEVIEWS
@@ -388,7 +390,7 @@ public class Main extends Application {
     }
 
     //load the map XML file to RAM -- this is just map DATA, not graphics
-    public void loadMapDataXML(String filename, int xDimension, int yDimension, WorldMapData mapData) {
+    public void loadMapDataXML(String filename, int xDimension, int yDimension, WorldMapData mapData, ProgressBar progressBar) {
         dbgAlert("running loadMapDataXML");
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         try {
@@ -401,8 +403,8 @@ public class Main extends Application {
             Document doc = b.parse(new File(saveFileName));
             dbgAlert("new Document doc");
 
-
-            Thread t = new Thread(new Runnable() {
+            DoubleProperty progressAmount = new SimpleDoubleProperty(.0);
+            new Thread(new Runnable() {
                 public void run() {
                     double progressAmount = 0;
                     for (int x = 0; x < xDimension; x++) {
@@ -416,13 +418,21 @@ public class Main extends Application {
                             mapData.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
 
                         }
+                        //progressAmount = (progressAmount + x)/xDimension;
+                        System.out.println(((float)x/xDimension)*100 + "%" );
+
+
+                        //progressBar updating doesn't work at the moment but oh well
+                        //progressBar.setProgress(progressAmount);
+
                     }
+                    System.out.println("finished for real");
                 }
 
-            });
+            }).run();
 
-            t.join();
-            t.stop();
+            //t.join();
+            //t.stop();
 
 
         } catch(ParserConfigurationException pc) {
@@ -434,10 +444,10 @@ public class Main extends Application {
         } catch (IOException ioe) {
             dbgAlert("IOException 33333");
             ioe.printStackTrace();
-        } catch (InterruptedException intex) {
+        } /*catch (InterruptedException intex) {
             dbgAlert("InterruptedException 33333");
             intex.printStackTrace();
-        }
+        }*/
 
 
 
@@ -1097,6 +1107,13 @@ public class Main extends Application {
 
         Player player = new Player();
         dbgAlert("new Player player");
+
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setMinWidth(500);
+        progressBar.setLayoutX(300);
+        progressBar.setLayoutY(300);
+        progressBar.setProgress(0);
+
         newSaveGameSuccessButton.setOnAction(e -> {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
             dbgAlert("newSaveGameSuccessImageView, newSaveGameSuccessText, and newSaveGameSuccessButton removed from mainMenu");
@@ -1107,7 +1124,7 @@ public class Main extends Application {
             dbgAlert("new TileImageSet imageSet");
 
             //this is where the map is put onto the screen
-            loadMap(mainMenu, player, getResolution(), imageSet, "map1.map");
+            loadMap(mainMenu, player, getResolution(), imageSet, "map1.map", progressBar);
 
         });
 
@@ -1115,7 +1132,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0061");
+        Label buildNumberLabel = new Label("Build: 0.0063");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -1270,6 +1287,7 @@ public class Main extends Application {
 
                         //6. let player know where the save file is (saves/name.save)
                         newSaveGameSuccessText.setText(newSaveGameSuccessText.getText() + saveFileName);
+                        newSaveGameSuccessText.setText(newSaveGameSuccessText.getText() + "\nNOTE: LOADING WILL TAKE A LONG TIME. PLEASE WAIT.");
                         mainMenu.getChildren().addAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
 
                         //6.1 Remove the new game save stuff from the screen, get rid of the other main menu buttons, put a new ImageView
@@ -1300,7 +1318,7 @@ public class Main extends Application {
                             }
                         }
                         //6.2 Then load the data from the map XML and put it into tiles on the screen
-
+                        mainMenu.getChildren().add(progressBar);
 
 
 
