@@ -55,7 +55,7 @@ public class Main extends Application {
     //TODO
     //UNFINISHED
     //this method will load the map for the "new game" and "continue" features
-    public void loadMap() {
+    public void loadMap(Pane mainMenu) {
         dbgAlert("*****This is the method for initially loading the map*****");
         dbgAlert("to resume working on the project, go to the loadMap() method");
         //PUT STUFF INTO A WORLD-LOADING METHOD IN THE WORLDMAP CLASS?
@@ -126,10 +126,29 @@ public class Main extends Application {
          *
          */
 
+        //IMAGE LOADING TEST FOR TABLET
+
+        dbgAlert("tablet performance benchmark for ImageViews");
+        Image rocksImage = new Image("file:assets/tiles/rock.png");
+        ImageView rocksImageViewArray[][] = new ImageView[32][20];
+        //creating and laying out the ImageViews on the mainMenu Pane
+        //32x20 tiles on the screen
+        for (int i = 0; i < 32; i++) {
+            for (int j = 0; j < 20; j++) {
+                rocksImageViewArray[i][j] = new ImageView(rocksImage);
+                rocksImageViewArray[i][j].setLayoutX(i * 40);
+                rocksImageViewArray[i][j].setLayoutY(j * 40);
+                mainMenu.getChildren().add(rocksImageViewArray[i][j]);
+                dbgAlert("adding rocksImageViewArray[" + i + "][" + j + "] at x,y: " + (i * 40) + (j * 40));
+            }
+        }
+
+        //end of current working area
+        //==================================================================================================================
+
     }
 
-    //end of current working area
-    //==================================================================================================================
+
 
     //Apache Commons IO makes it easier for me to copy templates to saves and whatnot
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -500,6 +519,7 @@ public class Main extends Application {
             case "1280x800":
             case "1920x1080":
                 writeResolution(res);
+                dbgAlert("setResolution got here 123");
                 break;
             default:
                 dbgAlert("error with setResolution method with res arg: " + res);
@@ -597,17 +617,26 @@ public class Main extends Application {
         switch (currentResolution) {
             case "1280x720":
                 stage.setWidth(1280);
+                stage.setMinWidth(1280);
+
                 stage.setHeight(720);
+                stage.setMinHeight(720);
                 dbgAlert("resolution is 1280x720");
                 break;
             case "1280x800":
                 stage.setWidth(1280);
+                stage.setMinWidth(1280);
+
                 stage.setHeight(800);
+                stage.setMinHeight(800);
                 dbgAlert("resolution is 1280x800");
                 break;
             case "1920x1080":
                 stage.setWidth(1920);
+                stage.setMinWidth(1920);
+
                 stage.setHeight(1080);
+                stage.setMinHeight(1080);
                 dbgAlert("resolution is 1920x1080");
                 break;
             default:
@@ -871,7 +900,8 @@ public class Main extends Application {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
             dbgAlert("newSaveGameSuccessImageView, newSaveGameSuccessText, and newSaveGameSuccessButton removed from mainMenu");
             //this is where the map is put onto the screen
-            loadMap();
+            setResolution("1280x800");
+            loadMap(mainMenu);
 
         });
 
@@ -879,7 +909,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0053");
+        Label buildNumberLabel = new Label("Build: 0.0054");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
