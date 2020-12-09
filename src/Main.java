@@ -108,19 +108,44 @@ public class Main extends Application {
 
 
 
-        WorldMap map = new WorldMap(mapXdimensionInt, mapYdimensionInt, mapPath);
+        WorldMapData mapData = new WorldMapData(mapXdimensionInt, mapYdimensionInt, mapPath);
         dbgAlert("new WorldMap map: " + mapXdimensionInt + "x" + mapYdimensionInt + " on map " + mapPath);
         String mapThePlayerIsOn = getUniqueXMLField("playerCurrentMapName", playerFileName);
         String fileNameOfMapPlayerIsOn = "maps/" + mapThePlayerIsOn + ".map"; //i.e. maps/map1.map for the first world map the player will be on
         dbgAlert(fileNameOfMapPlayerIsOn);
 
-        //where I left off!!!
-        //now need to load the map XML to a WorldMap object, but first, need to make the WorldMap class
-        //should be generalizable for maps of many different sizes -- map1 is 200x200 but I could have other dimensions for other future maps
-        
 
-        //now that I have the player x,y coordinates, I need to know which map to load, i.e. map1
-        //and then calculate which tiles need to be loaded from the XML's <playerCurrentMapName>
+
+        //where I left off!!!
+        //load entire map XML into WorldMap object's Tile[][] array
+        dbgAlert("this might be problematic for resource usage");
+        for (int x = 0; x < mapXdimensionInt; x++) {
+            for (int y = 0; y < mapYdimensionInt; y++) {
+                //SKIPPING TILE EVENTS ETC FOR NOW, ONLY WORKING ON GRAPHICS, MOVEMENT, AND COLLISION
+                String bottomLayerField = "bottom_layer_" + x + "_" + y;
+                String bottomLayerValue = getUniqueXMLField(bottomLayerField, mapPath);
+                mapData.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
+                dbgAlert("bottomLayerfield " + bottomLayerField + "'s value = " + bottomLayerValue);
+
+                String collisionField = "collision_" + x + "_" + y;
+                String collisionValue = getUniqueXMLField(collisionField, mapPath);
+                Boolean collisionBoolean = Boolean.parseBoolean(collisionValue);
+                mapData.tiles[x][y].setCollision(collisionBoolean);
+                dbgAlert("collisionField" + collisionField + "'s value = " + collisionValue);
+
+                System.out.println(x + ", " + y);
+                System.gc();
+            }
+        }
+        System.out.println("finally finished");
+
+
+        //WORLDMAP CLASS AND TILES NO LONGER CONTAIN IMAGES OR IMAGEVIEWS
+        //BECAUSE IT USED UP WAY TOO MANY RESOURCES
+
+        //graphics stuff
+        //now that I have the player x,y coordinates and which map to load.
+        // I need to calculate which tiles need to be loaded from the XML's <playerCurrentMapName>
         //by figuring out where the player will be on-screen, then an offset for a number of tiles for the whole screen
         //but this depends on the resolution
         //I also need to make the WorldMap class and give it an array of Tiles
@@ -1024,7 +1049,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0060");
+        Label buildNumberLabel = new Label("Build: 0.0061");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");

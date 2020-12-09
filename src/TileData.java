@@ -1,21 +1,19 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Tile {
+public class TileData {
     //I'm not implementing events just yet
-    //just wanna try the tile images and collision detection
+    //just wanna try the tile data
+
+    //TILE GRAPHICS ARE HANDLED SEPARATELY
     TileEvent tileEvent;
     String npcImageFileName;
     String middleLayerFileName;
     String bottomLayerFileName;
-    ImageView npcImageView;
-    ImageView middleLayerImageView;
-    ImageView bottomLayerImageView;
-
     boolean collision;
     int x;
     int y;
-    public Tile() {
+    public TileData() {
         //not finished yet
     }
 
@@ -51,27 +49,13 @@ public class Tile {
         this.bottomLayerFileName = bottomLayerFileName;
     }
 
-    public ImageView getNpcImageView() {
-        return npcImageView;
+
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
     }
 
-    public void setNpcImageView(ImageView npcImageView) {
-        this.npcImageView = npcImageView;
-    }
-
-    public ImageView getMiddleLayerImageView() {
-        return middleLayerImageView;
-    }
-
-    public void setMiddleLayerImageView(ImageView middleLayerImageView) {
-        this.middleLayerImageView = middleLayerImageView;
-    }
-
-    public ImageView getBottomLayerImageView() {
-        return bottomLayerImageView;
-    }
-
-    public void setBottomLayerImageView(ImageView bottomLayerImageView) {
-        this.bottomLayerImageView = bottomLayerImageView;
+    public boolean getCollision() {
+        return this.collision;
     }
 }
