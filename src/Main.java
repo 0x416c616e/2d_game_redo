@@ -57,7 +57,7 @@ public class Main extends Application {
     //TODO
     //UNFINISHED
     //this method will load the map for the "new game" and "continue" features
-    public void loadMap(Pane mainMenu, Player player, String resolution, TileImageSet imageSet, String mapName, ProgressBar progressBar) {
+    public void loadMap(Pane mainMenu, Player player, String resolution, TileImageSet imageSet, String mapName) {
         dbgAlert("Running loadMap() method");
         //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
         //6.4 make the game load the player to their x, y position
@@ -110,7 +110,7 @@ public class Main extends Application {
 
 
 
-        WorldMapData mapData = new WorldMapData(mapXdimensionInt, mapYdimensionInt, mapPath);
+        WorldMap worldMap = new WorldMap(mapXdimensionInt, mapYdimensionInt, mapPath);
         dbgAlert("new WorldMap map: " + mapXdimensionInt + "x" + mapYdimensionInt + " on map " + mapPath);
         String mapThePlayerIsOn = getUniqueXMLField("playerCurrentMapName", playerFileName);
         String fileNameOfMapPlayerIsOn = "maps/" + mapThePlayerIsOn + ".map"; //i.e. maps/map1.map for the first world map the player will be on
@@ -119,33 +119,9 @@ public class Main extends Application {
 
 
         //where I left off!!!
-        //load entire map XML into WorldMap object's Tile[][] array
-
-        /*
-        dbgAlert("this might be problematic for resource usage");
-        for (int x = 0; x < mapXdimensionInt; x++) {
-            for (int y = 0; y < mapYdimensionInt; y++) {
-                //SKIPPING TILE EVENTS ETC FOR NOW, ONLY WORKING ON GRAPHICS, MOVEMENT, AND COLLISION
-                String bottomLayerField = "bottom_layer_" + x + "_" + y;
-                String bottomLayerValue = getUniqueXMLField(bottomLayerField, mapPath);
-                mapData.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
-                dbgAlert("bottomLayerfield " + bottomLayerField + "'s value = " + bottomLayerValue);
-
-                String collisionField = "collision_" + x + "_" + y;
-                String collisionValue = getUniqueXMLField(collisionField, mapPath);
-                Boolean collisionBoolean = Boolean.parseBoolean(collisionValue);
-                mapData.tiles[x][y].setCollision(collisionBoolean);
-                dbgAlert("collisionField" + collisionField + "'s value = " + collisionValue);
-
-                System.out.println(x + ", " + y);
-                System.gc();
-            }
-        }*/
-
-        //potentially faster way of achieving what I commented out above?
-        loadMapDataXML(mapPath, mapXdimensionInt, mapYdimensionInt, mapData, progressBar);
-        //(String filename, int xDimension, int yDimension, WorldMapData mapData)
-
+        //DELETED THE "LOAD ALL MAP DATA" THING
+        //need to load less stuff so that it will load faster
+        System.out.println("time to load the on-screen map data");
 
 
 
@@ -389,78 +365,7 @@ public class Main extends Application {
         return "errorGUPXML";
     }
 
-    //load the map XML file to RAM -- this is just map DATA, not graphics
-    public void loadMapDataXML(String filename, int xDimension, int yDimension, WorldMapData mapData, ProgressBar progressBar) {
-        dbgAlert("running loadMapDataXML");
-        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-        try {
-            //only getting collision and bottom_layer at the moment, for collision detection and filename of tile image
-            //collision_X_Y
-            //bottom_layer_X_Y
-            String saveFileName = filename;
-            DocumentBuilder b = f.newDocumentBuilder();
-            dbgAlert("new DocumentBuilder b");
-            Document doc = b.parse(new File(saveFileName));
-            dbgAlert("new Document doc");
 
-            DoubleProperty progressAmount = new SimpleDoubleProperty(.0);
-
-            //this loads the entire map data into RAM
-            //screw it, I need to only load enough to show what is on screen
-            //then additional loading happens when player moves
-            //that is how I should redo this!!!
-            new Thread(new Runnable() {
-                public void run() {
-                    double progressAmount = 0;
-                    for (int x = 0; x < xDimension; x++) {
-                        for (int y = 0; y < yDimension; y++) {
-                            String collisionField = "collision_" + x + "_" + y;
-                            String collisionValue = doc.getElementsByTagName(collisionField).item(0).getTextContent();
-                            Boolean collisionBoolean = Boolean.parseBoolean(collisionValue);
-                            mapData.tiles[x][y].setCollision(collisionBoolean);
-                            //System.out.println("tiles[" + x + "][" + y + "] collision: " + collisionBoolean);
-
-                            String bottomLayerField = "bottom_layer_" + x + "_" + y;
-                            String bottomLayerValue = doc.getElementsByTagName(bottomLayerField).item(0).getTextContent();
-                            mapData.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
-                            //System.out.println("tiles[" + x + "][" + y + "] bottomLayer: " + bottomLayerValue);
-
-                        }
-                        //progressAmount = (progressAmount + x)/xDimension;
-                        System.out.println(((float)x/xDimension)*100 + "%" );
-
-
-                        //progressBar updating doesn't work at the moment but oh well
-                        //progressBar.setProgress(progressAmount);
-
-                    }
-                    System.out.println("finished for real");
-                }
-
-            }).run();
-
-            //t.join();
-            //t.stop();
-
-
-        } catch(ParserConfigurationException pc) {
-            dbgAlert("ParserConfigurationException 33333");
-            pc.printStackTrace();
-        } catch (SAXException se) {
-            dbgAlert("SAXException 33333");
-            se.printStackTrace();
-        } catch (IOException ioe) {
-            dbgAlert("IOException 33333");
-            ioe.printStackTrace();
-        } /*catch (InterruptedException intex) {
-            dbgAlert("InterruptedException 33333");
-            intex.printStackTrace();
-        }*/
-
-
-
-        dbgAlert("ran loadMapDataXML");
-    }
 
     //if there is a uniquely-named field in an XML file, then this method can replace the contents with a new value
     //example: updateUniqueXMLField(player, playerName, "Bob", "saves/Test.save") will update the player's save file to say "bob"
@@ -1116,11 +1021,7 @@ public class Main extends Application {
         Player player = new Player();
         dbgAlert("new Player player");
 
-        ProgressBar progressBar = new ProgressBar();
-        progressBar.setMinWidth(500);
-        progressBar.setLayoutX(300);
-        progressBar.setLayoutY(300);
-        progressBar.setProgress(0);
+
 
         newSaveGameSuccessButton.setOnAction(e -> {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
@@ -1132,7 +1033,7 @@ public class Main extends Application {
             dbgAlert("new TileImageSet imageSet");
 
             //this is where the map is put onto the screen
-            loadMap(mainMenu, player, getResolution(), imageSet, "map1.map", progressBar);
+            loadMap(mainMenu, player, getResolution(), imageSet, "map1.map");
 
         });
 
@@ -1140,7 +1041,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0064");
+        Label buildNumberLabel = new Label("Build: 0.0065");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -1326,7 +1227,6 @@ public class Main extends Application {
                             }
                         }
                         //6.2 Then load the data from the map XML and put it into tiles on the screen
-                        mainMenu.getChildren().add(progressBar);
 
 
 
