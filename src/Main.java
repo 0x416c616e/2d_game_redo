@@ -123,6 +123,58 @@ public class Main extends Application {
         //need to load less stuff so that it will load faster
         System.out.println("time to load the on-screen map data");
 
+        //where will the character be put on screen? depends on the screen resolution
+        //1280x720 is 32x18
+        //1280x800 is 32x20
+        //1920x1080 is 48x27
+        //also keep in mind that, in windowed mode, edge tiles can be slightly cut off
+
+        //720p player position should be ((32/2) - 1 - 1), ((18/2) -1 -1)
+        //explanation: -1 because the array is 0-31, not 1-32
+        //and another -1 because of windowed mode cutting off the other one
+
+        int middleX = ((numberOfTilesX/2) -2);
+        int middleY = ((numberOfTilesY/2) - 2);
+        System.out.println("Player starting position on map: " + middleX + ", " + middleY);
+
+        int xLowerOffset720 = -14; //from middleX to x=0
+        int xLowerOffset800 = -14; //from middleX to x=0
+        int xLowerOffset1080 = -22; //from middleX to x=0
+
+        int xUpperOffset720 = 17; //from middleX to x=31
+        int xUpperOffset800 = 17; //from middleX to x=31
+        int xUpperOffset1080 =25; //from middleX to x=47
+
+        int yLowerOffset720 = -7;//from middleY to y=0
+        int yLowerOffset800;//from middleY to y=0
+        int yLowerOffset1080;//from middleY to y=0
+
+        int yUpperOffset720 = 10;//from middleY to y=17
+        int yUpperOffset800;//from middleY to y=19
+        int yUpperOffset1080;//from middleY to y=47
+
+        /*
+        1280x720
+        middle x,y is (14,7)
+
+        default starting position is 60,60
+
+        x range would be from x 60-14 through 60+17
+        so from 46 through 77
+        32 total tiles for x because range is inclusive on either end (46 through 77, NOT up to)
+
+        y range would be 60-7 through 60+10
+        so from 53 through 70
+        18 total tiles for y
+         */
+
+        int xLowerBound720 = playerXposition + xLowerOffset720;
+        int yLowerBound720 = playerYposition + yLowerOffset720;
+        int xUpperBound720 = playerXposition + xUpperOffset720;
+        int yUpperBound720 = playerYposition + yUpperOffset720;
+        System.out.println("The player position is " + playerXposition + ", " + playerYposition);
+        System.out.println("The x tiles for 720p would be from " + xLowerBound720 + " through " + xUpperBound720);
+        System.out.println("The y tiles for 720p would be from " + yLowerBound720 + " through " + yUpperBound720);
 
 
         //WORLDMAP CLASS AND TILES NO LONGER CONTAIN IMAGES OR IMAGEVIEWS
@@ -1041,7 +1093,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0065");
+        Label buildNumberLabel = new Label("Build: 0.0066");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
