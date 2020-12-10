@@ -57,7 +57,7 @@ public class Main extends Application {
     //TODO
     //UNFINISHED
     //this method will load the map for the "new game" and "continue" features
-    public void loadMap(Pane mainMenu, Player player, String resolution, TileImageSet imageSet, String mapName) {
+    public void loadMap(Pane mainMenu, Player player, String resolution, TileImageSet imageSet, String mapName, Pane worldPane) {
         dbgAlert("Running loadMap() method");
         //6.3 720p = 32x18 tiles, 800p = 32x20 tiles, and 1080p = 48x27
         //6.4 make the game load the player to their x, y position
@@ -85,6 +85,7 @@ public class Main extends Application {
                 break;
             default:
                 System.out.println("Error with resolution in loadMap method");
+                System.exit(1222);
                 break;
         }
 
@@ -168,6 +169,8 @@ public class Main extends Application {
         18 total tiles for y
          */
 
+
+
         int xLowerBound720 = playerXposition + xLowerOffset720;
         int yLowerBound720 = playerYposition + yLowerOffset720;
         int xUpperBound720 = playerXposition + xUpperOffset720;
@@ -175,6 +178,102 @@ public class Main extends Application {
         System.out.println("The player position is " + playerXposition + ", " + playerYposition);
         System.out.println("The x tiles for 720p would be from " + xLowerBound720 + " through " + xUpperBound720);
         System.out.println("The y tiles for 720p would be from " + yLowerBound720 + " through " + yUpperBound720);
+        //where I left off!!!!!!!
+        //for now I am only testing this on 720p
+        //I will add support for the other resolutions later
+
+        //populate tiles
+        /*
+        for (int x = xLowerBound720; x < xUpperBound720; x++) {
+            for (int y = yLowerBound720; y < yUpperBound720; y++) {
+                //only doing collision and bottomlayer for this initial test
+                String collisionFieldName = "collision_" + x + "_" + y;
+                String bottomLayerFieldName = "bottom_layer_" + x + "_" + y;
+
+                boolean collisionBool = Boolean.parseBoolean(getUniqueXMLField(collisionFieldName, mapPath));
+                String bottomLayerFileName = getUniqueXMLField(bottomLayerFieldName, mapPath);
+
+                worldMap.tiles[x][y].setCollision(collisionBool);
+                worldMap.tiles[x][y].setBottomLayerFileName(bottomLayerFileName);
+                //System.out.println("worldMap.tiles[" + x + "][" + y + "] collision = " + collisionBool);
+                //System.out.println("worldMap.tiles[" + x + "][" + y + "] bottomLayer = " + bottomLayerFileName);
+            }
+        }*/
+
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        try {
+            //only getting collision and bottom_layer at the moment, for collision detection and filename of tile image
+            //collision_X_Y
+            //bottom_layer_X_Y
+            String saveFileName = mapPath;
+            DocumentBuilder b = f.newDocumentBuilder();
+            //dbgAlert("new DocumentBuilder b");
+            Document doc = b.parse(new File(saveFileName));
+            //dbgAlert("new Document doc");
+
+
+            ImageView imageViewArray[][] = new ImageView[200][200];
+
+            Thread t = new Thread(new Runnable() {
+            public void run() {
+                int tileXposition = 0;
+                int tileYposition = 0;
+                for (int x = xLowerBound720; x <= xUpperBound720; x++) {
+
+                    for (int y = yLowerBound720; y <= yUpperBound720; y++) {
+
+                        String collisionField = "collision_" + x + "_" + y;
+                        String collisionValue = doc.getElementsByTagName(collisionField).item(0).getTextContent();
+                        Boolean collisionBoolean = Boolean.parseBoolean(collisionValue);
+                        worldMap.tiles[x][y].setCollision(collisionBoolean);
+
+                        String bottomLayerField = "bottom_layer_" + x + "_" + y;
+                        String bottomLayerValue = doc.getElementsByTagName(bottomLayerField).item(0).getTextContent();
+                        worldMap.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
+                        imageViewArray[x][y] = new ImageView(imageSet.getImageByString(bottomLayerValue));
+                        int layoutX = (tileXposition * 40);
+                        int layoutY = (tileYposition * 40);
+                        imageViewArray[x][y].setLayoutX(layoutX);
+                        imageViewArray[x][y].setLayoutY(layoutY);
+                        //System.out.println("x, y pos for " + "[" + x + "][" + y + "] is: " + layoutX + ", " + layoutY);
+                        worldPane.getChildren().add(imageViewArray[x][y]);
+
+                        tileYposition += 1;
+                        //System.out.println("tileYposition: " + tileYposition);
+                        //System.out.println("tileXposition: " + tileXposition);
+                    }
+                    tileYposition = 0;
+                    tileXposition += 1;
+                    //System.out.println(x);
+
+                }
+                System.out.println("finished thread for getting XML map data into Tile objects in RAM");
+                mainMenu.getChildren().add(worldPane);
+                System.gc();
+            }
+
+        });
+        t.run();
+        } catch (ParserConfigurationException pc) {
+            dbgAlert("ParserConfigurationException 33333");
+            pc.printStackTrace();
+        } catch (SAXException se) {
+            dbgAlert("SAXException 33333");
+            se.printStackTrace();
+        } catch (IOException ioe) {
+            dbgAlert("IOException 33333");
+            ioe.printStackTrace();
+        } /*catch (InterruptedException intex) {
+            dbgAlert("InterruptedException 33333");
+            intex.printStackTrace();
+        }*/
+
+
+
+
+
+
+
 
 
         //WORLDMAP CLASS AND TILES NO LONGER CONTAIN IMAGES OR IMAGEVIEWS
@@ -291,6 +390,8 @@ public class Main extends Application {
         //==================================================================================================================
 
     }
+
+
 
 
 
@@ -564,6 +665,92 @@ public class Main extends Application {
         }
         dbgAlert("ran getBreakpoint() method");
     }
+
+
+
+
+
+
+    //loadMap() helper method================================================================
+
+
+
+
+    public void loadMapDataXML(String filename, int xDimension, int yDimension, WorldMap mapData) {
+        dbgAlert("running loadMapDataXML");
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        try {
+            //only getting collision and bottom_layer at the moment, for collision detection and filename of tile image
+            //collision_X_Y
+            //bottom_layer_X_Y
+            String saveFileName = filename;
+            DocumentBuilder b = f.newDocumentBuilder();
+            dbgAlert("new DocumentBuilder b");
+            Document doc = b.parse(new File(saveFileName));
+            dbgAlert("new Document doc");
+
+            DoubleProperty progressAmount = new SimpleDoubleProperty(.0);
+
+            //this loads the entire map data into RAM
+            //screw it, I need to only load enough to show what is on screen
+            //then additional loading happens when player moves
+            //that is how I should redo this!!!
+            new Thread(new Runnable() {
+                public void run() {
+                    double progressAmount = 0;
+                    for (int x = 0; x < xDimension; x++) {
+                        for (int y = 0; y < yDimension; y++) {
+                            String collisionField = "collision_" + x + "_" + y;
+                            String collisionValue = doc.getElementsByTagName(collisionField).item(0).getTextContent();
+                            Boolean collisionBoolean = Boolean.parseBoolean(collisionValue);
+                            mapData.tiles[x][y].setCollision(collisionBoolean);
+                            //System.out.println("tiles[" + x + "][" + y + "] collision: " + collisionBoolean);
+
+                            String bottomLayerField = "bottom_layer_" + x + "_" + y;
+                            String bottomLayerValue = doc.getElementsByTagName(bottomLayerField).item(0).getTextContent();
+                            mapData.tiles[x][y].setBottomLayerFileName(bottomLayerValue);
+                            //System.out.println("tiles[" + x + "][" + y + "] bottomLayer: " + bottomLayerValue);
+
+                        }
+                        //progressAmount = (progressAmount + x)/xDimension;
+                        System.out.println(((float) x / xDimension) * 100 + "%");
+
+
+                        //progressBar updating doesn't work at the moment but oh well
+                        //progressBar.setProgress(progressAmount);
+
+                    }
+                    System.out.println("finished for real");
+                }
+
+            }).run();
+
+            //t.join();
+            //t.stop();
+
+
+        } catch (ParserConfigurationException pc) {
+            dbgAlert("ParserConfigurationException 33333");
+            pc.printStackTrace();
+        } catch (SAXException se) {
+            dbgAlert("SAXException 33333");
+            se.printStackTrace();
+        } catch (IOException ioe) {
+            dbgAlert("IOException 33333");
+            ioe.printStackTrace();
+        } /*catch (InterruptedException intex) {
+            dbgAlert("InterruptedException 33333");
+            intex.printStackTrace();
+        }*/
+    }
+
+
+
+
+    //end of loadMap() helper method==========================================================
+
+
+
 
     //methods getting or setting controls status (keyboard or touchscreen)
 
@@ -1085,7 +1272,8 @@ public class Main extends Application {
             dbgAlert("new TileImageSet imageSet");
 
             //this is where the map is put onto the screen
-            loadMap(mainMenu, player, getResolution(), imageSet, "map1.map");
+            Pane worldPane = new Pane();
+            loadMap(mainMenu, player, getResolution(), imageSet, "map1.map", worldPane);
 
         });
 
@@ -1093,7 +1281,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0066");
+        Label buildNumberLabel = new Label("Build: 0.0067");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");

@@ -48,4 +48,30 @@ public class TileImageSet {
     public ImageView getPlayerImageView() {
         return playerImageView;
     }
+
+    public ImageView getImageViewByString(String imageViewName) {
+        switch (imageViewName) {
+            case "rock.png":
+                return this.getRockImageView();
+            case "grass.png":
+                return this.getGrassImageView();
+            default:
+                System.out.println("getImageViewByString error");
+                break;
+        }
+        return null;
+    }
+
+    public Image getImageByString(String imageName) {
+        switch (imageName) {
+            case "rock.png":
+                return this.getRockImage();
+            case "grass.png":
+                return this.getGrassImage();
+            default:
+                System.out.println("getImageViewByString error");
+                break;
+        }
+        return null;
+    }
 }

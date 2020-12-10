@@ -1,8 +1,8 @@
 <save>
     <player>
         <playerName></playerName>
-        <playerXposition>60</playerXposition>
-        <playerYposition>60</playerYposition>
+        <playerXposition>55</playerXposition>
+        <playerYposition>55</playerYposition>
         <playerCurrentMapName>map1</playerCurrentMapName>
     </player>
 </save>

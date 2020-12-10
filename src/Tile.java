@@ -6,6 +6,9 @@ public class Tile {
     String npcImageFileName;
     String middleLayerFileName;
     String bottomLayerFileName;
+    ImageView bottomLayerImageView;
+    Image bottomLayerImage;
+
     boolean collision;
     int x;
     int y;
@@ -45,7 +48,13 @@ public class Tile {
         this.bottomLayerFileName = bottomLayerFileName;
     }
 
+    public void setBottomLayerImage(Image bottomLayerImage) {
+        this.bottomLayerImage = bottomLayerImage;
+    }
 
+    public Image getBottomLayerImage() {
+        return bottomLayerImage;
+    }
 
     public void setCollision(boolean collision) {
         this.collision = collision;
@@ -54,4 +63,19 @@ public class Tile {
     public boolean getCollision() {
         return this.collision;
     }
+
+    public void setBottomLayerImageView(ImageView bottomLayerImageView) {
+        this.bottomLayerImageView = bottomLayerImageView;
+    }
+
+    public ImageView getBottomLayerImageView() {
+        return bottomLayerImageView;
+    }
+
+    public void setBottomLayerImageViewXY(int x, int y) {
+        this.bottomLayerImageView.setLayoutX(x);
+        this.bottomLayerImageView.setLayoutY(y);
+    }
+
+
 }
