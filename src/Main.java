@@ -861,7 +861,7 @@ public class Main extends Application {
                     //only difference is where the loadMap() event will be to load the adjacent map
                     //but don't put any other content there
                     //so the maps are the same on all resolutions
-                    worldMap = new WorldMap(32, 18, "40x40");
+                    worldMap = new WorldMap(32, 18, "40x40", player);
                     dbgAlert("new worldMap worldMap, 720p");
                     loadMap_0_0(worldMap, worldPane, mainMenu);
 
@@ -869,11 +869,11 @@ public class Main extends Application {
 
                     break;
                 case "1280x800":
-                    worldMap = new WorldMap(32, 20, "40x40");
+                    worldMap = new WorldMap(32, 20, "40x40", player);
                     dbgAlert("new worldMap worldMap, 800p");
                     break;
                 case "1920x1080":
-                    worldMap = new WorldMap(32, 18, "60x60");
+                    worldMap = new WorldMap(32, 18, "60x60", player);
                     dbgAlert("new worldMap worldMap, 1080p");
                     break;
                 default:
@@ -888,7 +888,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0075");
+        Label buildNumberLabel = new Label("Build: 0.0078");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");

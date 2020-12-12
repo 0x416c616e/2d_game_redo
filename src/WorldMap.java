@@ -13,6 +13,7 @@ public class WorldMap {
     Tile tileArray[][];
     String name;
     String tileSize;
+    Player player;
 
     //Tiles contain data, but the WorldMap class contains the images
 
@@ -25,7 +26,7 @@ public class WorldMap {
 
     //constructors============================================
 
-    public WorldMap(int xDimension, int yDimension, String tileSize) {
+    public WorldMap(int xDimension, int yDimension, String tileSize, Player player) {
         setyDimension(yDimension);
         setxDimension(xDimension);
         setTileArray(new Tile[xDimension][yDimension]);
@@ -92,6 +93,7 @@ public class WorldMap {
     //graphics setters-----
 
 
+    //set one bottom level image
     public void setBottomLevelImage(int x, int y) {
         String bottomLevelFileName = this.tileArray[x][y].getBottomLevel();
         //only proceed if the bottomLevel String is not blank
@@ -109,7 +111,6 @@ public class WorldMap {
                 int newYLayout = y * tileSizeInt;
                 bottomLevelImageViewArray[x][y].setLayoutX(newXLayout);
                 bottomLevelImageViewArray[x][y].setLayoutY(newYLayout);
-                //System.out.println("Setting bottomLevelImageViewArray[" + x + "][" + y + "] to the x,y coords: " + );
             }
 
         } else {
@@ -117,6 +118,7 @@ public class WorldMap {
         }
     }
 
+    //set all bottom level images
     public void setAllBottomLevelImage(Pane pane) {
         for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
             for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
@@ -125,6 +127,44 @@ public class WorldMap {
             }
         }
     }
+
+
+    //set one mid level image
+    public void setMidLevelImage(int x, int y) {
+        String midLevelFileName = this.tileArray[x][y].getMidLevel();
+        //only proceed if the midLevel String is not blank
+        if (!midLevelFileName.equals("")) {
+            midLevelImageArray[x][y] = new Image(midLevelFileName);
+            midLevelImageViewArray[x][y] = new ImageView(midLevelImageArray[x][y]);
+            int tileSizeInt = -1;
+            if (this.getTileSize().equals("40x40")) {
+                tileSizeInt = 40;
+            } else if (this.getTileSize().equals("60x60")) {
+                tileSizeInt = 60;
+            }
+            if (! (tileSizeInt == -1)) {
+                int newXLayout = x * tileSizeInt;
+                int newYLayout = y * tileSizeInt;
+                midLevelImageViewArray[x][y].setLayoutX(newXLayout);
+                midLevelImageViewArray[x][y].setLayoutY(newYLayout);
+            }
+
+        } else {
+            System.out.println("Error with setMidLevelImage for " + x + ", " + y);
+        }
+    }
+
+    //set all mid level images
+    public void setAllMidLevelImage(Pane pane) {
+        for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
+            for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
+                setBottomLevelImage(xLoop, yLoop);
+                pane.getChildren().add(midLevelImageViewArray[xLoop][yLoop]);
+            }
+        }
+    }
+
+
 
 
 
