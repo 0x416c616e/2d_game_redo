@@ -27,7 +27,17 @@ public class Tile {
         setTopLevel("");
         setMidLevel("");
         setBottomLevel(bottomLevel);
-        collision = false;
+        setCollision(false);
+        int xPosition = -1; //needs to be initialized
+        int yPosition = -1; //needs to be initialized
+    }
+
+    public Tile(String bottomLevel, boolean collision) {
+        setEvent(new Event());
+        setTopLevel("");
+        setMidLevel("");
+        setBottomLevel(bottomLevel);
+        setCollision(collision);
         int xPosition = -1; //needs to be initialized
         int yPosition = -1; //needs to be initialized
     }

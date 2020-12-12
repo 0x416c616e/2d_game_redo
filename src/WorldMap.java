@@ -97,7 +97,7 @@ public class WorldMap {
     public void setBottomLevelImage(int x, int y) {
         String bottomLevelFileName = this.tileArray[x][y].getBottomLevel();
         //only proceed if the bottomLevel String is not blank
-        if (!bottomLevelFileName.equals("")) {
+        if (bottomLevelFileName.length() > 0) {
             bottomLevelImageArray[x][y] = new Image(bottomLevelFileName);
             bottomLevelImageViewArray[x][y] = new ImageView(bottomLevelImageArray[x][y]);
             int tileSizeInt = -1;
@@ -122,8 +122,11 @@ public class WorldMap {
     public void setAllBottomLevelImage(Pane pane) {
         for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
             for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
-                setBottomLevelImage(xLoop, yLoop);
-                pane.getChildren().add(bottomLevelImageViewArray[xLoop][yLoop]);
+                String bottomLevelName = this.tileArray[xLoop][yLoop].getBottomLevel();
+                if (bottomLevelName.length() > 0) {
+                    setBottomLevelImage(xLoop, yLoop);
+                    pane.getChildren().add(bottomLevelImageViewArray[xLoop][yLoop]);
+                }
             }
         }
     }
@@ -133,7 +136,7 @@ public class WorldMap {
     public void setMidLevelImage(int x, int y) {
         String midLevelFileName = this.tileArray[x][y].getMidLevel();
         //only proceed if the midLevel String is not blank
-        if (!midLevelFileName.equals("")) {
+        if (midLevelFileName.length() > 0) {
             midLevelImageArray[x][y] = new Image(midLevelFileName);
             midLevelImageViewArray[x][y] = new ImageView(midLevelImageArray[x][y]);
             int tileSizeInt = -1;
@@ -158,8 +161,11 @@ public class WorldMap {
     public void setAllMidLevelImage(Pane pane) {
         for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
             for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
-                setMidLevelImage(xLoop, yLoop);
-                pane.getChildren().add(midLevelImageViewArray[xLoop][yLoop]);
+                String midLevelName = this.tileArray[xLoop][yLoop].getMidLevel();
+                if (midLevelName.length() > 0) {
+                    setMidLevelImage(xLoop, yLoop);
+                    pane.getChildren().add(midLevelImageViewArray[xLoop][yLoop]);
+                }
             }
         }
     }
@@ -196,8 +202,12 @@ public class WorldMap {
     public void setAllTopLevelImage(Pane pane) {
         for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
             for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
-                setTopLevelImage(xLoop, yLoop);
-                pane.getChildren().add(topLevelImageViewArray[xLoop][yLoop]);
+                String topLevelName = this.tileArray[xLoop][yLoop].getTopLevel();
+                if (topLevelName.length() > 0) {
+                    setTopLevelImage(xLoop, yLoop);
+                    pane.getChildren().add(topLevelImageViewArray[xLoop][yLoop]);
+                }
+
             }
         }
     }

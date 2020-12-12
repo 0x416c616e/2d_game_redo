@@ -139,8 +139,10 @@ public class Main extends Application {
 
 
     //map-loading methods-----------------------------------------------------------------------
-    //maps are now hard-coded for performance reasons (XML parsing was too slow)
-
+    //maps are now hard-coded for performance reasons (XML parsing was too slow even though separating data from code sounds like a good idea in theory)
+    //IMPORTANT INFO ABOUT MAPS AND WINDOWED MODE:
+    //IMPORTANT TILES CANNOT BE ON THE BOTTOM OR RIGHTHAND EDGES BECAUSE THEY CAN BE CUT OFF
+    //IF YOU NEED TO PUT MAPMOVE TILES ON THE EDGES, MAKE SURE THERE ARE TWO, IN CASE ONE GETS CUT OFF
     public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution) {
         //testing loading bottom level
         String tileSizeFileNamePart = "";
@@ -168,24 +170,136 @@ public class Main extends Application {
             }
         }
 
+        //adding only bottom level stuff, in this case, just two arrows and some water
+        String downArrowFileName = "file:assets/tiles/down_arrow_" + tileSizeFileNamePart + ".png";
+        int downArrowToNextMapY;
+        if (!resolution.equals("1280x800")) {
+            downArrowToNextMapY = 16;
+        } else {
+            System.out.println("800p has a different number of tiles, so moving to another map is different (down a couple rows)");
+            //16:9 is 32x18 tiles, 16:10 is 32x20 tiles
+            downArrowToNextMapY = 18;
+        }
+
+        //adding tiles to the map that will eventually have events that will take you to the next map if you move over it
+        //there are two of each arrow (with a mapmove event) because windowed mode can get slightly cut off
+
+        worldMap.tileArray[11][downArrowToNextMapY] = new Tile(downArrowFileName);
+        worldMap.tileArray[11][downArrowToNextMapY + 1] = new Tile(downArrowFileName);
+        String rightArrowFileName = "file:assets/tiles/right_arrow_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[30][11] = new Tile(rightArrowFileName);
+        worldMap.tileArray[31][11] = new Tile(rightArrowFileName);
+
+        //adding water, the only other bottom level thing aside from the arrows and grass
+        //this might look dumb but it loads faster than "smarter" methods I tried in the past that were too slow
+        //this is loop unrolling and it looks bad but speeds things up
+        //important because this is intended to run on a low-end tablet PC
+        String waterFileName = "file:assets/tiles/water_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[1][4] = new Tile(waterFileName, true);
+        worldMap.tileArray[1][5] = new Tile(waterFileName, true);
+        worldMap.tileArray[1][6] = new Tile(waterFileName, true);
+        worldMap.tileArray[2][3] = new Tile(waterFileName, true);
+        worldMap.tileArray[2][4] = new Tile(waterFileName, true);
+        worldMap.tileArray[2][5] = new Tile(waterFileName, true);
+        worldMap.tileArray[2][6] = new Tile(waterFileName, true);
+        worldMap.tileArray[2][7] = new Tile(waterFileName, true);
+        worldMap.tileArray[3][3] = new Tile(waterFileName, true);
+        worldMap.tileArray[3][4] = new Tile(waterFileName, true);
+        worldMap.tileArray[3][5] = new Tile(waterFileName, true);
+        worldMap.tileArray[3][6] = new Tile(waterFileName, true);
+        worldMap.tileArray[3][7] = new Tile(waterFileName, true);
+        worldMap.tileArray[4][4] = new Tile(waterFileName, true);
+        worldMap.tileArray[4][5] = new Tile(waterFileName, true);
+        worldMap.tileArray[4][6] = new Tile(waterFileName, true);
+
+        //all bottom level stuff is done now
+
         //adding trees to the map as MID LEVEL, and collision for them so you can't pass through them
-        //String midLevelStrings[][] = new String[][];
+        String treeMidLevelFileName = "file:assets/tiles/tree_" + tileSizeFileNamePart + ".png";
         //0,4
+        worldMap.tileArray[0][4].setMidLevel(treeMidLevelFileName);
         //0, 16
+        worldMap.tileArray[0][16].setMidLevel(treeMidLevelFileName);
         //0, 17
+        worldMap.tileArray[0][17].setMidLevel(treeMidLevelFileName);
         //1,2
+        worldMap.tileArray[1][2].setMidLevel(treeMidLevelFileName);
         //1,3
+        worldMap.tileArray[1][3].setMidLevel(treeMidLevelFileName);
         //1,7
+        worldMap.tileArray[1][7].setMidLevel(treeMidLevelFileName);
         //1, 10
+        worldMap.tileArray[1][10].setMidLevel(treeMidLevelFileName);
         //2,1
+        worldMap.tileArray[2][1].setMidLevel(treeMidLevelFileName);
         //2, 8
+        worldMap.tileArray[2][8].setMidLevel(treeMidLevelFileName);
         //2, 12
+        worldMap.tileArray[2][12].setMidLevel(treeMidLevelFileName);
         //2, 14
+        worldMap.tileArray[2][14].setMidLevel(treeMidLevelFileName);
         //3, 1
-        //3, 1
+        worldMap.tileArray[3][1].setMidLevel(treeMidLevelFileName);
+        //4, 16
+        worldMap.tileArray[4][16].setMidLevel(treeMidLevelFileName);
+        //5, 10
+        worldMap.tileArray[5][10].setMidLevel(treeMidLevelFileName);
+        //6, 11
+        worldMap.tileArray[6][11].setMidLevel(treeMidLevelFileName);
+        //7, 4
+        worldMap.tileArray[7][4].setMidLevel(treeMidLevelFileName);
+        //7, 16
+        worldMap.tileArray[7][16].setMidLevel(treeMidLevelFileName);
+        //9, 11
+        worldMap.tileArray[9][11].setMidLevel(treeMidLevelFileName);
+        //9, 15
+        worldMap.tileArray[9][15].setMidLevel(treeMidLevelFileName);
+        //13,13
+        worldMap.tileArray[13][13].setMidLevel(treeMidLevelFileName);
+        //14, 5
+        worldMap.tileArray[14][5].setMidLevel(treeMidLevelFileName);
+        //16, 2
+        worldMap.tileArray[16][2].setMidLevel(treeMidLevelFileName);
+        //17, 8
+        worldMap.tileArray[17][8].setMidLevel(treeMidLevelFileName);
+        //17, 17
+        worldMap.tileArray[17][17].setMidLevel(treeMidLevelFileName);
+        //20, 5
+        worldMap.tileArray[20][5].setMidLevel(treeMidLevelFileName);
+        //20, 8
+        worldMap.tileArray[20][8].setMidLevel(treeMidLevelFileName);
+        //21, 13
+        worldMap.tileArray[21][13].setMidLevel(treeMidLevelFileName);
+        //23, 3
+        worldMap.tileArray[23][3].setMidLevel(treeMidLevelFileName);
+        //23, 10
+        worldMap.tileArray[23][10].setMidLevel(treeMidLevelFileName);
+        //24, 1
+        worldMap.tileArray[24][1].setMidLevel(treeMidLevelFileName);
+        //24, 7
+        worldMap.tileArray[24][7].setMidLevel(treeMidLevelFileName);
+        //26, 2
+        worldMap.tileArray[26][2].setMidLevel(treeMidLevelFileName);
+        //26, 16
+        worldMap.tileArray[26][16].setMidLevel(treeMidLevelFileName);
+        //27, 15
+        worldMap.tileArray[27][15].setMidLevel(treeMidLevelFileName);
+        //28, 4
+        worldMap.tileArray[28][4].setMidLevel(treeMidLevelFileName);
+        //28, 10
+        worldMap.tileArray[28][10].setMidLevel(treeMidLevelFileName);
+        //30, 2
+        worldMap.tileArray[30][2].setMidLevel(treeMidLevelFileName);
+        //31, 14
+        worldMap.tileArray[31][14].setMidLevel(treeMidLevelFileName);
 
 
+        //where i left off
+
+
+        //tile data is used to figure out which images to add to the map
         worldMap.setAllBottomLevelImage(worldPane);
+        worldMap.setAllMidLevelImage(worldPane);
         mainMenu.getChildren().addAll(worldPane);
 
     }
@@ -621,6 +735,8 @@ public class Main extends Application {
         }
 
         stage.setResizable(false);
+
+
         //root stackpane used for stacking stuff on top i.e. a menu on top of something else in the window
         StackPane root = new StackPane();
         dbgAlert("new StackPane root");
@@ -887,7 +1003,6 @@ public class Main extends Application {
 
             //this is where the map is put onto the screen
             Pane worldPane = new Pane();
-            dbgAlert("This is where I left off!!!");
             WorldMap worldMap;
             switch (currentResolution) {
                 case "1280x720":
@@ -924,7 +1039,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0080");
+        Label buildNumberLabel = new Label("Build: 0.0081");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -1195,13 +1310,14 @@ public class Main extends Application {
         dbgAlert("new Button getOutOfAboutMenu");
         getOutOfAboutMenu.setFont(standardFont);
         getOutOfAboutMenu.setLayoutX(50);
-        getOutOfAboutMenu.setLayoutY(400);
+        getOutOfAboutMenu.setLayoutY(450);
 
 
         Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!" +
                 "\nThis game has big text and the option to use touchscreen controls because it's intended\n" +
                 "for small touchscreen tablets, though you can also play with keyboard\ncontrols." +
-                "The game supports 720p, 1280x800, and 1080p,\neither windowed or fullscreen.\nThe creator's website is here:");
+                "The game supports 720p, 1280x800, and 1080p,\neither windowed or fullscreen.\nPLEASE NOTE: it's best to play this game in fullscreen." +
+                "\nSometimes windowed mode can look cut off around the edges, making it hard to see the\narrow tiles that let you move to the next map.\nThe creator's website is here:");
         dbgAlert("new Text aboutText");
         aboutText.setFont(standardFont);
         aboutText.setLayoutX(50);
@@ -1212,7 +1328,7 @@ public class Main extends Application {
         Hyperlink websiteLink = new Hyperlink();
         dbgAlert("new Hyperlink websiteLink");
         websiteLink.setLayoutX(50);
-        websiteLink.setLayoutY(300);
+        websiteLink.setLayoutY(400);
         websiteLink.setFont(standardFont);
         websiteLink.setText("https://saintlouissoftware.com");
         websiteLink.setOnAction(e -> {
