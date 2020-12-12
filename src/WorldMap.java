@@ -158,12 +158,49 @@ public class WorldMap {
     public void setAllMidLevelImage(Pane pane) {
         for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
             for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
-                setBottomLevelImage(xLoop, yLoop);
+                setMidLevelImage(xLoop, yLoop);
                 pane.getChildren().add(midLevelImageViewArray[xLoop][yLoop]);
             }
         }
     }
 
+
+
+
+    //set one top level image
+    public void setTopLevelImage(int x, int y) {
+        String topLevelFileName = this.tileArray[x][y].getTopLevel();
+        //only proceed if the topLevel String is not blank
+        if (!topLevelFileName.equals("")) {
+            topLevelImageArray[x][y] = new Image(topLevelFileName);
+            topLevelImageViewArray[x][y] = new ImageView(topLevelImageArray[x][y]);
+            int tileSizeInt = -1;
+            if (this.getTileSize().equals("40x40")) {
+                tileSizeInt = 40;
+            } else if (this.getTileSize().equals("60x60")) {
+                tileSizeInt = 60;
+            }
+            if (! (tileSizeInt == -1)) {
+                int newXLayout = x * tileSizeInt;
+                int newYLayout = y * tileSizeInt;
+                topLevelImageViewArray[x][y].setLayoutX(newXLayout);
+                topLevelImageViewArray[x][y].setLayoutY(newYLayout);
+            }
+
+        } else {
+            System.out.println("Error with setTopLevelImage for " + x + ", " + y);
+        }
+    }
+
+    //set all top level images
+    public void setAllTopLevelImage(Pane pane) {
+        for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
+            for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
+                setTopLevelImage(xLoop, yLoop);
+                pane.getChildren().add(topLevelImageViewArray[xLoop][yLoop]);
+            }
+        }
+    }
 
 
 
