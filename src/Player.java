@@ -3,6 +3,7 @@ public class Player {
     int x;
     int y;
 
+
     public Player(String name, int x, int y) {
         setName(name);
         setX(x);
