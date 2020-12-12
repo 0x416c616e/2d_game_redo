@@ -1,27 +1,43 @@
 public class Player {
+
+    //attributes//attributes============================================
+
     private String name;
     int x;
     int y;
+    String position; //facing up, down, left, or right
+    String currentMapName;
 
 
-    public Player(String name, int x, int y) {
+    //constructors//attributes============================================
+
+    //full constructor
+    public Player(String name, int x, int y, String position, String currentMapName) {
         setName(name);
         setX(x);
         setY(y);
+        setPosition(position);
     }
 
+    //only use the following two constructors for the "new game" stuff
     public Player(String name){
         setName(name);
         //default starting position is 60, 60 for a new game save
-        int x = 60;
-        int y = 60;
+        setX(5);
+        setY(5);
+        setPosition("down");
+        setCurrentMapName("map_0_0");
     }
 
     public Player() {
         setName("noNameYet");
-        int x = 60;
-        int y = 60;
+        setX(5);
+        setY(5);
+        setPosition("down");
+        setCurrentMapName("map_0_0");
     }
+
+    //getters and setters============================================
 
     public void setName(String name) {
         if (name.length() > 0 && name.length() < 11) {
@@ -54,4 +70,22 @@ public class Player {
             this.y = y;
         }
     }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public String getCurrentMapName() {
+        return currentMapName;
+    }
+
+    public void setCurrentMapName(String currentMapName) {
+        this.currentMapName = currentMapName;
+    }
+
+    //other methods============================================
 }

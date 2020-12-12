@@ -3,8 +3,7 @@
         <playerName></playerName>
         <playerXpositionOnMap>5</playerXpositionOnMap>
         <playerYpositionOnMap>5</playerYpositionOnMap>
-
-        <playerCurrentMapNameX>0</playerCurrentMapNameX>
-        <playerCurrentMapNameY>0</playerCurrentMapNameY>
+        <playerPosition>down</playerPosition>
+        <playerCurrentMapName>map_0_0</playerCurrentMapName>
     </player>
 </save>
