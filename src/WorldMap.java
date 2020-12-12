@@ -1,3 +1,9 @@
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+
+import java.io.IOException;
+
 public class WorldMap {
 
     //attributes============================================
@@ -8,12 +14,32 @@ public class WorldMap {
     String name;
     String tileSize;
 
+    //Tiles contain data, but the WorldMap class contains the images
+
+    Image topLevelImageArray[][];
+    ImageView topLevelImageViewArray[][];
+    Image midLevelImageArray[][];
+    ImageView midLevelImageViewArray[][];
+    Image bottomLevelImageArray[][];
+    ImageView bottomLevelImageViewArray[][];
+
     //constructors============================================
 
     public WorldMap(int xDimension, int yDimension, String tileSize) {
         setyDimension(yDimension);
         setxDimension(xDimension);
-        this.tileArray = new Tile[xDimension][yDimension];
+        setTileArray(new Tile[xDimension][yDimension]);
+        setTileSize(tileSize);
+
+        topLevelImageArray = new Image[xDimension][yDimension];
+        topLevelImageViewArray = new ImageView[xDimension][yDimension];
+
+        midLevelImageArray = new Image[xDimension][yDimension];
+        midLevelImageViewArray = new ImageView[xDimension][yDimension];
+
+        bottomLevelImageArray = new Image[xDimension][yDimension];
+        bottomLevelImageViewArray = new ImageView[xDimension][yDimension];
+
         System.out.println("Created a new WorldMap. Not finished yet.");
     }
 
@@ -35,6 +61,10 @@ public class WorldMap {
         this.name = name;
     }
 
+    public void setTileSize(String tileSize) {
+        this.tileSize = tileSize;
+    }
+
 
 
     public int getyDimension() {
@@ -45,6 +75,7 @@ public class WorldMap {
         return xDimension;
     }
 
+
     public Tile[][] getTileArray() {
         return tileArray;
     }
@@ -52,6 +83,53 @@ public class WorldMap {
     public String getName() {
         return name;
     }
+
+    public String getTileSize() {
+        return tileSize;
+    }
+
+
+    //graphics setters-----
+
+
+    public void setBottomLevelImage(int x, int y) {
+        String bottomLevelFileName = this.tileArray[x][y].getBottomLevel();
+        //only proceed if the bottomLevel String is not blank
+        if (!bottomLevelFileName.equals("")) {
+            bottomLevelImageArray[x][y] = new Image(bottomLevelFileName);
+            bottomLevelImageViewArray[x][y] = new ImageView(bottomLevelImageArray[x][y]);
+            int tileSizeInt = -1;
+            if (this.getTileSize().equals("40x40")) {
+                tileSizeInt = 40;
+            } else if (this.getTileSize().equals("60x60")) {
+                tileSizeInt = 60;
+            }
+            if (! (tileSizeInt == -1)) {
+                int newXLayout = x * tileSizeInt;
+                int newYLayout = y * tileSizeInt;
+                bottomLevelImageViewArray[x][y].setLayoutX(newXLayout);
+                bottomLevelImageViewArray[x][y].setLayoutY(newYLayout);
+                //System.out.println("Setting bottomLevelImageViewArray[" + x + "][" + y + "] to the x,y coords: " + );
+            }
+
+        } else {
+            System.out.println("Error with setBottomLevelImage for " + x + ", " + y);
+        }
+    }
+
+    public void setAllBottomLevelImage(Pane pane) {
+        for (int xLoop = 0; xLoop < this.getxDimension(); xLoop++) {
+            for (int yLoop = 0; yLoop < this.getyDimension(); yLoop++) {
+                setBottomLevelImage(xLoop, yLoop);
+                pane.getChildren().add(bottomLevelImageViewArray[xLoop][yLoop]);
+            }
+        }
+    }
+
+
+
+
+
 
     //other methods============================================
 
@@ -62,4 +140,7 @@ public class WorldMap {
     public void unloadMap() {
         System.out.println("not implemented yet");
     }
+
+
+
 }

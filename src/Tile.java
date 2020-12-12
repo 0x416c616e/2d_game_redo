@@ -16,7 +16,7 @@ public class Tile {
         setEvent(new Event());
         setTopLevel("");
         setBottomLevel("");
-        setBottomLevel("grass.png");
+        setBottomLevel("file:assets/tiles/grass_40x40.png");
         collision = false;
         int xPosition = -1; //needs to be initialized
         int yPosition = -1; //needs to be initialized

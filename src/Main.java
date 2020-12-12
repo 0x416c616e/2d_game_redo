@@ -138,6 +138,24 @@ public class Main extends Application {
     //now on to the game code
 
 
+    //map-loading methods-----------------------------------------------------------------------
+    //maps are now hard-coded for performance reasons (XML parsing was too slow)
+
+    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu) {
+        //testing loading bottom level
+        for (int xMap = 0; xMap < 32; xMap++) {
+            for (int yMap = 0; yMap < 18; yMap++) {
+                worldMap.tileArray[xMap][yMap] = new Tile();
+            }
+        }
+        worldMap.setAllBottomLevelImage(worldPane);
+        mainMenu.getChildren().addAll(worldPane);
+
+    }
+
+    //end of map-loading methods----------------------------------------------------------------
+
+
     //gets a uniquely-named field from an XML file
     public String getUniqueXMLField(String fieldToGet, String filename) {
         dbgAlert("running getUniqueXMLField");
@@ -845,6 +863,10 @@ public class Main extends Application {
                     //so the maps are the same on all resolutions
                     worldMap = new WorldMap(32, 18, "40x40");
                     dbgAlert("new worldMap worldMap, 720p");
+                    loadMap_0_0(worldMap, worldPane, mainMenu);
+
+
+
                     break;
                 case "1280x800":
                     worldMap = new WorldMap(32, 20, "40x40");
@@ -866,7 +888,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0073");
+        Label buildNumberLabel = new Label("Build: 0.0074");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
