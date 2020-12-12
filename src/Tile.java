@@ -15,8 +15,18 @@ public class Tile {
     public Tile() {
         setEvent(new Event());
         setTopLevel("");
-        setBottomLevel("");
+        setMidLevel("");
         setBottomLevel("file:assets/tiles/grass_40x40.png");
+        collision = false;
+        int xPosition = -1; //needs to be initialized
+        int yPosition = -1; //needs to be initialized
+    }
+
+    public Tile(String bottomLevel) {
+        setEvent(new Event());
+        setTopLevel("");
+        setMidLevel("");
+        setBottomLevel(bottomLevel);
         collision = false;
         int xPosition = -1; //needs to be initialized
         int yPosition = -1; //needs to be initialized

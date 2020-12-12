@@ -141,13 +141,50 @@ public class Main extends Application {
     //map-loading methods-----------------------------------------------------------------------
     //maps are now hard-coded for performance reasons (XML parsing was too slow)
 
-    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu) {
+    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution) {
         //testing loading bottom level
-        for (int xMap = 0; xMap < 32; xMap++) {
-            for (int yMap = 0; yMap < 18; yMap++) {
-                worldMap.tileArray[xMap][yMap] = new Tile();
+        String tileSizeFileNamePart = "";
+        if (resolution.equals("1280x720")) {
+            System.out.println("loading map 720p");
+            tileSizeFileNamePart = "40x40";
+        } else if (resolution.equals("1280x800")) {
+            System.out.println("loading map 800p");
+            tileSizeFileNamePart = "40x40";
+
+        } else if (resolution.equals("1920x1080")) {
+            System.out.println("loading map 1080p");
+            tileSizeFileNamePart = "60x60";
+        } else {
+            System.err.println("Error with loadMap0_0 for resolution part");
+            System.exit(999234);
+        }
+
+        for (int xMap = 0; xMap < worldMap.getxDimension(); xMap++) {
+            for (int yMap = 0; yMap < worldMap.getyDimension(); yMap++) {
+                //default tile with grass and no event or collision
+                //only has a bottom level image by default, no mid level or top level
+                String tileGrassFileName = "file:assets/tiles/grass_" + tileSizeFileNamePart + ".png";
+                worldMap.tileArray[xMap][yMap] = new Tile(tileGrassFileName);
             }
         }
+
+        //adding trees to the map as MID LEVEL, and collision for them so you can't pass through them
+        //String midLevelStrings[][] = new String[][];
+        //0,4
+        //0, 16
+        //0, 17
+        //1,2
+        //1,3
+        //1,7
+        //1, 10
+        //2,1
+        //2, 8
+        //2, 12
+        //2, 14
+        //3, 1
+        //3, 1
+
+
         worldMap.setAllBottomLevelImage(worldPane);
         mainMenu.getChildren().addAll(worldPane);
 
@@ -863,18 +900,17 @@ public class Main extends Application {
                     //so the maps are the same on all resolutions
                     worldMap = new WorldMap(32, 18, "40x40", player);
                     dbgAlert("new worldMap worldMap, 720p");
-                    loadMap_0_0(worldMap, worldPane, mainMenu);
-
-
-
+                    loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution);
                     break;
                 case "1280x800":
                     worldMap = new WorldMap(32, 20, "40x40", player);
                     dbgAlert("new worldMap worldMap, 800p");
+                    loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution);
                     break;
                 case "1920x1080":
                     worldMap = new WorldMap(32, 18, "60x60", player);
                     dbgAlert("new worldMap worldMap, 1080p");
+                    loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution);
                     break;
                 default:
                     System.out.println("error with resolution in creating new WorldMap");
@@ -888,7 +924,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0079");
+        Label buildNumberLabel = new Label("Build: 0.0080");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
