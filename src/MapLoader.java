@@ -24,7 +24,7 @@ public class MapLoader {
     //IMPORTANT INFO ABOUT MAPS AND WINDOWED MODE:
     //IMPORTANT TILES CANNOT BE ON THE BOTTOM OR RIGHTHAND EDGES BECAUSE THEY CAN BE CUT OFF
     //IF YOU NEED TO PUT MAPMOVE TILES ON THE EDGES, MAKE SURE THERE ARE TWO, IN CASE ONE GETS CUT OFF
-    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution) {
+    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player) {
         //testing loading bottom level
         String tileSizeFileNamePart = "";
         if (resolution.equals("1280x720")) {
@@ -138,7 +138,6 @@ public class MapLoader {
         worldMap.tileArray[31][14].setMidLevelWithCollision(treeMidLevelFileName, true);
 
 
-        //where i left off!!!!
         //need to add more midLevel stuff, then eventually topLevel stuff
         //rock and collision
         String rocksMidLevelFileName = "file:assets/tiles/rock_" + tileSizeFileNamePart + ".png";
@@ -162,12 +161,46 @@ public class MapLoader {
         worldMap.tileArray[31][8].setMidLevelWithCollision(rocksMidLevelFileName, true);
 
 
+        //where i left off!!!!
+        //tree stumps
+        //tiles and collision
+        //2,17
+        String stumpMidLevelFileName = "file:assets/tiles/tree_stump_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[2][17].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //5,2
+        worldMap.tileArray[5][2].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //5,12
+        worldMap.tileArray[5][12].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //16,5
+        worldMap.tileArray[16][5].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //17,14
+        worldMap.tileArray[17][14].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //18,1
+        worldMap.tileArray[18][1].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //22,7
+        worldMap.tileArray[22][7].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //25,12
+        worldMap.tileArray[25][12].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //26,5
+        worldMap.tileArray[26][5].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //28,16
+        worldMap.tileArray[28][16].setMidLevelWithCollision(stumpMidLevelFileName, true);
+        //30,4
+        worldMap.tileArray[30][4].setMidLevelWithCollision(stumpMidLevelFileName, true);
+
+
+
+
         //tile data is used to figure out which images to add to the map
         worldMap.setAllBottomLevelImage(worldPane);
         worldMap.setAllMidLevelImage(worldPane);
         worldMap.setAllTopLevelImage(worldPane);
         mainMenu.getChildren().addAll(worldPane);
         System.gc();
+        player.loadPlayerFromFile();
+        System.out.print(player.toString() + "\n");
+
+        putPlayerOnMap(worldMap, worldPane, player);
 
     }
 
@@ -180,6 +213,96 @@ public class MapLoader {
     }
 
     //other methods===============================================
+
+    //1280x800 special case
+    //maybe make the "save" function just save them above so that there won't be issues
+    //because of the extra 2 rows at the bottom of the screen due to 16:10 aspect ratio instead of 16:9
+    public void putPlayerOnMap(WorldMap worldMap, Pane worldPane, Player player) {
+        int sizeOfTile = -1;
+        switch (worldMap.getTileSize()) {
+            case "40x40":
+                sizeOfTile = 40;
+                break;
+            case "60x60":
+                sizeOfTile = 60;
+                break;
+            default:
+                System.err.println("Error with putPlayerOnMap");
+                System.exit(234227);
+        }
+        if (! (sizeOfTile == -1)) {
+            int xLocation = player.getX() * sizeOfTile;
+            int yLocation = player.getY() * sizeOfTile;
+
+
+            String nameOfImageToUse = "player_" + player.getPosition() + "_" + worldMap.getTileSize();
+            boolean succeeded = false;
+            switch (nameOfImageToUse) {
+                case "player_down_40x40":
+                    player.player_down_40x40ImageView.setLayoutX(xLocation);
+                    player.player_down_40x40ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_down_40x40ImageView);
+                    succeeded = true;
+                    break;
+                case "player_down_60x60":
+                    player.player_down_60x60ImageView.setLayoutX(xLocation);
+                    player.player_down_60x60ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_down_60x60ImageView);
+                    succeeded = true;
+                    break;
+
+                case "player_right_40x40":
+                    player.player_right_40x40ImageView.setLayoutX(xLocation);
+                    player.player_right_40x40ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_right_40x40ImageView);
+                    succeeded = true;
+                    break;
+                case "player_right_60x60":
+                    player.player_right_60x60ImageView.setLayoutX(xLocation);
+                    player.player_right_60x60ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_right_60x60ImageView);
+                    succeeded = true;
+                    break;
+
+                case "player_up_40x40":
+                    player.player_up_40x40ImageView.setLayoutX(xLocation);
+                    player.player_up_40x40ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_up_40x40ImageView);
+                    succeeded = true;
+                    break;
+                case "player_up_60x60":
+                    player.player_up_60x60ImageView.setLayoutX(xLocation);
+                    player.player_up_60x60ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_up_60x60ImageView);
+                    succeeded = true;
+                    break;
+
+                case "player_left_40x40":
+                    player.player_left_40x40ImageView.setLayoutX(xLocation);
+                    player.player_left_40x40ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_left_40x40ImageView);
+                    succeeded = true;
+                    break;
+                case "player_left_60x60":
+                    player.player_left_60x60ImageView.setLayoutX(xLocation);
+                    player.player_left_60x60ImageView.setLayoutY(yLocation);
+                    worldPane.getChildren().add(player.player_left_60x60ImageView);
+                    succeeded = true;
+                    break;
+
+            }
+
+        } else {
+            System.err.println("errpr 2 with putPlayerOnMap");
+            System.exit(111133);
+        }
+
+    }
+
+    public void takePlayerOffMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player) {
+
+    }
+
 
     //unloading map
 

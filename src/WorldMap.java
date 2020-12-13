@@ -13,7 +13,6 @@ public class WorldMap {
     Tile tileArray[][];
     String name;
     String tileSize;
-    Player player;
 
     //Tiles contain data, but the WorldMap class contains the images
 
@@ -26,7 +25,7 @@ public class WorldMap {
 
     //constructors============================================
 
-    public WorldMap(int xDimension, int yDimension, String tileSize, Player player) {
+    public WorldMap(int xDimension, int yDimension, String tileSize) {
         setyDimension(yDimension);
         setxDimension(xDimension);
         setTileArray(new Tile[xDimension][yDimension]);

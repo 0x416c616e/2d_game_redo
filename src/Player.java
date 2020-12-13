@@ -1,3 +1,14 @@
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+
 public class Player {
 
     //attributes//attributes============================================
@@ -8,6 +19,25 @@ public class Player {
     String position; //facing up, down, left, or right
     String currentMapName;
 
+    Image player_up_60x60Image;
+    Image player_up_40x40Image;
+    ImageView player_up_60x60ImageView;
+    ImageView player_up_40x40ImageView;
+    Image player_right_60x60Image;
+    Image player_right_40x40Image;
+    ImageView player_right_60x60ImageView;
+    ImageView player_right_40x40ImageView;
+    Image player_left_60x60Image;
+    Image player_left_40x40Image;
+    ImageView player_left_60x60ImageView;
+    ImageView player_left_40x40ImageView;
+    Image player_down_60x60Image;
+    Image player_down_40x40Image;
+    ImageView player_down_60x60ImageView;
+    ImageView player_down_40x40ImageView;
+
+
+
 
     //constructors//attributes============================================
 
@@ -17,6 +47,7 @@ public class Player {
         setX(x);
         setY(y);
         setPosition(position);
+        this.loadImages();
     }
 
     //only use the following two constructors for the "new game" stuff
@@ -27,6 +58,7 @@ public class Player {
         setY(5);
         setPosition("down");
         setCurrentMapName("map_0_0");
+        this.loadImages();
     }
 
     public Player() {
@@ -35,6 +67,7 @@ public class Player {
         setY(5);
         setPosition("down");
         setCurrentMapName("map_0_0");
+        this.loadImages();
     }
 
     //getters and setters============================================
@@ -87,5 +120,95 @@ public class Player {
         this.currentMapName = currentMapName;
     }
 
+
+
     //other methods============================================
+
+    public void loadImages() {
+        //filename stuff
+        String firstPart = "file:assets/player/";
+        String lastPart = ".png";
+
+        //images
+
+        player_down_40x40Image = new Image(firstPart + "player_down_40x40" + lastPart);
+        player_down_60x60Image = new Image(firstPart + "player_down_60x60" + lastPart);
+
+        player_up_40x40Image = new Image(firstPart + "player_up_40x40" + lastPart);
+        player_up_60x60Image = new Image(firstPart + "player_up_60x60" + lastPart);
+
+        player_right_40x40Image = new Image(firstPart + "player_right_40x40" + lastPart);
+        player_right_60x60Image = new Image(firstPart + "player_right_60x60" + lastPart);
+
+        player_left_40x40Image = new Image(firstPart + "player_left_40x40" + lastPart);
+        player_left_60x60Image = new Image(firstPart + "player_left_60x60" + lastPart);
+
+
+        //imageviews
+
+        player_down_40x40ImageView = new ImageView(player_down_40x40Image);
+        player_down_60x60ImageView = new ImageView(player_down_60x60Image);
+
+        player_up_40x40ImageView = new ImageView(player_up_40x40Image);
+        player_up_60x60ImageView = new ImageView(player_up_60x60Image);
+
+        player_right_40x40ImageView = new ImageView(player_right_40x40Image);
+        player_right_60x60ImageView = new ImageView(player_right_60x60Image);
+
+        player_left_40x40ImageView = new ImageView(player_left_40x40Image);
+        player_left_60x60ImageView = new ImageView(player_left_60x60Image);
+    }
+
+    //gets a uniquely-named field from an XML file
+    public String getUniqueXMLField(String fieldToGet, String filename) {
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        try {
+            String saveFileName = filename;
+            DocumentBuilder b = f.newDocumentBuilder();
+            Document doc = b.parse(new File(saveFileName));
+            String valueOfXMLField = doc.getElementsByTagName(fieldToGet).item(0).getTextContent();
+            System.gc();
+            return valueOfXMLField;
+        } catch(ParserConfigurationException pc) {
+            System.gc();
+            pc.printStackTrace();
+        } catch (SAXException se) {
+            System.gc();
+            se.printStackTrace();
+        } catch (IOException ioe) {
+            System.gc();
+            ioe.printStackTrace();
+        }
+        System.gc();
+        return "errorGUPXML from Player class";
+    }
+
+    public void loadPlayerFromFile() {
+        //getting all XML fields from the save file
+        String playerSaveFileName = "saves/" + this.getName() + ".save";
+        String playerNameFromFile = getUniqueXMLField("playerName", playerSaveFileName);
+        int playerXFromFile = Integer.parseInt(getUniqueXMLField("playerXpositionOnMap", playerSaveFileName));
+        int playerYFromFile = Integer.parseInt(getUniqueXMLField("playerYpositionOnMap", playerSaveFileName));
+        String positionFromFile = getUniqueXMLField("playerPosition", playerSaveFileName);
+        String currentMapNameFromFile = getUniqueXMLField("playerCurrentMapName", playerSaveFileName);
+
+        //setting all the attributes of the player using the data from the save file
+        this.setName(playerNameFromFile);
+        this.setX(playerXFromFile);
+        this.setY(playerYFromFile);
+        this.setPosition(positionFromFile);
+        this.setCurrentMapName(currentMapNameFromFile);
+
+    }
+
+    public String toString(){
+        String playerString = "**********\n";
+        playerString += "[PLAYER toString]\nName: " + this.getName() + "\n";
+        playerString += "x: " + this.getX() + "\n";
+        playerString += "y: " + this.getY() + "\n";
+        playerString += "Position: " + this.getPosition() + "\n";
+        playerString += "Current map name: " + this.getCurrentMapName() + "\n";
+        playerString += "**********\n";
+        return playerString;
+    }
 }
