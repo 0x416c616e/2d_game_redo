@@ -106,6 +106,23 @@ public class Tile {
         return yPosition;
     }
 
+    //multiple setters
+
+    public void setBottomLevelWithCollision(String bottomLevel, boolean collision) {
+        this.setBottomLevel(bottomLevel);
+        this.setCollision(collision);
+    }
+
+    public void setMidLevelWithCollision(String midLevel, boolean collision) {
+        this.setMidLevel(midLevel);
+        this.setCollision(collision);
+    }
+
+    public void setTopLevelWithCollision(String topLevel, boolean collision) {
+        this.setTopLevel(topLevel);
+        this.setCollision(collision);
+    }
+
     //other methods============================================
 
     public void destroyTile() {

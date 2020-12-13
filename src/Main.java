@@ -215,92 +215,78 @@ public class Main extends Application {
         //all bottom level stuff is done now
 
         //adding trees to the map as MID LEVEL, and collision for them so you can't pass through them
+        //tree and collision so you can't move through it
         String treeMidLevelFileName = "file:assets/tiles/tree_" + tileSizeFileNamePart + ".png";
-        //0,4
-        worldMap.tileArray[0][4].setMidLevel(treeMidLevelFileName);
-        //0, 16
-        worldMap.tileArray[0][16].setMidLevel(treeMidLevelFileName);
-        //0, 17
-        worldMap.tileArray[0][17].setMidLevel(treeMidLevelFileName);
-        //1,2
-        worldMap.tileArray[1][2].setMidLevel(treeMidLevelFileName);
-        //1,3
-        worldMap.tileArray[1][3].setMidLevel(treeMidLevelFileName);
-        //1,7
-        worldMap.tileArray[1][7].setMidLevel(treeMidLevelFileName);
-        //1, 10
-        worldMap.tileArray[1][10].setMidLevel(treeMidLevelFileName);
-        //2,1
-        worldMap.tileArray[2][1].setMidLevel(treeMidLevelFileName);
-        //2, 8
-        worldMap.tileArray[2][8].setMidLevel(treeMidLevelFileName);
-        //2, 12
-        worldMap.tileArray[2][12].setMidLevel(treeMidLevelFileName);
-        //2, 14
-        worldMap.tileArray[2][14].setMidLevel(treeMidLevelFileName);
-        //3, 1
-        worldMap.tileArray[3][1].setMidLevel(treeMidLevelFileName);
-        //4, 16
-        worldMap.tileArray[4][16].setMidLevel(treeMidLevelFileName);
-        //5, 10
-        worldMap.tileArray[5][10].setMidLevel(treeMidLevelFileName);
-        //6, 11
-        worldMap.tileArray[6][11].setMidLevel(treeMidLevelFileName);
-        //7, 4
-        worldMap.tileArray[7][4].setMidLevel(treeMidLevelFileName);
-        //7, 16
-        worldMap.tileArray[7][16].setMidLevel(treeMidLevelFileName);
-        //9, 11
-        worldMap.tileArray[9][11].setMidLevel(treeMidLevelFileName);
-        //9, 15
-        worldMap.tileArray[9][15].setMidLevel(treeMidLevelFileName);
-        //13,13
-        worldMap.tileArray[13][13].setMidLevel(treeMidLevelFileName);
-        //14, 5
-        worldMap.tileArray[14][5].setMidLevel(treeMidLevelFileName);
-        //16, 2
-        worldMap.tileArray[16][2].setMidLevel(treeMidLevelFileName);
-        //17, 8
-        worldMap.tileArray[17][8].setMidLevel(treeMidLevelFileName);
-        //17, 17
-        worldMap.tileArray[17][17].setMidLevel(treeMidLevelFileName);
-        //20, 5
-        worldMap.tileArray[20][5].setMidLevel(treeMidLevelFileName);
-        //20, 8
-        worldMap.tileArray[20][8].setMidLevel(treeMidLevelFileName);
-        //21, 13
-        worldMap.tileArray[21][13].setMidLevel(treeMidLevelFileName);
-        //23, 3
-        worldMap.tileArray[23][3].setMidLevel(treeMidLevelFileName);
-        //23, 10
-        worldMap.tileArray[23][10].setMidLevel(treeMidLevelFileName);
-        //24, 1
-        worldMap.tileArray[24][1].setMidLevel(treeMidLevelFileName);
-        //24, 7
-        worldMap.tileArray[24][7].setMidLevel(treeMidLevelFileName);
-        //26, 2
-        worldMap.tileArray[26][2].setMidLevel(treeMidLevelFileName);
-        //26, 16
-        worldMap.tileArray[26][16].setMidLevel(treeMidLevelFileName);
-        //27, 15
-        worldMap.tileArray[27][15].setMidLevel(treeMidLevelFileName);
-        //28, 4
-        worldMap.tileArray[28][4].setMidLevel(treeMidLevelFileName);
-        //28, 10
-        worldMap.tileArray[28][10].setMidLevel(treeMidLevelFileName);
-        //30, 2
-        worldMap.tileArray[30][2].setMidLevel(treeMidLevelFileName);
-        //31, 14
-        worldMap.tileArray[31][14].setMidLevel(treeMidLevelFileName);
+        worldMap.tileArray[0][4].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[0][16].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[0][17].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[1][2].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[1][3].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[1][7].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[1][10].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[2][1].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[2][8].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[2][12].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[2][14].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[3][1].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[4][16].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[5][10].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[6][11].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[7][4].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[7][16].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[9][11].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[9][15].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[13][13].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[14][5].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[16][2].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[17][8].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[17][17].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[20][5].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[20][8].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[21][13].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[23][3].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[23][10].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[24][1].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[24][7].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[26][2].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[26][16].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[27][15].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[28][4].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[28][10].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[30][2].setMidLevelWithCollision(treeMidLevelFileName, true);
+        worldMap.tileArray[31][14].setMidLevelWithCollision(treeMidLevelFileName, true);
 
 
-        //where i left off
+        //where i left off!!!!
+        //need to add more midLevel stuff, then eventually topLevel stuff
+        //rock and collision
+        String rocksMidLevelFileName = "file:assets/tiles/rock_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[0][3].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[1][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[5][13].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[7][1].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[14][10].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[15][0].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[15][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[20][16].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[21][4].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[21][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[21][16].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[21][17].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[22][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[22][16].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[22][17].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[26][17].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[30][1].setMidLevelWithCollision(rocksMidLevelFileName, true);
+        worldMap.tileArray[31][8].setMidLevelWithCollision(rocksMidLevelFileName, true);
 
 
         //tile data is used to figure out which images to add to the map
         worldMap.setAllBottomLevelImage(worldPane);
         worldMap.setAllMidLevelImage(worldPane);
+        worldMap.setAllTopLevelImage(worldPane);
         mainMenu.getChildren().addAll(worldPane);
+        System.gc();
 
     }
 
@@ -1039,7 +1025,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0081");
+        Label buildNumberLabel = new Label("Build: 0.0082");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
