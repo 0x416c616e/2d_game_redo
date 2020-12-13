@@ -404,18 +404,22 @@ public class MapLoader {
     public void genericControlsMapMoveDown(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
 
         System.out.println("genericControlsMapMoveDown not yet implemented");
+        System.gc();
     }
 
     public void genericControlsMapMoveRight(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
         System.out.println("genericControlsMapMoveRight not yet implemented");
+        System.gc();
     }
 
     public void genericControlsMapMoveUp(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
         System.out.println("genericControlsMapMoveUp not yet implemented");
+        System.gc();
     }
 
     public void genericControlsMapMoveLeft(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
         System.out.println("genericControlsMapMoveLeft not yet implemented");
+        System.gc();
     }
 
     public void genericControlsOpenInventory() {
