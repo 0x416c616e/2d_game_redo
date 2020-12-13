@@ -218,15 +218,6 @@ public class WorldMap {
 
 
 
-    //other methods============================================
-
-    public void loadMap() {
-        System.out.println("not implemented yet");
-    }
-
-    public void unloadMap() {
-        System.out.println("not implemented yet");
-    }
 
 
 
