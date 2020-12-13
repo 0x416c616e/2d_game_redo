@@ -1,7 +1,9 @@
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 
 //this class is used to load maps
 //no attributes, no getters or setters
@@ -12,12 +14,13 @@ public class MapLoader {
 
     //attributes (none for now, maybe none ever)===============================================
 
-
+    Font buttonFont;
     //constructor===============================================
 
     public MapLoader() {
         //doesn't have much aside from just methods for loading stuff
         //in order to de-clutter the Main class
+        buttonFont = new Font("Arial", 30.0);
     }
 
 
@@ -331,7 +334,7 @@ public class MapLoader {
     }
 
     public void addKeyBoardControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
-        System.out.println("addKeyboardControls not implemented yet");
+        System.out.println("addKeyboardControls not implemented yet (work in progress)");
         scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case W:
@@ -357,6 +360,41 @@ public class MapLoader {
 
     public void addTouchscreenControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
         System.out.println("addTouchscreenControls not yet implemented");
+        Button downButton = new Button("v");
+        Button rightButton = new Button(">");
+        Button upButton = new Button("^");
+        Button leftButton = new Button("<");
+
+        downButton.setLayoutY(mainMenu.getHeight() * 0.85);
+        downButton.setLayoutX(mainMenu.getWidth() * 0.85);
+        downButton.setFont(buttonFont);
+
+        rightButton.setLayoutY(mainMenu.getHeight() * 0.85);
+        rightButton.setLayoutX(mainMenu.getWidth() * 0.9);
+        rightButton.setFont(buttonFont);
+
+        upButton.setLayoutY(mainMenu.getHeight() * 0.75);
+        upButton.setLayoutX(mainMenu.getWidth() * 0.85);
+        upButton.setFont(buttonFont);
+
+        leftButton.setLayoutY(mainMenu.getHeight() * 0.85);
+        leftButton.setLayoutX(mainMenu.getWidth() * 0.8);
+        leftButton.setFont(buttonFont);
+
+        worldPane.getChildren().addAll(downButton, rightButton, upButton, leftButton);
+        downButton.setOnAction(e -> {
+            genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+        });
+        rightButton.setOnAction(e -> {
+            genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+        });
+        upButton.setOnAction(e -> {
+            genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+        });
+        leftButton.setOnAction(e -> {
+            genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+        });
+
     }
 
     //GENERIC CONTROLS
