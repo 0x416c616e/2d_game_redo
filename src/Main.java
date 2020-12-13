@@ -812,7 +812,7 @@ public class Main extends Application {
         ImageView newSaveGameSuccessImageView = new ImageView(tempBackground);
         //this Text needs to be appended because you can't get the name from this scope
         Text newSaveGameSuccessText = new Text("New game successfully created." +
-                "\nIt is located in the game folder's saves subfolder, and it's saved as: ");
+                "\nIt is located in the game folder's saves subfolder, and it's saved as:\n");
         newSaveGameSuccessText.setFont(standardFont);
         newSaveGameSuccessText.setLayoutX(50);
         newSaveGameSuccessText.setLayoutY(50);
@@ -825,7 +825,7 @@ public class Main extends Application {
         Player player = new Player();
         dbgAlert("new Player player");
 
-
+        Scene scene = new Scene(root);
 
         newSaveGameSuccessButton.setOnAction(e -> {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
@@ -848,17 +848,17 @@ public class Main extends Application {
                     //so the maps are the same on all resolutions
                     worldMap = new WorldMap(32, 18, "40x40");
                     dbgAlert("new worldMap worldMap, 720p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player);
+                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene);
                     break;
                 case "1280x800":
                     worldMap = new WorldMap(32, 20, "40x40");
                     dbgAlert("new worldMap worldMap, 800p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player);
+                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene);
                     break;
                 case "1920x1080":
                     worldMap = new WorldMap(32, 18, "60x60");
                     dbgAlert("new worldMap worldMap, 1080p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player);
+                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene);
                     break;
                 default:
                     System.out.println("error with resolution in creating new WorldMap");
@@ -872,7 +872,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0086");
+        Label buildNumberLabel = new Label("Build: 0.0087");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -1499,7 +1499,9 @@ public class Main extends Application {
         //adding stuff to the window
         root.getChildren().add(mainMenu);
         dbgAlert("added mainMenu to root");
-        Scene scene = new Scene(root);
+
+
+
         dbgAlert("new Scene scene");
         dbgAlert("added root to scene");
         stage.setScene(scene);

@@ -1,3 +1,6 @@
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 //this class is used to load maps
@@ -24,7 +27,7 @@ public class MapLoader {
     //IMPORTANT INFO ABOUT MAPS AND WINDOWED MODE:
     //IMPORTANT TILES CANNOT BE ON THE BOTTOM OR RIGHTHAND EDGES BECAUSE THEY CAN BE CUT OFF
     //IF YOU NEED TO PUT MAPMOVE TILES ON THE EDGES, MAKE SURE THERE ARE TWO, IN CASE ONE GETS CUT OFF
-    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player) {
+    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
         //testing loading bottom level
         String tileSizeFileNamePart = "";
         if (resolution.equals("1280x720")) {
@@ -200,15 +203,17 @@ public class MapLoader {
         player.loadPlayerFromFile();
         System.out.print(player.toString() + "\n");
 
-        putPlayerOnMap(worldMap, worldPane, player);
+        //now that the map is loaded, time to add the player and controls
+        putPlayerAndControlsOnMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+
 
     }
 
-    public void loadMap_0_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution) {
+    public void loadMap_0_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
         System.out.println("not implemented yet");
     }
 
-    public void loadMap_1_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution) {
+    public void loadMap_1_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
         System.out.println("not implemented yet");
     }
 
@@ -217,6 +222,8 @@ public class MapLoader {
     //1280x800 special case
     //maybe make the "save" function just save them above so that there won't be issues
     //because of the extra 2 rows at the bottom of the screen due to 16:10 aspect ratio instead of 16:9
+    //or maybe just disallow saving there, and say this:
+        //"error: can't save so close to the edge on 16:10 aspect ratio, please move your character higher up and then save"
     public void putPlayerOnMap(WorldMap worldMap, Pane worldPane, Player player) {
         int sizeOfTile = -1;
         switch (worldMap.getTileSize()) {
@@ -299,10 +306,112 @@ public class MapLoader {
 
     }
 
-    public void takePlayerOffMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player) {
+
+    public void takePlayerOffMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        System.out.println("not yet implemented");
+    }
+
+    //controls methods for keyboard and touchscreen, adds ability to move on the map
+
+    public void addControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        switch (controls) {
+            case "keyboard":
+                System.out.println("Adding keyboard controls");
+                addKeyBoardControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                break;
+            case "touchscreen":
+                System.out.println("Adding touchscreen controls");
+                addTouchscreenControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                break;
+            default:
+                System.err.println("Error with addControls switch(controls)");
+                System.exit(45332746);
+
+        }
+    }
+
+    public void addKeyBoardControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        System.out.println("addKeyboardControls not implemented yet");
+        scene.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case W:
+                    genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    break;
+                case A:
+                    genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    break;
+                case S:
+                    genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    break;
+                case D:
+                    genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    break;
+                default:
+                    System.out.println("that key isn't handled at the moment");
+                    break;
+            }
+        });
 
     }
 
+
+    public void addTouchscreenControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        System.out.println("addTouchscreenControls not yet implemented");
+    }
+
+    //GENERIC CONTROLS
+    //this should be run by both the keyboard controls and touchscreen controls
+    //what triggers it depends on the type of controls, but the same logic applies to both of them
+
+    public void genericControlsMapMoveDown(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+
+        System.out.println("genericControlsMapMoveDown not yet implemented");
+    }
+
+    public void genericControlsMapMoveRight(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        System.out.println("genericControlsMapMoveRight not yet implemented");
+    }
+
+    public void genericControlsMapMoveUp(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        System.out.println("genericControlsMapMoveUp not yet implemented");
+    }
+
+    public void genericControlsMapMoveLeft(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        System.out.println("genericControlsMapMoveLeft not yet implemented");
+    }
+
+    public void genericControlsOpenInventory() {
+        System.out.println("genericControlsMapMoveOpenInventory not yet implemented");
+    }
+
+    public void genericControlsCloseInventory() {
+        System.out.println("genericControls not yet implemented");
+    }
+
+    public void genericControlsOpenMenu() {
+        System.out.println("genericControlsOpenMenu not yet implemented");
+    }
+
+    public void genericControlsCloseMenu() {
+        System.out.println("genericControlsCloseMenu not yet implemented");
+    }
+
+    public void genericControlsInteract() {
+        System.out.println("genericControlsInteract not yet implemented");
+    }
+
+
+
+
+    //put this at the end of every loadMap_X_Y method
+    public void putPlayerAndControlsOnMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+        putPlayerOnMap(worldMap, worldPane, player);
+        addControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+    }
+
+    public void takeControlsOffMap() {
+        System.out.println("takeControlsOffMap not yet implemented");
+    }
 
     //unloading map
 
