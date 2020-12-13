@@ -211,4 +211,26 @@ public class Player {
         playerString += "**********\n";
         return playerString;
     }
+
+    public void setAllImageViewLocationX(int newX) {
+        this.player_up_60x60ImageView.setLayoutX(newX);
+        this.player_up_40x40ImageView.setLayoutX(newX);
+        this.player_right_60x60ImageView.setLayoutX(newX);
+        this.player_right_40x40ImageView.setLayoutX(newX);
+        this.player_left_60x60ImageView.setLayoutX(newX);
+        this.player_left_40x40ImageView.setLayoutX(newX);
+        this.player_down_60x60ImageView.setLayoutX(newX);
+        this.player_down_40x40ImageView.setLayoutX(newX);
+    }
+
+    public void setAllImageViewLocationY(int newY) {
+        this.player_up_60x60ImageView.setLayoutY(newY);
+        this.player_up_40x40ImageView.setLayoutY(newY);
+        this.player_right_60x60ImageView.setLayoutY(newY);
+        this.player_right_40x40ImageView.setLayoutY(newY);
+        this.player_left_60x60ImageView.setLayoutY(newY);
+        this.player_left_40x40ImageView.setLayoutY(newY);
+        this.player_down_60x60ImageView.setLayoutY(newY);
+        this.player_down_40x40ImageView.setLayoutY(newY);
+    }
 }
