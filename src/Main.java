@@ -1025,7 +1025,7 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0082");
+        Label buildNumberLabel = new Label("Build: 0.0084");
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -1302,8 +1302,7 @@ public class Main extends Application {
         Text aboutText = new Text("About\nThis game was made by a computer science student.\nThis game is not finished yet!" +
                 "\nThis game has big text and the option to use touchscreen controls because it's intended\n" +
                 "for small touchscreen tablets, though you can also play with keyboard\ncontrols." +
-                "The game supports 720p, 1280x800, and 1080p,\neither windowed or fullscreen.\nPLEASE NOTE: it's best to play this game in fullscreen." +
-                "\nSometimes windowed mode can look cut off around the edges, making it hard to see the\narrow tiles that let you move to the next map.\nThe creator's website is here:");
+                "The game supports 720p, 1280x800, and 1080p,\neither windowed or fullscreen.\nIt's recommended that you play the game in fullscreen.\n\nThe creator's website is here:");
         dbgAlert("new Text aboutText");
         aboutText.setFont(standardFont);
         aboutText.setLayoutX(50);

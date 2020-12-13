@@ -1,0 +1,1 @@
+This game was developed on a desktop computer, but tested on a tablet PC. The shell script in this directory is for resetting any changes and then getting the latest version of the game from the git repo. Don't use this unless you're okay with losing your game data. It's only useful for developers, not people just playing the game.
