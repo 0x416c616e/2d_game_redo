@@ -20,7 +20,7 @@ You can play the game with either the keyboard or touchscreen controls, configur
 
 This is a 2D RPG. It's not finished yet.
 
-The game supports 1280x720, 1280x800, and 1920x1080 resolutions, with 40x40 pixel tiles. It has a tile-based movement system. 
+The game supports 1280x720, 1280x800, and 1920x1080 resolutions, with 40x40 pixel tiles for 720p and 800p, and 60x60 tiles in 1080p. It has a tile-based movement system. 
 
 **Please note**: if you are using a laptop or tablet, please put the display scaling to 100%, or else things will be spaced out incorrectly.
 
