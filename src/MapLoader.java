@@ -365,19 +365,19 @@ public class MapLoader {
         Button upButton = new Button("^");
         Button leftButton = new Button("<");
 
-        downButton.setLayoutY(mainMenu.getHeight() * 0.85);
+        downButton.setLayoutY(mainMenu.getHeight() * 0.8);
         downButton.setLayoutX(mainMenu.getWidth() * 0.85);
         downButton.setFont(buttonFont);
 
-        rightButton.setLayoutY(mainMenu.getHeight() * 0.85);
+        rightButton.setLayoutY(mainMenu.getHeight() * 0.8);
         rightButton.setLayoutX(mainMenu.getWidth() * 0.9);
         rightButton.setFont(buttonFont);
 
-        upButton.setLayoutY(mainMenu.getHeight() * 0.75);
+        upButton.setLayoutY(mainMenu.getHeight() * 0.7);
         upButton.setLayoutX(mainMenu.getWidth() * 0.85);
         upButton.setFont(buttonFont);
 
-        leftButton.setLayoutY(mainMenu.getHeight() * 0.85);
+        leftButton.setLayoutY(mainMenu.getHeight() * 0.8);
         leftButton.setLayoutX(mainMenu.getWidth() * 0.8);
         leftButton.setFont(buttonFont);
 
