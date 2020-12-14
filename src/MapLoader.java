@@ -20,6 +20,8 @@ public class MapLoader {
     boolean upPressed;
     boolean leftPressed;
     boolean rightPressed;
+    long timeBetween;
+    long THRESHOLD; //switch for either keyboard or touchscreen
 
     Font buttonFont;
     //constructor===============================================
@@ -30,14 +32,26 @@ public class MapLoader {
     //maploader deals with movement, and for smooth movement, you should only be able to move every now and then
     //for a consistent movement rate, unlike before due to how OS-specific keyboard speed polling/character repeating works
     //so only run the movement stuff if it's been a certain amount of time
-    final long THRESHOLD = 350_000_000L;
+    final long KEYBOARD_THRESHOLD = 100_000_000L;
+    //touchscreen movement feels better with no limitations on how fast you can tap to move
+    //to avoid "dead clicks"
+    final long TOUCHSCREEN_THRESHOLD = 1L;
     long lastMove;
+    String controls;
 
-    public MapLoader() {
+    public MapLoader(String controls) {
         //doesn't have much aside from just methods for loading stuff
         //in order to de-clutter the Main class
         buttonFont = new Font("Arial", 30.0);
-        lastMove = System.nanoTime() - THRESHOLD; //they will be different nanosecond amounts later on
+        switch (controls) {
+            case "keyboard":
+            case "touchscreen":
+                this.controls = controls;
+                break;
+            default:
+                System.out.println("MapLoader constructor error with controls initialization");
+                break;
+        }
         now = System.nanoTime();
         setAllTouchscreenButtonsNotPressed();
     }
@@ -93,7 +107,8 @@ public class MapLoader {
     public boolean enoughTimeHasPassed() {
         System.out.println("got here enoughTimeHasPassed");
         updateTime();
-        long timeBetween = now - lastMove;
+        timeBetween = now - lastMove;
+        THRESHOLD = (this.controls.equals("keyboard")) ? KEYBOARD_THRESHOLD : TOUCHSCREEN_THRESHOLD;
         if (timeBetween >= THRESHOLD) {
             System.out.println("timeBetween = " + timeBetween);
             swap = now;
