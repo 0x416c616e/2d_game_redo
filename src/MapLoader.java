@@ -32,7 +32,7 @@ public class MapLoader {
     //maploader deals with movement, and for smooth movement, you should only be able to move every now and then
     //for a consistent movement rate, unlike before due to how OS-specific keyboard speed polling/character repeating works
     //so only run the movement stuff if it's been a certain amount of time
-    final long KEYBOARD_THRESHOLD = 100_000_000L;
+    final long KEYBOARD_THRESHOLD = 100_000_000L; //100 milliseconds
     //touchscreen movement feels better with no limitations on how fast you can tap to move
     //to avoid "dead clicks"
     final long TOUCHSCREEN_THRESHOLD = 1L;
@@ -170,10 +170,15 @@ public class MapLoader {
         //there are two of each arrow (with a mapmove event) because windowed mode can get slightly cut off
 
         worldMap.tileArray[11][downArrowToNextMapY] = new Tile(downArrowFileName);
+        worldMap.tileArray[11][downArrowToNextMapY].setEvent(new MapMove("walk", "map_0_1"));
+        System.out.println(worldMap.tileArray[11][downArrowToNextMapY].getEvent().getEventType());
         worldMap.tileArray[11][downArrowToNextMapY + 1] = new Tile(downArrowFileName);
+        worldMap.tileArray[11][downArrowToNextMapY + 1].setEvent(new MapMove("walk", "map_0_1"));
         String rightArrowFileName = "file:assets/tiles/right_arrow_" + tileSizeFileNamePart + ".png";
         worldMap.tileArray[30][11] = new Tile(rightArrowFileName);
+        worldMap.tileArray[30][11].setEvent(new MapMove("walk", "map_1_0"));
         worldMap.tileArray[31][11] = new Tile(rightArrowFileName);
+        worldMap.tileArray[31][11].setEvent(new MapMove("walk", "map_1_0"));
 
         //adding water, the only other bottom level thing aside from the arrows and grass
         //this might look dumb but it loads faster than "smarter" methods I tried in the past that were too slow
@@ -312,7 +317,7 @@ public class MapLoader {
     }
 
     public void loadMap_0_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
-        System.out.println("not implemented yet");
+        System.out.println("not implemented yet map_0_1");
     }
 
     public void loadMap_1_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
@@ -645,6 +650,59 @@ public class MapLoader {
                     player.setY(newY);
                     player.setAllImageViewLocationX(player.getX() * tileSize);
                     player.setAllImageViewLocationY(newY * tileSize);
+                    //player is now on the new tile, now time to see if there's an event there
+                    String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
+                    //System.out.println("got here before tileEventTrigger");
+                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    if (tileEventTrigger.equals("walk")) {
+                        //System.out.println("got here in tileEventTrigger");
+                        String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
+                        switch (tileEventType) {
+                            case "MapMove":
+                                String mapToLoadFromMoveEvent = worldMap.tileArray[player.getX()][player.getY()].getEvent().getMapToLoad();
+                                switch (mapToLoadFromMoveEvent) {
+                                    case "map_0_0":
+                                        System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_0_1":
+                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_1_0":
+                                        System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "none":
+                                        System.err.println("error with MapMove Event, in switch mapToLoadFromMoveEvent");
+                                        break;
+                                    default:
+                                        System.out.println("I don't know, or it isn't implemented yet");
+                                        break;
+                                }
+                                break;
+                            case "Shop":
+                                System.out.println("move-triggered Shop event not implemented yet");
+                                break;
+                            case "Dialogue":
+                                System.out.println("move-triggered Dialogue event not implemented yet");
+                                break;
+                            case "Quest":
+                                System.out.println("move-triggered Quest event not implemented yet");
+                                break;
+                            case "Combat":
+                                System.out.println("move-triggered Combat event not implemented yet");
+                                break;
+                            case "Treasure":
+                                System.out.println("move-triggered Treasure event not implemented yet");
+                                break;
+                            case "none":
+                                System.out.println("this is a none type event, therefore nothing happens.");
+                                break;
+                            default:
+                                System.err.println("move-triggered event error");
+                                System.exit(67686);
+                                break;
+                            //MapMove, Shop, Dialogue, Quest, Combat, Treasure, or none
+                        }
+                    } //else there is no move-triggered event on this tile
 
                 } else {
                     System.out.println("can't move down due to collision");
@@ -756,6 +814,59 @@ public class MapLoader {
 
                     player.setAllImageViewLocationX(newX * tileSize);
                     player.setAllImageViewLocationY(player.getY() * tileSize);
+                    //player is now on the new tile, now time to see if there's an event there
+                    String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
+                    //System.out.println("got here before tileEventTrigger");
+                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    if (tileEventTrigger.equals("walk")) {
+                        //System.out.println("got here in tileEventTrigger");
+                        String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
+                        switch (tileEventType) {
+                            case "MapMove":
+                                String mapToLoadFromMoveEvent = worldMap.tileArray[player.getX()][player.getY()].getEvent().getMapToLoad();
+                                switch (mapToLoadFromMoveEvent) {
+                                    case "map_0_0":
+                                        System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_0_1":
+                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_1_0":
+                                        System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "none":
+                                        System.err.println("error with MapMove Event, in switch mapToLoadFromMoveEvent");
+                                        break;
+                                    default:
+                                        System.out.println("I don't know, or it isn't implemented yet");
+                                        break;
+                                }
+                                break;
+                            case "Shop":
+                                System.out.println("move-triggered Shop event not implemented yet");
+                                break;
+                            case "Dialogue":
+                                System.out.println("move-triggered Dialogue event not implemented yet");
+                                break;
+                            case "Quest":
+                                System.out.println("move-triggered Quest event not implemented yet");
+                                break;
+                            case "Combat":
+                                System.out.println("move-triggered Combat event not implemented yet");
+                                break;
+                            case "Treasure":
+                                System.out.println("move-triggered Treasure event not implemented yet");
+                                break;
+                            case "none":
+                                System.out.println("this is a none type event, therefore nothing happens.");
+                                break;
+                            default:
+                                System.err.println("move-triggered event error");
+                                System.exit(67686);
+                                break;
+                            //MapMove, Shop, Dialogue, Quest, Combat, Treasure, or none
+                        }
+                    } //else there is no move-triggered event on this tile
 
                 } else {
                     System.out.println("can't move right due to collision");
@@ -869,6 +980,59 @@ public class MapLoader {
                     player.setY(newY);
                     player.setAllImageViewLocationX(player.getX() * tileSize);
                     player.setAllImageViewLocationY(newY * tileSize);
+                    //player is now on the new tile, now time to see if there's an event there
+                    String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
+                    //System.out.println("got here before tileEventTrigger");
+                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    if (tileEventTrigger.equals("walk")) {
+                        //System.out.println("got here in tileEventTrigger");
+                        String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
+                        switch (tileEventType) {
+                            case "MapMove":
+                                String mapToLoadFromMoveEvent = worldMap.tileArray[player.getX()][player.getY()].getEvent().getMapToLoad();
+                                switch (mapToLoadFromMoveEvent) {
+                                    case "map_0_0":
+                                        System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_0_1":
+                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_1_0":
+                                        System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "none":
+                                        System.err.println("error with MapMove Event, in switch mapToLoadFromMoveEvent");
+                                        break;
+                                    default:
+                                        System.out.println("I don't know, or it isn't implemented yet");
+                                        break;
+                                }
+                                break;
+                            case "Shop":
+                                System.out.println("move-triggered Shop event not implemented yet");
+                                break;
+                            case "Dialogue":
+                                System.out.println("move-triggered Dialogue event not implemented yet");
+                                break;
+                            case "Quest":
+                                System.out.println("move-triggered Quest event not implemented yet");
+                                break;
+                            case "Combat":
+                                System.out.println("move-triggered Combat event not implemented yet");
+                                break;
+                            case "Treasure":
+                                System.out.println("move-triggered Treasure event not implemented yet");
+                                break;
+                            case "none":
+                                System.out.println("this is a none type event, therefore nothing happens.");
+                                break;
+                            default:
+                                System.err.println("move-triggered event error");
+                                System.exit(67686);
+                                break;
+                            //MapMove, Shop, Dialogue, Quest, Combat, Treasure, or none
+                        }
+                    } //else there is no move-triggered event on this tile
 
                 } else {
                     System.out.println("can't move down due to collision");
@@ -981,6 +1145,59 @@ public class MapLoader {
 
                     player.setAllImageViewLocationX(newX * tileSize);
                     player.setAllImageViewLocationY(player.getY() * tileSize);
+                    //player is now on the new tile, now time to see if there's an event there
+                    String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
+                    //System.out.println("got here before tileEventTrigger");
+                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    if (tileEventTrigger.equals("walk")) {
+                        //System.out.println("got here in tileEventTrigger");
+                        String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
+                        switch (tileEventType) {
+                            case "MapMove":
+                                String mapToLoadFromMoveEvent = worldMap.tileArray[player.getX()][player.getY()].getEvent().getMapToLoad();
+                                switch (mapToLoadFromMoveEvent) {
+                                    case "map_0_0":
+                                        System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_0_1":
+                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "map_1_0":
+                                        System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
+                                        break;
+                                    case "none":
+                                        System.err.println("error with MapMove Event, in switch mapToLoadFromMoveEvent");
+                                        break;
+                                    default:
+                                        System.out.println("I don't know, or it isn't implemented yet");
+                                        break;
+                                }
+                                break;
+                            case "Shop":
+                                System.out.println("move-triggered Shop event not implemented yet");
+                                break;
+                            case "Dialogue":
+                                System.out.println("move-triggered Dialogue event not implemented yet");
+                                break;
+                            case "Quest":
+                                System.out.println("move-triggered Quest event not implemented yet");
+                                break;
+                            case "Combat":
+                                System.out.println("move-triggered Combat event not implemented yet");
+                                break;
+                            case "Treasure":
+                                System.out.println("move-triggered Treasure event not implemented yet");
+                                break;
+                            case "none":
+                                System.out.println("this is a none type event, therefore nothing happens.");
+                                break;
+                            default:
+                                System.err.println("move-triggered event error");
+                                System.exit(67686);
+                                break;
+                            //MapMove, Shop, Dialogue, Quest, Combat, Treasure, or none
+                        }
+                    } //else there is no move-triggered event on this tile
 
                 } else {
                     System.out.println("can't move left due to collision");
