@@ -60,8 +60,8 @@ public class Player {
     public Player(String name){
         setName(name);
         //default starting position is 60, 60 for a new game save
-        setX(5);
-        setY(5);
+        setX(11);
+        setY(11);
         setPosition("down");
         setCurrentMapName("map_0_0");
         setIsBusy(false);
@@ -216,6 +216,12 @@ public class Player {
         this.setY(playerYFromFile);
         this.setPosition(positionFromFile);
         this.setCurrentMapName(currentMapNameFromFile);
+
+        playerSaveFileName = null;
+        playerNameFromFile = null;
+        positionFromFile = null;
+        currentMapNameFromFile = null;
+
 
     }
 

@@ -211,8 +211,9 @@ public class WorldMap {
         }
     }
 
-
-    public void destroyWorldMap() {
+    //this is too slow, don't use it
+    //put unloadMap_X_Y methods in the MapLoader class instead
+    public void destroyWorldMap(Pane mainMenu, Pane worldPane) {
         //destroy tile array
         //used for MapMove -- gotta unload everything on the screen before loading new stuff
         for (int xIter = 0; xIter < xDimension; xIter++) {
@@ -220,17 +221,26 @@ public class WorldMap {
                 this.tileArray[xIter][yIter].getEvent().destroyEvent();
                 this.tileArray[xIter][yIter].destroyTile();
                 this.tileArray[xIter][yIter] = null;
+                if (topLevelImageViewArray[xIter][yIter] != null) {
+                    topLevelImageViewArray[xIter][yIter].setImage(null);
+                }
                 topLevelImageViewArray[xIter][yIter] = null;
                 topLevelImageArray[xIter][yIter] = null;
+                if (midLevelImageViewArray[xIter][yIter] != null) {
+                    midLevelImageViewArray[xIter][yIter].setImage(null);
+                }
                 midLevelImageViewArray[xIter][yIter] = null;
                 midLevelImageArray[xIter][yIter] = null;
+                if (bottomLevelImageViewArray[xIter][yIter] != null) {
+                    bottomLevelImageViewArray[xIter][yIter].setImage(null);
+                }
                 bottomLevelImageViewArray[xIter][yIter] = null;
                 bottomLevelImageArray[xIter][yIter] = null;
             }
-        } //too slow
-
+        }
+        mainMenu.getChildren().remove(worldPane);
         setName(null);
-        setTileSize(null);
+
     }
 
 

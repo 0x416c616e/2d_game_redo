@@ -54,7 +54,7 @@ public class Event {
         //System.out.println("generic Event destroyed");
         setEventType(null);
         setTrigger(null);
-        System.gc();
+        //System.gc();
     }
 
 

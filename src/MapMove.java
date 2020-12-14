@@ -8,7 +8,7 @@ public class MapMove extends Event {
 
     public MapMove() {
         super();
-        System.out.println("made a new MapMove event");
+        //System.out.println("made a new MapMove event");
     }
 
     public MapMove(String trigger, String mapToLoad) {
@@ -36,6 +36,6 @@ public class MapMove extends Event {
         setMapToLoad(null);
         setEventType(null);
         setTrigger(null);
-        System.gc();
+        //System.gc();
     }
 }

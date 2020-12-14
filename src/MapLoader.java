@@ -16,6 +16,10 @@ public class MapLoader {
 
     //attributes===============================================
 
+
+
+    boolean controlsAreOnTheMap;
+
     boolean downPressed;
     boolean upPressed;
     boolean leftPressed;
@@ -39,6 +43,12 @@ public class MapLoader {
     long lastMove;
     String controls;
 
+
+    Button downButton;
+    Button rightButton;
+    Button upButton;
+    Button leftButton;
+
     public MapLoader(String controls) {
         //doesn't have much aside from just methods for loading stuff
         //in order to de-clutter the Main class
@@ -54,6 +64,11 @@ public class MapLoader {
         }
         now = System.nanoTime();
         setAllTouchscreenButtonsNotPressed();
+        controlsAreOnTheMap = false;
+        downButton = new Button("v");
+        rightButton = new Button(">");
+        upButton = new Button("^");
+        leftButton = new Button("<");
     }
 
 
@@ -105,12 +120,12 @@ public class MapLoader {
     //you will only be able to move again after a certain amount of time
     //this method checks how long it's been since the last time you moved
     public boolean enoughTimeHasPassed() {
-        System.out.println("got here enoughTimeHasPassed");
+        //System.out.println("got here enoughTimeHasPassed");
         updateTime();
         timeBetween = now - lastMove;
         THRESHOLD = (this.controls.equals("keyboard")) ? KEYBOARD_THRESHOLD : TOUCHSCREEN_THRESHOLD;
         if (timeBetween >= THRESHOLD) {
-            System.out.println("timeBetween = " + timeBetween);
+            //System.out.println("timeBetween = " + timeBetween);
             swap = now;
             lastMove = swap;
             updateTime();
@@ -132,14 +147,14 @@ public class MapLoader {
         //testing loading bottom level
         String tileSizeFileNamePart = "";
         if (resolution.equals("1280x720")) {
-            System.out.println("loading map 720p");
+            //System.out.println("loading map 720p");
             tileSizeFileNamePart = "40x40";
         } else if (resolution.equals("1280x800")) {
-            System.out.println("loading map 800p");
+            //System.out.println("loading map 800p");
             tileSizeFileNamePart = "40x40";
 
         } else if (resolution.equals("1920x1080")) {
-            System.out.println("loading map 1080p");
+            //System.out.println("loading map 1080p");
             tileSizeFileNamePart = "60x60";
         } else {
             System.err.println("Error with loadMap0_0 for resolution part");
@@ -171,7 +186,7 @@ public class MapLoader {
 
         worldMap.tileArray[11][downArrowToNextMapY] = new Tile(downArrowFileName);
         worldMap.tileArray[11][downArrowToNextMapY].setEvent(new MapMove("walk", "map_0_1"));
-        System.out.println(worldMap.tileArray[11][downArrowToNextMapY].getEvent().getEventType());
+        //System.out.println(worldMap.tileArray[11][downArrowToNextMapY].getEvent().getEventType());
         worldMap.tileArray[11][downArrowToNextMapY + 1] = new Tile(downArrowFileName);
         worldMap.tileArray[11][downArrowToNextMapY + 1].setEvent(new MapMove("walk", "map_0_1"));
         String rightArrowFileName = "file:assets/tiles/right_arrow_" + tileSizeFileNamePart + ".png";
@@ -180,125 +195,6 @@ public class MapLoader {
         worldMap.tileArray[31][11] = new Tile(rightArrowFileName);
         worldMap.tileArray[31][11].setEvent(new MapMove("walk", "map_1_0"));
 
-        //adding water, the only other bottom level thing aside from the arrows and grass
-        //this might look dumb but it loads faster than "smarter" methods I tried in the past that were too slow
-        //this is loop unrolling and it looks bad but speeds things up
-        //important because this is intended to run on a low-end tablet PC
-        String waterFileName = "file:assets/tiles/water_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[1][4] = new Tile(waterFileName, true);
-        worldMap.tileArray[1][5] = new Tile(waterFileName, true);
-        worldMap.tileArray[1][6] = new Tile(waterFileName, true);
-        worldMap.tileArray[2][3] = new Tile(waterFileName, true);
-        worldMap.tileArray[2][4] = new Tile(waterFileName, true);
-        worldMap.tileArray[2][5] = new Tile(waterFileName, true);
-        worldMap.tileArray[2][6] = new Tile(waterFileName, true);
-        worldMap.tileArray[2][7] = new Tile(waterFileName, true);
-        worldMap.tileArray[3][3] = new Tile(waterFileName, true);
-        worldMap.tileArray[3][4] = new Tile(waterFileName, true);
-        worldMap.tileArray[3][5] = new Tile(waterFileName, true);
-        worldMap.tileArray[3][6] = new Tile(waterFileName, true);
-        worldMap.tileArray[3][7] = new Tile(waterFileName, true);
-        worldMap.tileArray[4][4] = new Tile(waterFileName, true);
-        worldMap.tileArray[4][5] = new Tile(waterFileName, true);
-        worldMap.tileArray[4][6] = new Tile(waterFileName, true);
-
-        //all bottom level stuff is done now
-
-        //adding trees to the map as MID LEVEL, and collision for them so you can't pass through them
-        //tree and collision so you can't move through it
-        String treeMidLevelFileName = "file:assets/tiles/tree_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[0][4].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[0][16].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[0][17].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[1][2].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[1][3].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[1][7].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[1][10].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[2][1].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[2][8].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[2][12].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[2][14].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[3][1].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[4][16].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[5][10].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[6][11].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[7][4].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[7][16].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[9][11].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[9][15].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[13][13].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[14][5].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[16][2].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[17][8].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[17][17].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[20][5].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[20][8].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[21][13].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[23][3].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[23][10].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[24][1].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[24][7].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[26][2].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[26][16].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[27][15].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[28][4].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[28][10].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[30][2].setMidLevelWithCollision(treeMidLevelFileName, true);
-        worldMap.tileArray[31][14].setMidLevelWithCollision(treeMidLevelFileName, true);
-
-
-        //need to add more midLevel stuff, then eventually topLevel stuff
-        //rock and collision
-        String rocksMidLevelFileName = "file:assets/tiles/rock_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[0][3].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[1][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[5][13].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[7][1].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[14][10].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[15][0].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[15][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[20][16].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[21][4].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[21][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[21][16].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[21][17].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[22][15].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[22][16].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[22][17].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[26][17].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[30][1].setMidLevelWithCollision(rocksMidLevelFileName, true);
-        worldMap.tileArray[31][8].setMidLevelWithCollision(rocksMidLevelFileName, true);
-
-
-        //tree stumps
-        //tiles and collision
-        //2,17
-        String stumpMidLevelFileName = "file:assets/tiles/tree_stump_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[2][17].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //5,2
-        worldMap.tileArray[5][2].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //5,12
-        worldMap.tileArray[5][12].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //16,5
-        worldMap.tileArray[16][5].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //17,14
-        worldMap.tileArray[17][14].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //18,1
-        worldMap.tileArray[18][1].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //22,7
-        worldMap.tileArray[22][7].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //25,12
-        worldMap.tileArray[25][12].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //26,5
-        worldMap.tileArray[26][5].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //28,16
-        worldMap.tileArray[28][16].setMidLevelWithCollision(stumpMidLevelFileName, true);
-        //30,4
-        worldMap.tileArray[30][4].setMidLevelWithCollision(stumpMidLevelFileName, true);
-
-
-        //where I left off
-        //adding more midLevel stuff to map_0_0
 
 
         //tile data is used to figure out which images to add to the map
@@ -306,12 +202,12 @@ public class MapLoader {
         worldMap.setAllMidLevelImage(worldPane);
         worldMap.setAllTopLevelImage(worldPane);
         mainMenu.getChildren().addAll(worldPane);
-        System.gc();
         player.loadPlayerFromFile();
-        System.out.print(player.toString() + "\n");
+        //System.out.print(player.toString() + "\n");
 
         //now that the map is loaded, time to add the player and controls
         putPlayerAndControlsOnMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+        System.gc();
 
 
     }
@@ -414,31 +310,45 @@ public class MapLoader {
     }
 
 
-    public void takePlayerOffMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
-        System.out.println("not yet implemented");
-    }
+
 
     //controls methods for keyboard and touchscreen, adds ability to move on the map
 
     public void addControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        switch (controls) {
-            case "keyboard":
-                System.out.println("Adding keyboard controls");
-                addKeyBoardControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                break;
-            case "touchscreen":
-                System.out.println("Adding touchscreen controls");
-                addTouchscreenControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                break;
-            default:
-                System.err.println("Error with addControls switch(controls)");
-                System.exit(45332746);
+        if (!controlsAreOnTheMap) {
+            switch (controls) {
+                case "keyboard":
+                    //System.out.println("Adding keyboard controls");
+                    addKeyBoardControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                    System.out.println("adding keyboard controls");
+                    break;
+                case "touchscreen":
+                    //System.out.println("Adding touchscreen controls");
+                    addTouchscreenControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                    System.out.println("adding touchscreen controls");
+                    break;
+                default:
+                    System.err.println("Error with addControls switch(controls)");
+                    System.exit(45332746);
+
+            }
+            controlsAreOnTheMap = true;
+        } else {
+            //System.out.println("Controls are already on the map, no need to add the again");
+            //all event handlers exist for keyboard and mouse still, HOWEVER: edge case for touchscreen controls
+            //they get removed when the map is unloaded
+            //but they can just be put back, no need to make them again
+            if (!worldPane.getChildren().contains(downButton) && (controls.equals("touchscreen"))){
+                worldPane.getChildren().addAll(downButton, rightButton, upButton, leftButton);
+                controlsAreOnTheMap = true;
+            }
 
         }
+
     }
 
     public void addKeyBoardControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        System.out.println("addKeyboardControls not implemented yet (work in progress)");
+        //System.out.println("addKeyboardControls not implemented yet (work in progress)");
         scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case W:
@@ -461,13 +371,24 @@ public class MapLoader {
 
     }
 
+    public void removeKeyBoardControls(Scene scene) {
+        scene.setOnKeyPressed(null);
+        System.out.println("removing keyboard controls");
+        //still need to change boolean for controlsAreOnTheMap to false
+    }
+
+    public void removeTouchscreenControls(){
+        downButton.setOnAction(null);
+        rightButton.setOnAction(null);
+        upButton.setOnAction(null);
+        leftButton.setOnAction(null);
+        System.out.println("removing touchscreen controls");
+    }
+
 
     public void addTouchscreenControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        System.out.println("addTouchscreenControls not yet implemented");
-        Button downButton = new Button("v");
-        Button rightButton = new Button(">");
-        Button upButton = new Button("^");
-        Button leftButton = new Button("<");
+
+
 
         int intendedHeight = -1; //means not initialized
         int intendedWidth = -1;
@@ -514,7 +435,7 @@ public class MapLoader {
         worldPane.getChildren().addAll(downButton, rightButton, upButton, leftButton);
 
 
-        /*
+
         downButton.setOnAction(e -> {
             genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             //without toFront(), the player's character could be on top of the touchscreen control buttons!
@@ -522,12 +443,12 @@ public class MapLoader {
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
-        });*/
+        });
 
         //for all of the Xbutton event handlers, I replaced MouseEvent.MOUSE_PRESSED with MouseEvent.ANY
 
 
-
+        /*
         downButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -541,18 +462,19 @@ public class MapLoader {
 
                 event.consume();
             }
-        });
+        });*/
 
 
-        /*
+
         rightButton.setOnAction(e -> {
             genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
-        });*/
+        });
 
+        /*
         rightButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -565,17 +487,18 @@ public class MapLoader {
 
                 event.consume();
             }
-        });
+        });*/
 
-        /*
+
         upButton.setOnAction(e -> {
             genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
-        });*/
+        });
 
+        /*
         upButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -588,17 +511,18 @@ public class MapLoader {
 
                 event.consume();
             }
-        });
+        });*/
 
-        /*
+
         leftButton.setOnAction(e -> {
             genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
-        });*/
+        });
 
+        /*
         leftButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -611,7 +535,7 @@ public class MapLoader {
 
                 event.consume();
             }
-        });
+        });*/
 
 
     }
@@ -622,10 +546,10 @@ public class MapLoader {
 
     public void genericControlsMapMoveDown(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
-            System.out.println("can't move due to being busy or not waiting long enough");
+            //System.out.println("can't move due to being busy or not waiting long enough");
         } else {
-            System.out.println("proceeding with movement because the player isn't busy");
-            System.out.println("player x,y before moving down: " + player.getX() + ", " + player.getY());
+            //System.out.println("proceeding with movement because the player isn't busy");
+            //System.out.println("player x,y before moving down: " + player.getX() + ", " + player.getY());
             //down increases Y
             //counterintuitive but 0,0 is in the upper lefthand corner
             //and bottom right is the highest x,y position
@@ -640,7 +564,7 @@ public class MapLoader {
             if (player.getY() >= (worldMap.yDimension - 1)) {
                 //already at the edge of the map, can't go further
                 //moving will be handled with mapmove events, not implemented yet
-                System.out.println("can't move down, at the edge of the map");
+                //System.out.println("can't move down, at the edge of the map");
             } else {
                 //the below tile can possibly be moved to
 
@@ -653,7 +577,7 @@ public class MapLoader {
                     //player is now on the new tile, now time to see if there's an event there
                     String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
                     //System.out.println("got here before tileEventTrigger");
-                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    //System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
                     if (tileEventTrigger.equals("walk")) {
                         //System.out.println("got here in tileEventTrigger");
                         String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
@@ -665,11 +589,11 @@ public class MapLoader {
                                         System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
                                         break;
                                     case "map_0_1":
-                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        //System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
                                         //to figure out what needs to be unloaded, you first need to know what currently IS loaded
                                         switch (player.getCurrentMapName()) {
                                             case "map_0_0":
-                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 return;
                                             default:
@@ -716,7 +640,7 @@ public class MapLoader {
                     } //else there is no move-triggered event on this tile
 
                 } else {
-                    System.out.println("can't move down due to collision");
+                    //System.out.println("can't move down due to collision");
                     //but still need to update position and graphics
 
 
@@ -733,7 +657,7 @@ public class MapLoader {
             String oldPosition = player.getPosition();
             //if new position is different, need to change the imageview
             player.setPosition("down");
-            System.out.println("facing down");
+            //System.out.println("facing down");
 
             if (!(oldPosition.equals(player.getPosition()))) {
                 switch (tileSize) {
@@ -792,17 +716,17 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving down: " + player.getX() + ", " + player.getY());
+            //System.out.println("player x,y after moving down: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
 
     public void genericControlsMapMoveRight(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
-            System.out.println("can't move due to being busy or not waiting long enough");
+            //System.out.println("can't move due to being busy or not waiting long enough");
         } else {
-            System.out.println("proceeding with movement because the player isn't busy");
-            System.out.println("player x,y before moving right: " + player.getX() + ", " + player.getY());
+            //System.out.println("proceeding with movement because the player isn't busy");
+            //System.out.println("player x,y before moving right: " + player.getX() + ", " + player.getY());
             //right increases X
             int newX = player.getX() +1;
 
@@ -814,7 +738,7 @@ public class MapLoader {
             if (player.getX() >= (worldMap.xDimension - 1)) {
                 //already at the edge of the map, can't go further
                 //moving will be handled with mapmove events, not implemented yet
-                System.out.println("can't move right, at the edge of the map");
+                //System.out.println("can't move right, at the edge of the map");
             } else {
                 //the below tile can possibly be moved to
 
@@ -828,7 +752,7 @@ public class MapLoader {
                     //player is now on the new tile, now time to see if there's an event there
                     String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
                     //System.out.println("got here before tileEventTrigger");
-                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    //System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
                     if (tileEventTrigger.equals("walk")) {
                         //System.out.println("got here in tileEventTrigger");
                         String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
@@ -840,11 +764,11 @@ public class MapLoader {
                                         System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
                                         break;
                                     case "map_0_1":
-                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        //System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
                                         //to figure out what needs to be unloaded, you first need to know what currently IS loaded
                                         switch (player.getCurrentMapName()) {
                                             case "map_0_0":
-                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 return;
                                             default:
@@ -891,7 +815,7 @@ public class MapLoader {
                     } //else there is no move-triggered event on this tile
 
                 } else {
-                    System.out.println("can't move right due to collision");
+                    //System.out.println("can't move right due to collision");
                 }
 
 
@@ -907,7 +831,7 @@ public class MapLoader {
             String oldPosition = player.getPosition();
             //if new position is different, need to change the imageview
             player.setPosition("right");
-            System.out.println("facing right");
+            //System.out.println("facing right");
             //
 
             if (!(oldPosition.equals(player.getPosition()))) {
@@ -967,17 +891,17 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving right: " + player.getX() + ", " + player.getY());
+            //System.out.println("player x,y after moving right: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
 
     public void genericControlsMapMoveUp(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
-            System.out.println("can't move due to being busy or not waiting long enough");
+            //System.out.println("can't move due to being busy or not waiting long enough");
         } else {
-            System.out.println("proceeding with movement because the player isn't busy");
-            System.out.println("player x,y before moving up: " + player.getX() + ", " + player.getY());
+            //System.out.println("proceeding with movement because the player isn't busy");
+            //System.out.println("player x,y before moving up: " + player.getX() + ", " + player.getY());
             //up decreases Y
             //counterintuitive but 0,0 is in the upper lefthand corner
             //and bottom right is the highest x,y position
@@ -992,7 +916,7 @@ public class MapLoader {
             if (player.getY() <= 0) {
                 //already at the edge of the map, can't go further
                 //moving will be handled with mapmove events, not implemented yet
-                System.out.println("can't move up, at the edge of the map");
+                //System.out.println("can't move up, at the edge of the map");
             } else {
                 //the below tile can possibly be moved to
 
@@ -1005,7 +929,7 @@ public class MapLoader {
                     //player is now on the new tile, now time to see if there's an event there
                     String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
                     //System.out.println("got here before tileEventTrigger");
-                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    //System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
                     if (tileEventTrigger.equals("walk")) {
                         //System.out.println("got here in tileEventTrigger");
                         String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
@@ -1017,11 +941,11 @@ public class MapLoader {
                                         System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
                                         break;
                                     case "map_0_1":
-                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        //System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
                                         //to figure out what needs to be unloaded, you first need to know what currently IS loaded
                                         switch (player.getCurrentMapName()) {
                                             case "map_0_0":
-                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 return;
                                             default:
@@ -1068,7 +992,7 @@ public class MapLoader {
                     } //else there is no move-triggered event on this tile
 
                 } else {
-                    System.out.println("can't move down due to collision");
+                    //System.out.println("can't move down due to collision");
                     //but still need to update position and graphics
                     //i.e. you are next to an obstacle but not facing it, then you want to move that way, and then your position (facing) changes
                     //this is important for being able to interact with things with the interact key
@@ -1086,7 +1010,7 @@ public class MapLoader {
             String oldPosition = player.getPosition();
             //if new position is different, need to change the imageview
             player.setPosition("up");
-            System.out.println("facing up");
+            //System.out.println("facing up");
 
             if (!(oldPosition.equals(player.getPosition()))) {
                 switch (tileSize) {
@@ -1145,17 +1069,17 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving up: " + player.getX() + ", " + player.getY());
+            //System.out.println("player x,y after moving up: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
 
     public void genericControlsMapMoveLeft(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
-            System.out.println("can't move due to being busy or not waiting long enough");
+            //System.out.println("can't move due to being busy or not waiting long enough");
         } else {
-            System.out.println("proceeding with movement because the player isn't busy");
-            System.out.println("player x,y before moving left: " + player.getX() + ", " + player.getY());
+            //System.out.println("proceeding with movement because the player isn't busy");
+            //System.out.println("player x,y before moving left: " + player.getX() + ", " + player.getY());
             //left decreases X
             int newX = player.getX() -1;
 
@@ -1167,7 +1091,7 @@ public class MapLoader {
             if (player.getX() <= 0) {
                 //already at the edge of the map, can't go further
                 //moving will be handled with mapmove events, not implemented yet
-                System.out.println("can't move right, at the edge of the map");
+                //System.out.println("can't move right, at the edge of the map");
             } else {
                 //the below left can possibly be moved to
 
@@ -1181,7 +1105,7 @@ public class MapLoader {
                     //player is now on the new tile, now time to see if there's an event there
                     String tileEventTrigger = worldMap.tileArray[player.getX()][player.getY()].getEvent().getTrigger();
                     //System.out.println("got here before tileEventTrigger");
-                    System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
+                    //System.out.println("tileEventTrigger for tile " + player.getX() + ", " + player.getY() + ": " + tileEventTrigger);
                     if (tileEventTrigger.equals("walk")) {
                         //System.out.println("got here in tileEventTrigger");
                         String tileEventType = worldMap.tileArray[player.getX()][player.getY()].getEvent().getEventType();
@@ -1193,11 +1117,11 @@ public class MapLoader {
                                         System.out.println("need to unload current map and then load map_0_0 (loading/unloading not implemented yet)");
                                         break;
                                     case "map_0_1":
-                                        System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
+                                        //System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
                                         //to figure out what needs to be unloaded, you first need to know what currently IS loaded
                                         switch (player.getCurrentMapName()) {
                                             case "map_0_0":
-                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 return;
                                             default:
@@ -1260,7 +1184,7 @@ public class MapLoader {
             String oldPosition = player.getPosition();
             //if new position is different, need to change the imageview
             player.setPosition("left");
-            System.out.println("facing left");
+            //System.out.println("facing left");
             //
 
             if (!(oldPosition.equals(player.getPosition()))) {
@@ -1322,7 +1246,7 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving left: " + player.getX() + ", " + player.getY());
+            //System.out.println("player x,y after moving left: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
@@ -1363,12 +1287,40 @@ public class MapLoader {
     //UNLOAD MAP METHODS!!!!!!!!!!!!!!!!!!!!!!!
 
     //unloading map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public void unloadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        System.out.println("where i left off!!!!!");
+    public void unloadMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+        //System.out.println("where i left off!!!!!");
         worldPane.getChildren().clear(); //gets everything OUT of the worldPane, but it hasn't been destroyed yet
         mainMenu.getChildren().remove(worldPane);
-        //worldMap.destroyWorldMap(); //destroys Events, Tiles, and WorldMap, but there's still a couple other things that were added here in MapLoader
+        worldMap.destroyWorldMap(mainMenu, worldPane); //destroys Events, Tiles, and WorldMap, but there's still a couple other things that were added here in MapLoader
         //!!!!!!!!!!!!!!destroyWorldMap is too slow! I need to make separate destroyMap events for each level, no loops, only destroying what I know is in there!!!
+        //update: I think I made it faster, so it's better after all
+        worldPane = null;
+        worldPane = new Pane();
+
+
+
+
+        /*
+        for (int xMap = 0; xMap < worldMap.getxDimension(); xMap++) {
+            for (int yMap = 0; yMap < worldMap.getyDimension(); yMap++) {
+                worldMap.tileArray[xMap][yMap].destroyTile();
+                worldMap.tileArray[xMap][yMap] = null;
+            }
+        }
+        int downArrowToNextMapY;
+        if (!resolution.equals("1280x800")) {
+            downArrowToNextMapY = 16;
+        } else {
+            System.out.println("800p has a different number of tiles, so moving to another map is different (down a couple rows)");
+            //16:9 is 32x18 tiles, 16:10 is 32x20 tiles
+            downArrowToNextMapY = 18;
+        }*/
+
+
+        removeKeyBoardControls(scene);
+        removeTouchscreenControls();
+        this.controlsAreOnTheMap = false;
+
         System.gc();
 
     }

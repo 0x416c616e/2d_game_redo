@@ -125,6 +125,7 @@ public class Tile {
 
     //other methods============================================
 
+    //use this in MapLoader unloadMap methods
     public void destroyTile() {
         //System.out.println("Destroying Tile");
         event.destroyEvent();
@@ -132,6 +133,6 @@ public class Tile {
         setTopLevel(null);
         setMidLevel(null);
         setBottomLevel(null);
-        System.gc();
+        //System.gc();
     }
 }
