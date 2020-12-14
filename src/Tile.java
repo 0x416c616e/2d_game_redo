@@ -126,6 +126,12 @@ public class Tile {
     //other methods============================================
 
     public void destroyTile() {
-        System.out.println("not implemented yet");
+        //System.out.println("Destroying Tile");
+        event.destroyEvent();
+        setEvent(null);
+        setTopLevel(null);
+        setMidLevel(null);
+        setBottomLevel(null);
+        System.gc();
     }
 }

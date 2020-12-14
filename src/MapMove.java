@@ -29,7 +29,13 @@ public class MapMove extends Event {
 
     //other methods============================================
 
-    public void changeMap() {
-        System.out.println("Changing map to " + getMapToLoad());
+
+    @Override
+    public void destroyEvent() {
+        //System.out.println("MapMove Event destroyed");
+        setMapToLoad(null);
+        setEventType(null);
+        setTrigger(null);
+        System.gc();
     }
 }

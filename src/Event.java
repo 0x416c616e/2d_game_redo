@@ -51,6 +51,11 @@ public class Event {
     //other methods============================================
 
     public void destroyEvent() {
-        System.out.println("not implemented yet");
+        //System.out.println("generic Event destroyed");
+        setEventType(null);
+        setTrigger(null);
+        System.gc();
     }
+
+
 }

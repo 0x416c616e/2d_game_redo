@@ -316,11 +316,11 @@ public class MapLoader {
 
     }
 
-    public void loadMap_0_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void loadMap_0_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_0_1");
     }
 
-    public void loadMap_1_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void loadMap_1_1(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet");
     }
 
@@ -666,7 +666,18 @@ public class MapLoader {
                                         break;
                                     case "map_0_1":
                                         System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
-                                        break;
+                                        //to figure out what needs to be unloaded, you first need to know what currently IS loaded
+                                        switch (player.getCurrentMapName()) {
+                                            case "map_0_0":
+                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                return;
+                                            default:
+                                                System.out.println("trying to load map_0_1 from a map other than map_0_0");
+                                                break;
+                                            //when I make more maps, put them here, but only that connect to map_0_1
+                                        }
+                                        return; //return gets out of entire method
                                     case "map_1_0":
                                         System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
                                         break;
@@ -830,7 +841,18 @@ public class MapLoader {
                                         break;
                                     case "map_0_1":
                                         System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
-                                        break;
+                                        //to figure out what needs to be unloaded, you first need to know what currently IS loaded
+                                        switch (player.getCurrentMapName()) {
+                                            case "map_0_0":
+                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                return;
+                                            default:
+                                                System.out.println("trying to load map_0_1 from a map other than map_0_0");
+                                                break;
+                                            //when I make more maps, put them here, but only that connect to map_0_1
+                                        }
+                                        return; //return gets out of entire method
                                     case "map_1_0":
                                         System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
                                         break;
@@ -996,7 +1018,18 @@ public class MapLoader {
                                         break;
                                     case "map_0_1":
                                         System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
-                                        break;
+                                        //to figure out what needs to be unloaded, you first need to know what currently IS loaded
+                                        switch (player.getCurrentMapName()) {
+                                            case "map_0_0":
+                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                return;
+                                            default:
+                                                System.out.println("trying to load map_0_1 from a map other than map_0_0");
+                                                break;
+                                            //when I make more maps, put them here, but only that connect to map_0_1
+                                        }
+                                        return; //return gets out of entire method
                                     case "map_1_0":
                                         System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
                                         break;
@@ -1161,7 +1194,18 @@ public class MapLoader {
                                         break;
                                     case "map_0_1":
                                         System.out.println("need to unload current map and then load map_0_1 (loading/unloading not implemented yet)");
-                                        break;
+                                        //to figure out what needs to be unloaded, you first need to know what currently IS loaded
+                                        switch (player.getCurrentMapName()) {
+                                            case "map_0_0":
+                                                unloadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                return;
+                                            default:
+                                                System.out.println("trying to load map_0_1 from a map other than map_0_0");
+                                                break;
+                                            //when I make more maps, put them here, but only that connect to map_0_1
+                                        }
+                                        return; //return gets out of entire method
                                     case "map_1_0":
                                         System.out.println("need to unload current map and then load map_1_0 (loading/unloading not implemented yet)");
                                         break;
@@ -1316,11 +1360,20 @@ public class MapLoader {
         System.out.println("takeControlsOffMap not yet implemented");
     }
 
-    //unloading map
+    //UNLOAD MAP METHODS!!!!!!!!!!!!!!!!!!!!!!!
 
-    public void unloadMap() {
-        System.out.println("not implemented yet");
+    //unloading map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void unloadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+        System.out.println("where i left off!!!!!");
+        worldPane.getChildren().clear(); //gets everything OUT of the worldPane, but it hasn't been destroyed yet
+        mainMenu.getChildren().remove(worldPane);
+        //worldMap.destroyWorldMap(); //destroys Events, Tiles, and WorldMap, but there's still a couple other things that were added here in MapLoader
+        //!!!!!!!!!!!!!!destroyWorldMap is too slow! I need to make separate destroyMap events for each level, no loops, only destroying what I know is in there!!!
+        System.gc();
+
     }
+
+
 
 
 }

@@ -212,7 +212,26 @@ public class WorldMap {
     }
 
 
+    public void destroyWorldMap() {
+        //destroy tile array
+        //used for MapMove -- gotta unload everything on the screen before loading new stuff
+        for (int xIter = 0; xIter < xDimension; xIter++) {
+            for (int yIter = 0; yIter < yDimension; yIter++) {
+                this.tileArray[xIter][yIter].getEvent().destroyEvent();
+                this.tileArray[xIter][yIter].destroyTile();
+                this.tileArray[xIter][yIter] = null;
+                topLevelImageViewArray[xIter][yIter] = null;
+                topLevelImageArray[xIter][yIter] = null;
+                midLevelImageViewArray[xIter][yIter] = null;
+                midLevelImageArray[xIter][yIter] = null;
+                bottomLevelImageViewArray[xIter][yIter] = null;
+                bottomLevelImageArray[xIter][yIter] = null;
+            }
+        } //too slow
 
+        setName(null);
+        setTileSize(null);
+    }
 
 
 
