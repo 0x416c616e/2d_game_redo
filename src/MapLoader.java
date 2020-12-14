@@ -594,7 +594,7 @@ public class MapLoader {
                                         switch (player.getCurrentMapName()) {
                                             case "map_0_0":
                                                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                                                loadMap_0_1(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                                                loadMap_0_0(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                                                 return;
                                             default:
                                                 System.out.println("trying to load map_0_1 from a map other than map_0_0");
