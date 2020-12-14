@@ -1,7 +1,9 @@
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 
@@ -12,30 +14,96 @@ import javafx.scene.text.Font;
 
 public class MapLoader {
 
-    //attributes (none for now, maybe none ever)===============================================
+    //attributes===============================================
+
+    boolean downPressed;
+    boolean upPressed;
+    boolean leftPressed;
+    boolean rightPressed;
 
     Font buttonFont;
     //constructor===============================================
 
     long now;
+    long swap;
     //current time in nanoseconds
     //maploader deals with movement, and for smooth movement, you should only be able to move every now and then
     //for a consistent movement rate, unlike before due to how OS-specific keyboard speed polling/character repeating works
     //so only run the movement stuff if it's been a certain amount of time
-    final long THRESHOLD = 500_000_000L;
+    final long THRESHOLD = 350_000_000L;
     long lastMove;
 
     public MapLoader() {
         //doesn't have much aside from just methods for loading stuff
         //in order to de-clutter the Main class
         buttonFont = new Font("Arial", 30.0);
-        lastMove = System.nanoTime(); //they will be different nanosecond amounts later on
+        lastMove = System.nanoTime() - THRESHOLD; //they will be different nanosecond amounts later on
         now = System.nanoTime();
+        setAllTouchscreenButtonsNotPressed();
+    }
+
+
+
+    public void setDownPressed(boolean downPressed) {
+        this.downPressed = downPressed;
+    }
+
+    public boolean getDownPressed() {
+        return this.downPressed;
+    }
+
+    public void setUpPressed(boolean upPressed) {
+        this.upPressed = upPressed;
+    }
+
+    public boolean getUpPressed() {
+        return this.upPressed;
+    }
+
+    public void setRightPressed(boolean rightPressed) {
+        this.rightPressed = rightPressed;
+    }
+
+    public boolean getRightPressed() {
+        return this.rightPressed;
+    }
+
+    public void setLeftPressed(boolean leftPressed) {
+        this.leftPressed = leftPressed;
+    }
+
+    public boolean getLeftPressed() {
+        return this.leftPressed;
+    }
+
+    public void setAllTouchscreenButtonsNotPressed() {
+        setUpPressed(false);
+        setDownPressed(false);
+        setLeftPressed(false);
+        setRightPressed(false);
     }
 
     //update current time in milliseconds
-    public void update() {
-        //not implemented yet
+    public void updateTime() {
+        now = System.nanoTime();
+    }
+
+    //you will only be able to move again after a certain amount of time
+    //this method checks how long it's been since the last time you moved
+    public boolean enoughTimeHasPassed() {
+        System.out.println("got here enoughTimeHasPassed");
+        updateTime();
+        long timeBetween = now - lastMove;
+        if (timeBetween >= THRESHOLD) {
+            System.out.println("timeBetween = " + timeBetween);
+            swap = now;
+            lastMove = swap;
+            updateTime();
+            return true;
+        } else {
+            //too soon to move again
+            return false;
+        }
     }
 
 
@@ -424,6 +492,9 @@ public class MapLoader {
 
 
         worldPane.getChildren().addAll(downButton, rightButton, upButton, leftButton);
+
+
+        /*
         downButton.setOnAction(e -> {
             genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             //without toFront(), the player's character could be on top of the touchscreen control buttons!
@@ -431,28 +502,97 @@ public class MapLoader {
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
+        });*/
+
+        //for all of the Xbutton event handlers, I replaced MouseEvent.MOUSE_PRESSED with MouseEvent.ANY
+
+
+
+        downButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                //without toFront(), the player's character could be on top of the touchscreen control buttons!
+                downButton.toFront();
+                rightButton.toFront();
+                upButton.toFront();
+                leftButton.toFront();
+
+                event.consume();
+            }
         });
+
+
+        /*
         rightButton.setOnAction(e -> {
             genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
+        });*/
+
+        rightButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                downButton.toFront();
+                rightButton.toFront();
+                upButton.toFront();
+                leftButton.toFront();
+
+                event.consume();
+            }
         });
+
+        /*
         upButton.setOnAction(e -> {
             genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
+        });*/
+
+        upButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                downButton.toFront();
+                rightButton.toFront();
+                upButton.toFront();
+                leftButton.toFront();
+
+                event.consume();
+            }
         });
+
+        /*
         leftButton.setOnAction(e -> {
             genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
+        });*/
+
+        leftButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                downButton.toFront();
+                rightButton.toFront();
+                upButton.toFront();
+                leftButton.toFront();
+
+                event.consume();
+            }
         });
+
 
     }
 
@@ -461,8 +601,8 @@ public class MapLoader {
     //what triggers it depends on the type of controls, but the same logic applies to both of them
 
     public void genericControlsMapMoveDown(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        if (player.getIsBusy() == true) {
-            System.out.println("can't move due to being busy");
+        if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
+            System.out.println("can't move due to being busy or not waiting long enough");
         } else {
             System.out.println("proceeding with movement because the player isn't busy");
             System.out.println("player x,y before moving down: " + player.getX() + ", " + player.getY());
@@ -574,8 +714,8 @@ public class MapLoader {
     }
 
     public void genericControlsMapMoveRight(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        if (player.getIsBusy() == true) {
-            System.out.println("can't move due to being busy");
+        if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
+            System.out.println("can't move due to being busy or not waiting long enough");
         } else {
             System.out.println("proceeding with movement because the player isn't busy");
             System.out.println("player x,y before moving right: " + player.getX() + ", " + player.getY());
@@ -685,8 +825,8 @@ public class MapLoader {
     }
 
     public void genericControlsMapMoveUp(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        if (player.getIsBusy() == true) {
-            System.out.println("can't move due to being busy");
+        if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
+            System.out.println("can't move due to being busy or not waiting long enough");
         } else {
             System.out.println("proceeding with movement because the player isn't busy");
             System.out.println("player x,y before moving up: " + player.getX() + ", " + player.getY());
@@ -799,8 +939,8 @@ public class MapLoader {
     }
 
     public void genericControlsMapMoveLeft(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        if (player.getIsBusy() == true) {
-            System.out.println("can't move due to being busy");
+        if (player.getIsBusy() == true || (this.enoughTimeHasPassed() == false)) {
+            System.out.println("can't move due to being busy or not waiting long enough");
         } else {
             System.out.println("proceeding with movement because the player isn't busy");
             System.out.println("player x,y before moving left: " + player.getX() + ", " + player.getY());
