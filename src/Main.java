@@ -3,11 +3,16 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -34,6 +39,12 @@ import java.util.regex.Matcher;
 
 //if you want to see where most stuff happens, scroll down to the init() method
 public class Main extends Application {
+
+    //used for playing audio
+    AudioPlayer jukebox = new AudioPlayer();
+
+
+
 
     //this prints out helpful information if enabled
     boolean debugMode = false;
@@ -736,6 +747,7 @@ public class Main extends Application {
 
         closeNameErrorButton.setOnAction(e -> {
             dbgAlert("Running closeNameErrorButton event handler");
+            jukebox.playSound(5);
             mainMenu.getChildren().removeAll(nameErrorBackground, nameErrorText, closeNameErrorButton);
             dbgAlert("nameErrorBackground, nameErrorText, and closeNameErrorButton removed from mainMenu");
             dbgAlert("Ran closeNameErrorButton event handler");
@@ -771,6 +783,7 @@ public class Main extends Application {
         });
 
         getOutOfNewMenu.setOnAction(e -> {
+            jukebox.playSound(4);
             dbgAlert("running getOutOfNewMenu event handler");
             mainMenu.getChildren().removeAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
             dbgAlert("tempBackgroundView, enterNameLavel, nameField, submitNameButton, and getOutOfNewMenu removed from mainMenu");
@@ -804,6 +817,7 @@ public class Main extends Application {
         newGameNameAlreadyExistsButton.setLayoutX(50);
         newGameNameAlreadyExistsButton.setLayoutY(100);
         newGameNameAlreadyExistsButton.setOnAction(e -> {
+            jukebox.playSound(5);
             mainMenu.getChildren().removeAll(newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, newGameNameAlreadyExistsButton);
             dbgAlert("newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, and newGameNameAlreadyExistsButton removed from mainMenu");
         });
@@ -829,6 +843,7 @@ public class Main extends Application {
 
         newSaveGameSuccessButton.setOnAction(e -> {
             mainMenu.getChildren().removeAll(newSaveGameSuccessImageView, newSaveGameSuccessText, newSaveGameSuccessButton);
+            jukebox.playSound(5);
             dbgAlert("newSaveGameSuccessImageView, newSaveGameSuccessText, and newSaveGameSuccessButton removed from mainMenu");
             dbgAlert("LOADING GAME");
 
@@ -848,17 +863,17 @@ public class Main extends Application {
                     //so the maps are the same on all resolutions
                     worldMap = new WorldMap(32, 18, "40x40");
                     dbgAlert("new worldMap worldMap, 720p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene);
+                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
                     break;
                 case "1280x800":
                     worldMap = new WorldMap(32, 20, "40x40");
                     dbgAlert("new worldMap worldMap, 800p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene);
+                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
                     break;
                 case "1920x1080":
                     worldMap = new WorldMap(32, 18, "60x60");
                     dbgAlert("new worldMap worldMap, 1080p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene);
+                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
                     break;
                 default:
                     System.out.println("error with resolution in creating new WorldMap");
@@ -872,7 +887,18 @@ public class Main extends Application {
         //had to put this here so it'd be in scope for the submitNameButton
         //so that the submitNameButton can get rid of it
         //because after making a new game save, then the main menu nodes are removed
-        Label buildNumberLabel = new Label("Build: 0.0094");
+
+        //Label for build number to show which version the player is playing
+        //build number is the current number of commits + 1 because this will be in the next commit
+        //ex: if there are 555 commits on github, then it will be build 0.0556
+        Label buildNumberLabel = new Label("Build: 0.0095");
+        dbgAlert("new Label buildNumber");
+        buildNumberLabel.setFont(standardFont);
+        buildNumberLabel.setLayoutX(900);
+        buildNumberLabel.setLayoutY(500);
+
+        //^end of label for build number
+
 
         //Label for info about debug mode
         Label debugModeLabel = new Label("To turn off debug mode,\njust restart the game.");
@@ -989,9 +1015,11 @@ public class Main extends Application {
             if (!nameMatcher.matches()) {
                 mainMenu.getChildren().addAll(nameErrorBackground, nameErrorText, closeNameErrorButton);
                 dbgAlert("added nameErrorBackground, nameErrorText, and closeNameErrorButton to mainMenu");
+                jukebox.playSound(2); //error sound
             } else {
                 //name matched regex, so here's where I can implement the additional save stuff and eventually loading a new game
                 dbgAlert("Name matched regex, proceeding with further new game stuff");
+
 
                 //1. Change capitalization of name to first letter being uppercase and all other letters are lowercase
                 String playerName = nameField.getText().toLowerCase();
@@ -1004,7 +1032,9 @@ public class Main extends Application {
                 if (saveAlreadyExists) {
                     dbgAlert("Save with that name already exists, therefore can't make it with that name");
                     mainMenu.getChildren().addAll(newGameNameAlreadyExistsImageView, newGameNameAlreadyExistsText, newGameNameAlreadyExistsButton);
+                    jukebox.playSound(2); //error sound
                 } else {
+                    jukebox.playSound(5); //success sound
                     dbgAlert("Save with that name doesn't already exist, therefore it can be made");
                     File saveTemplateSource = new File("templates/save_template.xml");
                     dbgAlert("new File saveTemplateSource");
@@ -1079,6 +1109,7 @@ public class Main extends Application {
 
         newButton.setOnAction(e -> {
             dbgAlert("Running newButton event handler");
+            jukebox.playSound(5);
             mainMenu.getChildren().addAll(tempBackgroundView, enterNameLabel, nameField, submitNameButton, getOutOfNewMenu);
             dbgAlert("tempBackgroundView, enterNameLabel, nameField, submitNameButton, and getOutOfNewMenu added to mainMenu");
             if (controls.equals("touchscreen")) {
@@ -1112,7 +1143,7 @@ public class Main extends Application {
 
         continueButton.setOnAction(e -> {
             dbgAlert("Running continueButton event handler");
-
+            jukebox.playSound(5);
             //not yet implemented event handler
             saveChooser.setTitle("Open Existing Game Save");
             saveChooser.getExtensionFilters().add(saveFilter);
@@ -1120,6 +1151,7 @@ public class Main extends Application {
             dbgAlert("new File selectedGameSave");
             if (selectedGameSave == null) {
                 dbgAlert("Player did not select a game save to load");
+                jukebox.playSound(4);
             } else {
                 dbgAlert("Proceeding with loading game save");
                 dbgAlert("Game save selected: " + selectedGameSave.getName());
@@ -1171,6 +1203,7 @@ public class Main extends Application {
 
         //lambdas for opening and closing the about menu
         aboutButton.setOnAction(e -> {
+            jukebox.playSound(5);
             dbgAlert("Running aboutButton event handler");
             mainMenu.getChildren().addAll(tempBackgroundView, aboutText, websiteLink, getOutOfAboutMenu);
             dbgAlert("tempBackgroundView, aboutText, websiteLink, and getOutOfAboutMenu added to mainMenu");
@@ -1181,6 +1214,7 @@ public class Main extends Application {
 
         getOutOfAboutMenu.setOnAction(e -> {
             dbgAlert("Running getOutOfAboutMenu event handler");
+            jukebox.playSound(4);
             mainMenu.getChildren().removeAll(tempBackgroundView, aboutText, websiteLink, getOutOfAboutMenu);
             dbgAlert("tempBackgroundView, aboutText, websiteLink, and getOutOfAboutMenu removed from mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
@@ -1253,14 +1287,42 @@ public class Main extends Application {
         restartToApplyChangesButton.setLayoutX(50);
         restartToApplyChangesButton.setLayoutY(600);
 
+        Label goodbyeLabel = new Label("Goodbye!");
+        Label restartLabel = new Label("Restart the game for the new settings to apply.");
+        goodbyeLabel.setFont(standardFont);
+        restartLabel.setFont(standardFont);
+        goodbyeLabel.setLayoutX(550);
+        goodbyeLabel.setLayoutY(200);
+        restartLabel.setLayoutX(350);
+        restartLabel.setLayoutY(200);
+        ImageView quitScreen = new ImageView(tempBackground);
+        Media quitMedia = jukebox.getSoundMedia(6);
+        MediaView view = new MediaView();
+        MediaPlayer mediaPlayer = new MediaPlayer(quitMedia);
+        view.setMediaPlayer(mediaPlayer);
+
         restartToApplyChangesButton.setOnAction(e -> {
             dbgAlert("running restartToApplyChangesButton event handler");
-            System.exit(0);
+
+
+            mainMenu.getChildren().addAll(quitScreen, restartLabel);
+
+
+
+
+            mediaPlayer.setOnEndOfMedia(() -> {
+                view.setVisible(false);
+                System.exit(0);
+                //return code 0 means no errors, any other number means something went wrong
+            });
+
+            mediaPlayer.play();
         });
 
         //control buttons event handlers
         keyboardControlsButton.setOnAction(e -> {
             dbgAlert("running keyboardControlsButton event handler");
+            jukebox.playSound(8); //pick sound effect
             setControlStatus("keyboard");
 
             //if they make changes to settings, they have to restart the program
@@ -1273,7 +1335,7 @@ public class Main extends Application {
         });
         touchscreenControlsButton.setOnAction(e -> {
             dbgAlert("running touchscreenControlsButton event handler");
-
+            jukebox.playSound(8); //pick sound effect
             setControlStatus("touchscreen");
 
             //if they make changes to settings, they have to restart the program
@@ -1326,6 +1388,7 @@ public class Main extends Application {
         //window mode button event handlers
         fullscreenWindowModeButton.setOnAction(e -> {
             dbgAlert("running fullscreenWindowModeButton event handler");
+            jukebox.playSound(8); //pick sound effect
             setWindowModeStatus("fullscreen");
 
             //if they make changes to settings, they have to restart the program
@@ -1337,6 +1400,7 @@ public class Main extends Application {
         });
         windowedWindowModeButton.setOnAction(e -> {
             dbgAlert("running windowedModebutton event handler");
+            jukebox.playSound(8); //pick sound effect
             setWindowModeStatus("windowed");
 
             //if they make changes to settings, they have to restart the program
@@ -1380,14 +1444,25 @@ public class Main extends Application {
                 dbgAlert("error with fetching resolution for combobox");
                 break;
         }
+
         resolutionComboBox.setOnAction(e -> {
             //all this does is log that it got clicked, but for UI purposes, it lets the user change the active resolution choice
             //but the way the resolution is changed is through clicking the changeResolutionButton, which then gets the selected item in
             //the resolutionComboBox
             dbgAlert("running resolutionComboBox event handler");
+            jukebox.playSound(8);
             dbgAlert("ran resolutionComboBox event handler");
             System.gc();
         });
+
+        resolutionComboBox.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                jukebox.playSound(8);
+                event.consume();
+            }
+        });
+
 
         Button changeResolutionButton = new Button("Change Resolution");
         dbgAlert("new button changeResolutionButton");
@@ -1396,6 +1471,7 @@ public class Main extends Application {
         changeResolutionButton.setLayoutY(300);
         changeResolutionButton.setOnAction(e -> {
             dbgAlert("running changeResolutionButton event handler");
+            jukebox.playSound(8);
             String newResolutionSelection = resolutionComboBox.getSelectionModel().getSelectedItem().toString();
             dbgAlert("Resolution string: " + newResolutionSelection);
             setResolution(newResolutionSelection);
@@ -1411,6 +1487,7 @@ public class Main extends Application {
 
         settingsButton.setOnAction(e -> {
             dbgAlert("running settingsButton event handler");
+            jukebox.playSound(5);
             mainMenu.getChildren().addAll(tempBackgroundView, settingsText, settingsNoteText, getOutOfSettingsMenu);
             dbgAlert("tempBackgroundView, settingsText, settingsNoteText, and getOutOfSettingsMenu added to mainMenu");
             mainMenu.getChildren().addAll(controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, controlsStatusFromFile);
@@ -1426,6 +1503,7 @@ public class Main extends Application {
 
         getOutOfSettingsMenu.setOnAction(e -> {
             dbgAlert("running getOutOfSettingsMenu event handler");
+            jukebox.playSound(4);
             mainMenu.getChildren().removeAll(tempBackgroundView, settingsText, settingsNoteText, getOutOfSettingsMenu);
             dbgAlert("tempBackgroundView, settingsText, settingsNoteText, and getOutOfSettingsMenu removed from mainMenu");
             mainMenu.getChildren().removeAll(controlsText, keyboardControlsButton, touchscreenControlsButton, currentControlsText, controlsStatusFromFile);
@@ -1456,6 +1534,7 @@ public class Main extends Application {
         //displays controls
         controlsButton.setOnAction(e -> {
             dbgAlert("running controlsButton event handler");
+            jukebox.playSound(5);
             mainMenu.getChildren().addAll(tempBackgroundView, controlsMenuText, getOutOfControlsMenu);
             dbgAlert("tempBackgroundView, controlsMenuText, and getOutOfControlsmenu added to mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
@@ -1464,6 +1543,7 @@ public class Main extends Application {
         });
         getOutOfControlsMenu.setOnAction(e -> {
             dbgAlert("running getOutOfControlsMenu event handler");
+            jukebox.playSound(4);
             mainMenu.getChildren().removeAll(tempBackgroundView, controlsMenuText, getOutOfControlsMenu);
             dbgAlert("tempBackgroundView, controlsMenuText, and getOutOfControlsMenu removed from mainMenu");
             //try to force garbage collection because clicking menus increases memory usage
@@ -1473,26 +1553,32 @@ public class Main extends Application {
 
         //^end of controls info menu
 
-        //quit button, very simple
+
+
+        //quit button
+        //plays sound and adds "goodbye" message before quitting
+        //looks complicated but that's because it would quit before playing the sound
+        //so I had to do the setOnEndOfMedia thing
         quitButton.setOnAction(e -> {
             dbgAlert("running quitButton event handler");
-            //return code 0 means no errors, any other number means something went wrong
-            System.exit(0);
+
+            mainMenu.getChildren().addAll(quitScreen, goodbyeLabel);
+
+            mediaPlayer.setOnEndOfMedia(() -> {
+                view.setVisible(false);
+                System.exit(0);
+                //return code 0 means no errors, any other number means something went wrong
+            });
+
+            mediaPlayer.play();
+
+
 
         });
 
         //^end of quit button
 
-        //Label for build number to show which version the player is playing
-        //build number is the current number of commits + 1 because this will be in the next commit
-        //ex: if there are 555 commits on github, then it will be build 0.0556
 
-        dbgAlert("new Label buildNumber");
-        buildNumberLabel.setFont(standardFont);
-        buildNumberLabel.setLayoutX(900);
-        buildNumberLabel.setLayoutY(500);
-
-        //^end of label for build number
 
 
 

@@ -45,3 +45,19 @@ In order to edit the JAR, meaning you can change the game and then run it with t
 ### Debug mode
 
 Double click on run_debug_mode.bat if you want to run the game with the debug mode flag, which will allow you to enable debug mode and/or debug mode logging.
+
+
+-------
+
+### Credits
+
+Most of the game's code and graphics were made by me. Some IO code is from the Apache Commons IO library. The GUI framework is OpenJFX. Java is made by Oracle.
+
+Some of the sounds in this project were created by David McKee (ViRiX) soundcloud.com/virix
+
+Sound effects used:
+
+https://opengameart.org/content/ui-sound-effects-pack
+
+
+

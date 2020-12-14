@@ -17,10 +17,25 @@ public class MapLoader {
     Font buttonFont;
     //constructor===============================================
 
+    long now;
+    //current time in nanoseconds
+    //maploader deals with movement, and for smooth movement, you should only be able to move every now and then
+    //for a consistent movement rate, unlike before due to how OS-specific keyboard speed polling/character repeating works
+    //so only run the movement stuff if it's been a certain amount of time
+    final long THRESHOLD = 500_000_000L;
+    long lastMove;
+
     public MapLoader() {
         //doesn't have much aside from just methods for loading stuff
         //in order to de-clutter the Main class
         buttonFont = new Font("Arial", 30.0);
+        lastMove = System.nanoTime(); //they will be different nanosecond amounts later on
+        now = System.nanoTime();
+    }
+
+    //update current time in milliseconds
+    public void update() {
+        //not implemented yet
     }
 
 
@@ -30,7 +45,7 @@ public class MapLoader {
     //IMPORTANT INFO ABOUT MAPS AND WINDOWED MODE:
     //IMPORTANT TILES CANNOT BE ON THE BOTTOM OR RIGHTHAND EDGES BECAUSE THEY CAN BE CUT OFF
     //IF YOU NEED TO PUT MAPMOVE TILES ON THE EDGES, MAKE SURE THERE ARE TWO, IN CASE ONE GETS CUT OFF
-    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void loadMap_0_0(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         //testing loading bottom level
         String tileSizeFileNamePart = "";
         if (resolution.equals("1280x720")) {
@@ -208,7 +223,7 @@ public class MapLoader {
         System.out.print(player.toString() + "\n");
 
         //now that the map is loaded, time to add the player and controls
-        putPlayerAndControlsOnMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+        putPlayerAndControlsOnMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
 
 
     }
@@ -317,15 +332,15 @@ public class MapLoader {
 
     //controls methods for keyboard and touchscreen, adds ability to move on the map
 
-    public void addControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void addControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         switch (controls) {
             case "keyboard":
                 System.out.println("Adding keyboard controls");
-                addKeyBoardControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                addKeyBoardControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "touchscreen":
                 System.out.println("Adding touchscreen controls");
-                addTouchscreenControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                addTouchscreenControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             default:
                 System.err.println("Error with addControls switch(controls)");
@@ -334,21 +349,21 @@ public class MapLoader {
         }
     }
 
-    public void addKeyBoardControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void addKeyBoardControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("addKeyboardControls not implemented yet (work in progress)");
         scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case W:
-                    genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                     break;
                 case A:
-                    genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                     break;
                 case S:
-                    genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                     break;
                 case D:
-                    genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+                    genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                     break;
                 default:
                     System.out.println("that key isn't handled at the moment");
@@ -359,7 +374,7 @@ public class MapLoader {
     }
 
 
-    public void addTouchscreenControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void addTouchscreenControls(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("addTouchscreenControls not yet implemented");
         Button downButton = new Button("v");
         Button rightButton = new Button(">");
@@ -410,7 +425,7 @@ public class MapLoader {
 
         worldPane.getChildren().addAll(downButton, rightButton, upButton, leftButton);
         downButton.setOnAction(e -> {
-            genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+            genericControlsMapMoveDown(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             //without toFront(), the player's character could be on top of the touchscreen control buttons!
             downButton.toFront();
             rightButton.toFront();
@@ -418,21 +433,21 @@ public class MapLoader {
             leftButton.toFront();
         });
         rightButton.setOnAction(e -> {
-            genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+            genericControlsMapMoveRight(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
         });
         upButton.setOnAction(e -> {
-            genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+            genericControlsMapMoveUp(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
             leftButton.toFront();
         });
         leftButton.setOnAction(e -> {
-            genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+            genericControlsMapMoveLeft(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
             downButton.toFront();
             rightButton.toFront();
             upButton.toFront();
@@ -445,7 +460,7 @@ public class MapLoader {
     //this should be run by both the keyboard controls and touchscreen controls
     //what triggers it depends on the type of controls, but the same logic applies to both of them
 
-    public void genericControlsMapMoveDown(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void genericControlsMapMoveDown(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("player x,y before moving down: " + player.getX() + ", " + player.getY());
         //down increases Y
         //counterintuitive but 0,0 is in the upper lefthand corner
@@ -550,9 +565,10 @@ public class MapLoader {
 
         System.gc();
         System.out.println("player x,y after moving down: " + player.getX() + ", " + player.getY());
+        //boombox.playSound(3);
     }
 
-    public void genericControlsMapMoveRight(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void genericControlsMapMoveRight(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("player x,y before moving right: " + player.getX() + ", " + player.getY());
         //right increases X
         int newX = player.getX() +1;
@@ -655,9 +671,10 @@ public class MapLoader {
 
         System.gc();
         System.out.println("player x,y after moving right: " + player.getX() + ", " + player.getY());
+        //boombox.playSound(3);
     }
 
-    public void genericControlsMapMoveUp(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void genericControlsMapMoveUp(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("player x,y before moving up: " + player.getX() + ", " + player.getY());
         //up decreases Y
         //counterintuitive but 0,0 is in the upper lefthand corner
@@ -763,9 +780,10 @@ public class MapLoader {
 
         System.gc();
         System.out.println("player x,y after moving up: " + player.getX() + ", " + player.getY());
+        //boombox.playSound(3);
     }
 
-    public void genericControlsMapMoveLeft(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void genericControlsMapMoveLeft(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("player x,y before moving left: " + player.getX() + ", " + player.getY());
         //left decreases X
         int newX = player.getX() -1;
@@ -870,6 +888,7 @@ public class MapLoader {
 
         System.gc();
         System.out.println("player x,y after moving left: " + player.getX() + ", " + player.getY());
+        //boombox.playSound(3);
     }
 
     public void genericControlsOpenInventory() {
@@ -896,9 +915,9 @@ public class MapLoader {
 
 
     //put this at the end of every loadMap_X_Y method
-    public void putPlayerAndControlsOnMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene) {
+    public void putPlayerAndControlsOnMap(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         putPlayerOnMap(worldMap, worldPane, player);
-        addControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene);
+        addControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
     }
 
     public void takeControlsOffMap() {
