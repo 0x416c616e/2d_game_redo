@@ -461,434 +461,454 @@ public class MapLoader {
     //what triggers it depends on the type of controls, but the same logic applies to both of them
 
     public void genericControlsMapMoveDown(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        System.out.println("player x,y before moving down: " + player.getX() + ", " + player.getY());
-        //down increases Y
-        //counterintuitive but 0,0 is in the upper lefthand corner
-        //and bottom right is the highest x,y position
-        int newY = player.getY() +1;
-
-        //to-do: handle events (events aren't implemented yet so I can't do that here)
-
-        //check if there even is a bottom tile before you can move there
-        //-1 because arrays start at 0, not 1, so yDimension is +1 more than the last array element's index
-        int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
-
-        if (player.getY() >= (worldMap.yDimension - 1)) {
-            //already at the edge of the map, can't go further
-            //moving will be handled with mapmove events, not implemented yet
-            System.out.println("can't move down, at the edge of the map");
+        if (player.getIsBusy() == true) {
+            System.out.println("can't move due to being busy");
         } else {
-            //the below tile can possibly be moved to
+            System.out.println("proceeding with movement because the player isn't busy");
+            System.out.println("player x,y before moving down: " + player.getX() + ", " + player.getY());
+            //down increases Y
+            //counterintuitive but 0,0 is in the upper lefthand corner
+            //and bottom right is the highest x,y position
+            int newY = player.getY() +1;
 
-            //check if below tile has collision or not
-            if (worldMap.tileArray[player.getX()][newY].collision == false) {
-                //here, the player can move because it's not something with collision
-                player.setY(newY);
-                player.setAllImageViewLocationX(player.getX() * tileSize);
-                player.setAllImageViewLocationY(newY * tileSize);
+            //to-do: handle events (events aren't implemented yet so I can't do that here)
 
+            //check if there even is a bottom tile before you can move there
+            //-1 because arrays start at 0, not 1, so yDimension is +1 more than the last array element's index
+            int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
+
+            if (player.getY() >= (worldMap.yDimension - 1)) {
+                //already at the edge of the map, can't go further
+                //moving will be handled with mapmove events, not implemented yet
+                System.out.println("can't move down, at the edge of the map");
             } else {
-                System.out.println("can't move down due to collision");
-                //but still need to update position and graphics
+                //the below tile can possibly be moved to
+
+                //check if below tile has collision or not
+                if (worldMap.tileArray[player.getX()][newY].collision == false) {
+                    //here, the player can move because it's not something with collision
+                    player.setY(newY);
+                    player.setAllImageViewLocationX(player.getX() * tileSize);
+                    player.setAllImageViewLocationY(newY * tileSize);
+
+                } else {
+                    System.out.println("can't move down due to collision");
+                    //but still need to update position and graphics
+
+
+                }
+
+
+
+
 
 
             }
 
 
+            String oldPosition = player.getPosition();
+            //if new position is different, need to change the imageview
+            player.setPosition("down");
+            System.out.println("facing down");
+
+            if (!(oldPosition.equals(player.getPosition()))) {
+                switch (tileSize) {
+                    case 40:
+                        //remove the old imageview
+                        switch (oldPosition) {
+                            case "down":
+                                //nothing for this one because it's the down event handler
+                                //worldPane.getChildren().remove(player.player_down_40x40ImageView);
+                                //worldPane.getChildren().add(player.player_down_40x40ImageView);
+                                break;
+                            case "right":
+                                worldPane.getChildren().remove(player.player_right_40x40ImageView);
+                                worldPane.getChildren().add(player.player_down_40x40ImageView);
+                                break;
+                            case "up":
+                                worldPane.getChildren().remove(player.player_up_40x40ImageView);
+                                worldPane.getChildren().add(player.player_down_40x40ImageView);
+                                break;
+                            case "left":
+                                worldPane.getChildren().remove(player.player_left_40x40ImageView);
+                                worldPane.getChildren().add(player.player_down_40x40ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case 60:
+                        switch (oldPosition) {
+                            case "down":
+                                //nothing for this one because it's the down event handler
+                                //worldPane.getChildren().remove(player.player_down_60x60ImageView);
+                                //worldPane.getChildren().add(player.player_down_60x60ImageView);
+                                break;
+                            case "right":
+                                worldPane.getChildren().remove(player.player_right_60x60ImageView);
+                                worldPane.getChildren().add(player.player_down_60x60ImageView);
+                                break;
+                            case "up":
+                                worldPane.getChildren().remove(player.player_up_60x60ImageView);
+                                worldPane.getChildren().add(player.player_down_60x60ImageView);
+                                break;
+                            case "left":
+                                worldPane.getChildren().remove(player.player_left_60x60ImageView);
+                                worldPane.getChildren().add(player.player_down_60x60ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        System.err.println("move down switch error");
+                        break;
+                }
+            }  //
 
 
-
-
+            System.gc();
+            System.out.println("player x,y after moving down: " + player.getX() + ", " + player.getY());
+            //boombox.playSound(3);
         }
-
-
-        String oldPosition = player.getPosition();
-        //if new position is different, need to change the imageview
-        player.setPosition("down");
-        System.out.println("facing down");
-
-        if (!(oldPosition.equals(player.getPosition()))) {
-            switch (tileSize) {
-                case 40:
-                    //remove the old imageview
-                    switch (oldPosition) {
-                        case "down":
-                            //nothing for this one because it's the down event handler
-                            //worldPane.getChildren().remove(player.player_down_40x40ImageView);
-                            //worldPane.getChildren().add(player.player_down_40x40ImageView);
-                            break;
-                        case "right":
-                            worldPane.getChildren().remove(player.player_right_40x40ImageView);
-                            worldPane.getChildren().add(player.player_down_40x40ImageView);
-                            break;
-                        case "up":
-                            worldPane.getChildren().remove(player.player_up_40x40ImageView);
-                            worldPane.getChildren().add(player.player_down_40x40ImageView);
-                            break;
-                        case "left":
-                            worldPane.getChildren().remove(player.player_left_40x40ImageView);
-                            worldPane.getChildren().add(player.player_down_40x40ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 60:
-                    switch (oldPosition) {
-                        case "down":
-                            //nothing for this one because it's the down event handler
-                            //worldPane.getChildren().remove(player.player_down_60x60ImageView);
-                            //worldPane.getChildren().add(player.player_down_60x60ImageView);
-                            break;
-                        case "right":
-                            worldPane.getChildren().remove(player.player_right_60x60ImageView);
-                            worldPane.getChildren().add(player.player_down_60x60ImageView);
-                            break;
-                        case "up":
-                            worldPane.getChildren().remove(player.player_up_60x60ImageView);
-                            worldPane.getChildren().add(player.player_down_60x60ImageView);
-                            break;
-                        case "left":
-                            worldPane.getChildren().remove(player.player_left_60x60ImageView);
-                            worldPane.getChildren().add(player.player_down_60x60ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    System.err.println("move down switch error");
-                    break;
-            }
-        }  //
-
-
-        System.gc();
-        System.out.println("player x,y after moving down: " + player.getX() + ", " + player.getY());
-        //boombox.playSound(3);
     }
 
     public void genericControlsMapMoveRight(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        System.out.println("player x,y before moving right: " + player.getX() + ", " + player.getY());
-        //right increases X
-        int newX = player.getX() +1;
-
-        //to-do: handle events (events aren't implemented yet so I can't do that here)
-
-        //check if there even is a right tile before you can move there
-        //-1 because arrays start at 0, not 1, so xDimension is +1 more than the last array element's index
-        int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
-        if (player.getX() >= (worldMap.xDimension - 1)) {
-            //already at the edge of the map, can't go further
-            //moving will be handled with mapmove events, not implemented yet
-            System.out.println("can't move right, at the edge of the map");
+        if (player.getIsBusy() == true) {
+            System.out.println("can't move due to being busy");
         } else {
-            //the below tile can possibly be moved to
+            System.out.println("proceeding with movement because the player isn't busy");
+            System.out.println("player x,y before moving right: " + player.getX() + ", " + player.getY());
+            //right increases X
+            int newX = player.getX() +1;
 
-            //check if below tile has collision or not
-            if (worldMap.tileArray[newX][player.getY()].collision == false) {
-                //here, the player can move because it's not something with collision
-                player.setX(newX);
+            //to-do: handle events (events aren't implemented yet so I can't do that here)
 
-                player.setAllImageViewLocationX(newX * tileSize);
-                player.setAllImageViewLocationY(player.getY() * tileSize);
-
+            //check if there even is a right tile before you can move there
+            //-1 because arrays start at 0, not 1, so xDimension is +1 more than the last array element's index
+            int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
+            if (player.getX() >= (worldMap.xDimension - 1)) {
+                //already at the edge of the map, can't go further
+                //moving will be handled with mapmove events, not implemented yet
+                System.out.println("can't move right, at the edge of the map");
             } else {
-                System.out.println("can't move right due to collision");
+                //the below tile can possibly be moved to
+
+                //check if below tile has collision or not
+                if (worldMap.tileArray[newX][player.getY()].collision == false) {
+                    //here, the player can move because it's not something with collision
+                    player.setX(newX);
+
+                    player.setAllImageViewLocationX(newX * tileSize);
+                    player.setAllImageViewLocationY(player.getY() * tileSize);
+
+                } else {
+                    System.out.println("can't move right due to collision");
+                }
+
+
+
+
+
+
+
+
             }
 
 
+            String oldPosition = player.getPosition();
+            //if new position is different, need to change the imageview
+            player.setPosition("right");
+            System.out.println("facing right");
+            //
+
+            if (!(oldPosition.equals(player.getPosition()))) {
+                switch (tileSize) {
+                    case 40:
+                        //remove the old imageview
+                        switch (oldPosition) {
+                            case "down":
+                                worldPane.getChildren().remove(player.player_down_40x40ImageView);
+                                worldPane.getChildren().add(player.player_right_40x40ImageView);
+                                break;
+                            case "right":
+                                //nothing for this one because it's the right event handler
+                                //worldPane.getChildren().remove(player.player_right_40x40ImageView);
+                                //worldPane.getChildren().add(player.player_down_40x40ImageView);
+                                break;
+                            case "up":
+                                worldPane.getChildren().remove(player.player_up_40x40ImageView);
+                                worldPane.getChildren().add(player.player_right_40x40ImageView);
+                                break;
+                            case "left":
+                                worldPane.getChildren().remove(player.player_left_40x40ImageView);
+                                worldPane.getChildren().add(player.player_right_40x40ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case 60:
+                        switch (oldPosition) {
+                            case "down":
+                                worldPane.getChildren().remove(player.player_down_60x60ImageView);
+                                worldPane.getChildren().add(player.player_right_60x60ImageView);
+                                break;
+                            case "right":
+                                //nothing for this one because it's the down event handler
+                                //worldPane.getChildren().remove(player.player_right_60x60ImageView);
+                                //worldPane.getChildren().add(player.player_down_60x60ImageView);
+                                break;
+                            case "up":
+                                worldPane.getChildren().remove(player.player_up_60x60ImageView);
+                                worldPane.getChildren().add(player.player_right_60x60ImageView);
+                                break;
+                            case "left":
+                                worldPane.getChildren().remove(player.player_left_60x60ImageView);
+                                worldPane.getChildren().add(player.player_right_60x60ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        System.err.println("move right switch error");
+                        break;
+                }
+            }  //
 
 
-
-
-
-
+            System.gc();
+            System.out.println("player x,y after moving right: " + player.getX() + ", " + player.getY());
+            //boombox.playSound(3);
         }
-
-
-        String oldPosition = player.getPosition();
-        //if new position is different, need to change the imageview
-        player.setPosition("right");
-        System.out.println("facing right");
-        //
-
-        if (!(oldPosition.equals(player.getPosition()))) {
-            switch (tileSize) {
-                case 40:
-                    //remove the old imageview
-                    switch (oldPosition) {
-                        case "down":
-                            worldPane.getChildren().remove(player.player_down_40x40ImageView);
-                            worldPane.getChildren().add(player.player_right_40x40ImageView);
-                            break;
-                        case "right":
-                            //nothing for this one because it's the right event handler
-                            //worldPane.getChildren().remove(player.player_right_40x40ImageView);
-                            //worldPane.getChildren().add(player.player_down_40x40ImageView);
-                            break;
-                        case "up":
-                            worldPane.getChildren().remove(player.player_up_40x40ImageView);
-                            worldPane.getChildren().add(player.player_right_40x40ImageView);
-                            break;
-                        case "left":
-                            worldPane.getChildren().remove(player.player_left_40x40ImageView);
-                            worldPane.getChildren().add(player.player_right_40x40ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 60:
-                    switch (oldPosition) {
-                        case "down":
-                            worldPane.getChildren().remove(player.player_down_60x60ImageView);
-                            worldPane.getChildren().add(player.player_right_60x60ImageView);
-                            break;
-                        case "right":
-                            //nothing for this one because it's the down event handler
-                            //worldPane.getChildren().remove(player.player_right_60x60ImageView);
-                            //worldPane.getChildren().add(player.player_down_60x60ImageView);
-                            break;
-                        case "up":
-                            worldPane.getChildren().remove(player.player_up_60x60ImageView);
-                            worldPane.getChildren().add(player.player_right_60x60ImageView);
-                            break;
-                        case "left":
-                            worldPane.getChildren().remove(player.player_left_60x60ImageView);
-                            worldPane.getChildren().add(player.player_right_60x60ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    System.err.println("move right switch error");
-                    break;
-            }
-        }  //
-
-
-        System.gc();
-        System.out.println("player x,y after moving right: " + player.getX() + ", " + player.getY());
-        //boombox.playSound(3);
     }
 
     public void genericControlsMapMoveUp(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        System.out.println("player x,y before moving up: " + player.getX() + ", " + player.getY());
-        //up decreases Y
-        //counterintuitive but 0,0 is in the upper lefthand corner
-        //and bottom right is the highest x,y position
-        int newY = player.getY() -1;
-
-        //to-do: handle events (events aren't implemented yet so I can't do that here)
-
-        //check if there even is an above tile before you can move there
-        //-1 because arrays start at 0, not 1, so yDimension is +1 more than the last array element's index
-        int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
-
-        if (player.getY() <= 0) {
-            //already at the edge of the map, can't go further
-            //moving will be handled with mapmove events, not implemented yet
-            System.out.println("can't move up, at the edge of the map");
+        if (player.getIsBusy() == true) {
+            System.out.println("can't move due to being busy");
         } else {
-            //the below tile can possibly be moved to
+            System.out.println("proceeding with movement because the player isn't busy");
+            System.out.println("player x,y before moving up: " + player.getX() + ", " + player.getY());
+            //up decreases Y
+            //counterintuitive but 0,0 is in the upper lefthand corner
+            //and bottom right is the highest x,y position
+            int newY = player.getY() -1;
 
-            //check if above tile has collision or not
-            if (worldMap.tileArray[player.getX()][newY].collision == false) {
-                //here, the player can move because it's not something with collision
-                player.setY(newY);
-                player.setAllImageViewLocationX(player.getX() * tileSize);
-                player.setAllImageViewLocationY(newY * tileSize);
+            //to-do: handle events (events aren't implemented yet so I can't do that here)
 
+            //check if there even is an above tile before you can move there
+            //-1 because arrays start at 0, not 1, so yDimension is +1 more than the last array element's index
+            int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
+
+            if (player.getY() <= 0) {
+                //already at the edge of the map, can't go further
+                //moving will be handled with mapmove events, not implemented yet
+                System.out.println("can't move up, at the edge of the map");
             } else {
-                System.out.println("can't move down due to collision");
-                //but still need to update position and graphics
-                //i.e. you are next to an obstacle but not facing it, then you want to move that way, and then your position (facing) changes
-                //this is important for being able to interact with things with the interact key
+                //the below tile can possibly be moved to
+
+                //check if above tile has collision or not
+                if (worldMap.tileArray[player.getX()][newY].collision == false) {
+                    //here, the player can move because it's not something with collision
+                    player.setY(newY);
+                    player.setAllImageViewLocationX(player.getX() * tileSize);
+                    player.setAllImageViewLocationY(newY * tileSize);
+
+                } else {
+                    System.out.println("can't move down due to collision");
+                    //but still need to update position and graphics
+                    //i.e. you are next to an obstacle but not facing it, then you want to move that way, and then your position (facing) changes
+                    //this is important for being able to interact with things with the interact key
+
+                }
+
+
+
+
+
 
             }
 
 
+            String oldPosition = player.getPosition();
+            //if new position is different, need to change the imageview
+            player.setPosition("up");
+            System.out.println("facing up");
+
+            if (!(oldPosition.equals(player.getPosition()))) {
+                switch (tileSize) {
+                    case 40:
+                        //remove the old imageview
+                        switch (oldPosition) {
+                            case "down":
+                                worldPane.getChildren().remove(player.player_down_40x40ImageView);
+                                worldPane.getChildren().add(player.player_up_40x40ImageView);
+                                break;
+                            case "right":
+                                worldPane.getChildren().remove(player.player_right_40x40ImageView);
+                                worldPane.getChildren().add(player.player_up_40x40ImageView);
+                                break;
+                            case "up":
+                                //nothing for this one because it's the down event handler
+                                //worldPane.getChildren().remove(player.player_up_40x40ImageView);
+                                //worldPane.getChildren().add(player.player_up_40x40ImageView);
+                                break;
+                            case "left":
+                                worldPane.getChildren().remove(player.player_left_40x40ImageView);
+                                worldPane.getChildren().add(player.player_up_40x40ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case 60:
+                        switch (oldPosition) {
+                            case "down":
+                                worldPane.getChildren().remove(player.player_down_60x60ImageView);
+                                worldPane.getChildren().add(player.player_up_60x60ImageView);
+                                break;
+                            case "right":
+                                worldPane.getChildren().remove(player.player_right_60x60ImageView);
+                                worldPane.getChildren().add(player.player_up_60x60ImageView);
+                                break;
+                            case "up":
+                                //nothing for this one because it's the down event handler
+                                //worldPane.getChildren().remove(player.player_up_60x60ImageView);
+                                //worldPane.getChildren().add(player.player_up_60x60ImageView);
+                                break;
+                            case "left":
+                                worldPane.getChildren().remove(player.player_left_60x60ImageView);
+                                worldPane.getChildren().add(player.player_up_60x60ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        System.err.println("move down switch error");
+                        break;
+                }
+            }  //
 
 
-
-
+            System.gc();
+            System.out.println("player x,y after moving up: " + player.getX() + ", " + player.getY());
+            //boombox.playSound(3);
         }
-
-
-        String oldPosition = player.getPosition();
-        //if new position is different, need to change the imageview
-        player.setPosition("up");
-        System.out.println("facing up");
-
-        if (!(oldPosition.equals(player.getPosition()))) {
-            switch (tileSize) {
-                case 40:
-                    //remove the old imageview
-                    switch (oldPosition) {
-                        case "down":
-                            worldPane.getChildren().remove(player.player_down_40x40ImageView);
-                            worldPane.getChildren().add(player.player_up_40x40ImageView);
-                            break;
-                        case "right":
-                            worldPane.getChildren().remove(player.player_right_40x40ImageView);
-                            worldPane.getChildren().add(player.player_up_40x40ImageView);
-                            break;
-                        case "up":
-                            //nothing for this one because it's the down event handler
-                            //worldPane.getChildren().remove(player.player_up_40x40ImageView);
-                            //worldPane.getChildren().add(player.player_up_40x40ImageView);
-                            break;
-                        case "left":
-                            worldPane.getChildren().remove(player.player_left_40x40ImageView);
-                            worldPane.getChildren().add(player.player_up_40x40ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 60:
-                    switch (oldPosition) {
-                        case "down":
-                            worldPane.getChildren().remove(player.player_down_60x60ImageView);
-                            worldPane.getChildren().add(player.player_up_60x60ImageView);
-                            break;
-                        case "right":
-                            worldPane.getChildren().remove(player.player_right_60x60ImageView);
-                            worldPane.getChildren().add(player.player_up_60x60ImageView);
-                            break;
-                        case "up":
-                            //nothing for this one because it's the down event handler
-                            //worldPane.getChildren().remove(player.player_up_60x60ImageView);
-                            //worldPane.getChildren().add(player.player_up_60x60ImageView);
-                            break;
-                        case "left":
-                            worldPane.getChildren().remove(player.player_left_60x60ImageView);
-                            worldPane.getChildren().add(player.player_up_60x60ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    System.err.println("move down switch error");
-                    break;
-            }
-        }  //
-
-
-        System.gc();
-        System.out.println("player x,y after moving up: " + player.getX() + ", " + player.getY());
-        //boombox.playSound(3);
     }
 
     public void genericControlsMapMoveLeft(WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
-        System.out.println("player x,y before moving left: " + player.getX() + ", " + player.getY());
-        //left decreases X
-        int newX = player.getX() -1;
-
-        //to-do: handle events (events aren't implemented yet so I can't do that here)
-
-        //check if there even is a left tile before you can move there
-        //-1 because arrays start at 0, not 1, so xDimension is +1 more than the last array element's index
-        int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
-        if (player.getX() <= 0) {
-            //already at the edge of the map, can't go further
-            //moving will be handled with mapmove events, not implemented yet
-            System.out.println("can't move right, at the edge of the map");
+        if (player.getIsBusy() == true) {
+            System.out.println("can't move due to being busy");
         } else {
-            //the below left can possibly be moved to
+            System.out.println("proceeding with movement because the player isn't busy");
+            System.out.println("player x,y before moving left: " + player.getX() + ", " + player.getY());
+            //left decreases X
+            int newX = player.getX() -1;
 
-            //check if left tile has collision or not
-            if (worldMap.tileArray[newX][player.getY()].collision == false) {
-                //here, the player can move because it's not something with collision
-                player.setX(newX);
+            //to-do: handle events (events aren't implemented yet so I can't do that here)
 
-                player.setAllImageViewLocationX(newX * tileSize);
-                player.setAllImageViewLocationY(player.getY() * tileSize);
-
+            //check if there even is a left tile before you can move there
+            //-1 because arrays start at 0, not 1, so xDimension is +1 more than the last array element's index
+            int tileSize = worldMap.getTileSize().equals("40x40")? 40 : 60;
+            if (player.getX() <= 0) {
+                //already at the edge of the map, can't go further
+                //moving will be handled with mapmove events, not implemented yet
+                System.out.println("can't move right, at the edge of the map");
             } else {
-                System.out.println("can't move left due to collision");
+                //the below left can possibly be moved to
+
+                //check if left tile has collision or not
+                if (worldMap.tileArray[newX][player.getY()].collision == false) {
+                    //here, the player can move because it's not something with collision
+                    player.setX(newX);
+
+                    player.setAllImageViewLocationX(newX * tileSize);
+                    player.setAllImageViewLocationY(player.getY() * tileSize);
+
+                } else {
+                    System.out.println("can't move left due to collision");
+                }
+
+
+
+
+
+
+
             }
 
 
 
+            String oldPosition = player.getPosition();
+            //if new position is different, need to change the imageview
+            player.setPosition("left");
+            System.out.println("facing left");
+            //
+
+            if (!(oldPosition.equals(player.getPosition()))) {
+                switch (tileSize) {
+                    case 40:
+                        //remove the old imageview
+                        switch (oldPosition) {
+                            case "down":
+                                worldPane.getChildren().remove(player.player_down_40x40ImageView);
+                                worldPane.getChildren().add(player.player_left_40x40ImageView);
+                                break;
+                            case "right":
+                                worldPane.getChildren().remove(player.player_right_40x40ImageView);
+                                worldPane.getChildren().add(player.player_left_40x40ImageView);
+                                break;
+                            case "up":
+
+                                worldPane.getChildren().remove(player.player_up_40x40ImageView);
+                                worldPane.getChildren().add(player.player_left_40x40ImageView);
+                                break;
+                            case "left":
+                                //nothing for this one because it's the right event handler
+                                //worldPane.getChildren().remove(player.player_left_40x40ImageView);
+                                //worldPane.getChildren().add(player.player_left_40x40ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case 60:
+                        switch (oldPosition) {
+                            case "down":
+                                worldPane.getChildren().remove(player.player_down_60x60ImageView);
+                                worldPane.getChildren().add(player.player_left_60x60ImageView);
+                                break;
+                            case "right":
+                                worldPane.getChildren().remove(player.player_right_60x60ImageView);
+                                worldPane.getChildren().add(player.player_left_60x60ImageView);
+                                break;
+                            case "up":
+                                worldPane.getChildren().remove(player.player_up_60x60ImageView);
+                                worldPane.getChildren().add(player.player_left_60x60ImageView);
+                                break;
+                            case "left":
+                                //nothing for this one because it's the down event handler
+                                //worldPane.getChildren().remove(player.player_left_60x60ImageView);
+                                //worldPane.getChildren().add(player.player_left_60x60ImageView);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        System.err.println("move left switch error");
+                        break;
+                }
+            }  //
 
 
 
-
+            System.gc();
+            System.out.println("player x,y after moving left: " + player.getX() + ", " + player.getY());
+            //boombox.playSound(3);
         }
-
-
-
-        String oldPosition = player.getPosition();
-        //if new position is different, need to change the imageview
-        player.setPosition("left");
-        System.out.println("facing left");
-        //
-
-        if (!(oldPosition.equals(player.getPosition()))) {
-            switch (tileSize) {
-                case 40:
-                    //remove the old imageview
-                    switch (oldPosition) {
-                        case "down":
-                            worldPane.getChildren().remove(player.player_down_40x40ImageView);
-                            worldPane.getChildren().add(player.player_left_40x40ImageView);
-                            break;
-                        case "right":
-                            worldPane.getChildren().remove(player.player_right_40x40ImageView);
-                            worldPane.getChildren().add(player.player_left_40x40ImageView);
-                            break;
-                        case "up":
-
-                            worldPane.getChildren().remove(player.player_up_40x40ImageView);
-                            worldPane.getChildren().add(player.player_left_40x40ImageView);
-                            break;
-                        case "left":
-                            //nothing for this one because it's the right event handler
-                            //worldPane.getChildren().remove(player.player_left_40x40ImageView);
-                            //worldPane.getChildren().add(player.player_left_40x40ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 60:
-                    switch (oldPosition) {
-                        case "down":
-                            worldPane.getChildren().remove(player.player_down_60x60ImageView);
-                            worldPane.getChildren().add(player.player_left_60x60ImageView);
-                            break;
-                        case "right":
-                            worldPane.getChildren().remove(player.player_right_60x60ImageView);
-                            worldPane.getChildren().add(player.player_left_60x60ImageView);
-                            break;
-                        case "up":
-                            worldPane.getChildren().remove(player.player_up_60x60ImageView);
-                            worldPane.getChildren().add(player.player_left_60x60ImageView);
-                            break;
-                        case "left":
-                            //nothing for this one because it's the down event handler
-                            //worldPane.getChildren().remove(player.player_left_60x60ImageView);
-                            //worldPane.getChildren().add(player.player_left_60x60ImageView);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    System.err.println("move left switch error");
-                    break;
-            }
-        }  //
-
-
-
-        System.gc();
-        System.out.println("player x,y after moving left: " + player.getX() + ", " + player.getY());
-        //boombox.playSound(3);
     }
 
     public void genericControlsOpenInventory() {

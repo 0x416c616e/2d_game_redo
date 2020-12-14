@@ -3,9 +3,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
-//I THOUGHT I WOULD PLAY SOUND EFFECTS WITH THIS CLASS
-//BUT IT INTRODUCES A MEMORY LEAK
-//DON'T USE IT UNTIL YOU FIGURE OUT HOW TO FIX IT!!!!
+//used for playing sound effects
+//no longer has a memory leak issue
 
 public class AudioPlayer {
 

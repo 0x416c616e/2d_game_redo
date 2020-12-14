@@ -18,6 +18,11 @@ public class Player {
     int y;
     String position; //facing up, down, left, or right
     String currentMapName;
+    boolean isBusy; //denotes when the player is busy with an interface open, such as a menu, inventory, in combat, etc
+                    //some things like WASD/touchscreen movement can't be done when the player is busy
+
+    //busy status does NOT get saved to a file
+    //you will not be able to save except in situations where you aren't busy with something else anyway, i.e. having a dialogue window open
 
     Image player_up_60x60Image;
     Image player_up_40x40Image;
@@ -47,6 +52,7 @@ public class Player {
         setX(x);
         setY(y);
         setPosition(position);
+        setIsBusy(false);
         this.loadImages();
     }
 
@@ -58,6 +64,7 @@ public class Player {
         setY(5);
         setPosition("down");
         setCurrentMapName("map_0_0");
+        setIsBusy(false);
         this.loadImages();
     }
 
@@ -67,10 +74,21 @@ public class Player {
         setY(5);
         setPosition("down");
         setCurrentMapName("map_0_0");
+        setIsBusy(false);
         this.loadImages();
     }
 
     //getters and setters============================================
+
+
+    public void setIsBusy(boolean busy) {
+        isBusy = busy;
+    }
+
+    public boolean getIsBusy() {
+        return isBusy;
+    }
+
 
     public void setName(String name) {
         if (name.length() > 0 && name.length() < 11) {
