@@ -126,6 +126,54 @@ public class MapLoader {
         now = System.nanoTime();
     }
 
+    //easy way to add a tile to the map with a single method call
+    //overloaded to be more versatile
+
+    //set bottom level with no collision, i.e. grass
+    public void addTileToMap(String bottomLevelImageName, String tileSizeFileNamePart, WorldMap worldMap, int x, int y) {
+        String bottomLevelImage = "file:assets/tiles/" + bottomLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[x][y] = new Tile(bottomLevelImage, x, y);
+    }
+
+    //set bottom level with collision
+    public void addTileToMap(String bottomLevelImageName, String tileSizeFileNamePart, WorldMap worldMap, int x, int y, boolean collision) {
+        String bottomLevelImage = "file:assets/tiles/" + bottomLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[x][y] = new Tile(bottomLevelImage, x, y, collision);
+    }
+
+    //set bottom level and mid level with collision
+    public void addTileToMap(String bottomLevelImageName, String midLevelImageName, String tileSizeFileNamePart, WorldMap worldMap, int x, int y, boolean collision) {
+        String bottomLevelImage = "file:assets/tiles/" + bottomLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        String midLevelImage = "file:assets/tiles/" + midLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[x][y] = new Tile(bottomLevelImage, midLevelImage, x, y, collision);
+    }
+
+    //set bottom level, mid level, and top level with collision
+    public void addTileToMap(String bottomLevelImageName, String midLevelImageName, String topLevelImageName, String tileSizeFileNamePart, WorldMap worldMap, int x, int y, boolean collision) {
+        String bottomLevelImage = "file:assets/tiles/" + bottomLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        String midLevelImage = "file:assets/tiles/" + midLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        String topLevelImage = "file:assets/tiles/" + topLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[x][y].setBottomLevelWithCollision(bottomLevelImageName, collision);
+        worldMap.tileArray[x][y].setMidLevel(midLevelImage);
+        worldMap.tileArray[x][y].setTopLevel(topLevelImage);
+        worldMap.tileArray[x][y] = new Tile(bottomLevelImage, midLevelImage, topLevelImage, x, y, collision);
+    }
+
+    //set bottom level, mid level, top level, event, and collision
+    public void addTileToMap(String bottomLevelImageName, String midLevelImageName, String topLevelImageName, Event tileEvent, String tileSizeFileNamePart, WorldMap worldMap, int x, int y, boolean collision) {
+        String bottomLevelImage = "file:assets/tiles/" + bottomLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        String midLevelImage = "file:assets/tiles/" + midLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        String topLevelImage = "file:assets/tiles/" + topLevelImageName + "_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[x][y].setBottomLevelWithCollision(bottomLevelImageName, collision);
+        worldMap.tileArray[x][y].setMidLevel(midLevelImage);
+        worldMap.tileArray[x][y].setTopLevel(topLevelImage);
+        worldMap.tileArray[x][y].setEvent(tileEvent);
+
+    }
+
+
+
+
     //you will only be able to move again after a certain amount of time
     //this method checks how long it's been since the last time you moved
     public boolean enoughTimeHasPassed() {
@@ -193,8 +241,9 @@ public class MapLoader {
             for (int yMap = 0; yMap < worldMap.getyDimension(); yMap++) {
                 //default tile with grass and no event or collision
                 //only has a bottom level image by default, no mid level or top level
-                String tileGrassFileName = "file:assets/tiles/grass_" + tileSizeFileNamePart + ".png";
-                worldMap.tileArray[xMap][yMap] = new Tile(tileGrassFileName);
+                //String tileGrassFileName = "file:assets/tiles/grass_" + tileSizeFileNamePart + ".png";
+                //worldMap.tileArray[xMap][yMap] = new Tile(tileGrassFileName);
+                addTileToMap("grass", tileSizeFileNamePart, worldMap, xMap, yMap);
             }
         }
 
@@ -218,15 +267,15 @@ public class MapLoader {
 
         //arrows and MapMove events
 
-        worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName);
+        worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName, 15, downArrowToNextMapY);
         worldMap.tileArray[15][downArrowToNextMapY].setEvent(new MapMove("walk", "map_0_1", 15, 2));
         //System.out.println(worldMap.tileArray[15][downArrowToNextMapY].getEvent().getEventType());
-        worldMap.tileArray[15][downArrowToNextMapY + 1] = new Tile(downArrowFileName);
+        worldMap.tileArray[15][downArrowToNextMapY + 1] = new Tile(downArrowFileName, 15, (downArrowToNextMapY+1));
         worldMap.tileArray[15][downArrowToNextMapY + 1].setEvent(new MapMove("walk", "map_0_1", 15, 2));
         String rightArrowFileName = "file:assets/tiles/right_arrow_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[30][9] = new Tile(rightArrowFileName);
+        worldMap.tileArray[30][9] = new Tile(rightArrowFileName, 30, 9);
         worldMap.tileArray[30][9].setEvent(new MapMove("walk", "map_1_0", 2, 9));
-        worldMap.tileArray[31][9] = new Tile(rightArrowFileName);
+        worldMap.tileArray[31][9] = new Tile(rightArrowFileName, 31, 9);
         worldMap.tileArray[31][9].setEvent(new MapMove("walk", "map_1_0", 2, 9));
 
         //content of the map
@@ -292,7 +341,7 @@ public class MapLoader {
                 //default tile with grass and no event or collision
                 //only has a bottom level image by default, no mid level or top level
                 String tileGrassFileName = "file:assets/tiles/grass_" + tileSizeFileNamePart + ".png";
-                worldMap.tileArray[xMap][yMap] = new Tile(tileGrassFileName);
+                worldMap.tileArray[xMap][yMap] = new Tile(tileGrassFileName, xMap, yMap);
             }
         }
 
@@ -312,19 +361,19 @@ public class MapLoader {
         //middle stuff (specific to map_0_1====================================
 
         //arrows + MapMove events to different maps
-        worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName);
+        worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName, 15, downArrowToNextMapY);
         worldMap.tileArray[15][downArrowToNextMapY].setEvent(new MapMove("walk", "map_0_2", 15, 2));
-        worldMap.tileArray[15][downArrowToNextMapY + 1] = new Tile(downArrowFileName);
+        worldMap.tileArray[15][downArrowToNextMapY + 1] = new Tile(downArrowFileName, 15, (downArrowToNextMapY + 1));
         worldMap.tileArray[15][downArrowToNextMapY + 1].setEvent(new MapMove("walk", "map_0_2", 15, 2));
         String rightArrowFileName = "file:assets/tiles/right_arrow_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[30][9] = new Tile(rightArrowFileName);
+        worldMap.tileArray[30][9] = new Tile(rightArrowFileName, 30, 9);
         worldMap.tileArray[30][9].setEvent(new MapMove("walk", "map_1_1", 2, 9));
-        worldMap.tileArray[31][9] = new Tile(rightArrowFileName);
+        worldMap.tileArray[31][9] = new Tile(rightArrowFileName, 31, 9);
         worldMap.tileArray[31][9].setEvent(new MapMove("walk", "map_1_1", 2, 9));
         String upArrowFileName = "file:assets/tiles/up_arrow_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[15][0] = new Tile(upArrowFileName);
+        worldMap.tileArray[15][0] = new Tile(upArrowFileName, 15, 0);
         worldMap.tileArray[15][0].setEvent(new MapMove("walk", "map_0_0", 15, 15));
-        worldMap.tileArray[15][1] = new Tile(upArrowFileName);
+        worldMap.tileArray[15][1] = new Tile(upArrowFileName, 15, 1);
         worldMap.tileArray[15][1].setEvent(new MapMove("walk", "map_0_0", 15, 15));
 
 

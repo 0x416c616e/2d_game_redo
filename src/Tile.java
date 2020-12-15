@@ -22,27 +22,47 @@ public class Tile {
         int yPosition = -1; //needs to be initialized
     }
 
-    public Tile(String bottomLevel) {
+    public Tile(String bottomLevel, int xPosition, int yPosition) {
         setEvent(new Event());
         setTopLevel("");
         setMidLevel("");
         setBottomLevel(bottomLevel);
         setCollision(false);
-        int xPosition = -1; //needs to be initialized
-        int yPosition = -1; //needs to be initialized
+        setxPosition(xPosition);
+        setyPosition(yPosition);
     }
 
-    public Tile(String bottomLevel, boolean collision) {
+    public Tile(String bottomLevel, int xPosition, int yPosition, boolean collision) {
         setEvent(new Event());
         setTopLevel("");
         setMidLevel("");
         setBottomLevel(bottomLevel);
         setCollision(collision);
-        int xPosition = -1; //needs to be initialized
-        int yPosition = -1; //needs to be initialized
+        setxPosition(xPosition);
+        setyPosition(yPosition);
     }
 
-    public Tile(Event event, String topLevel, String midLevel, String bottomLevel, boolean collision, int xPosition, int yPosition) {
+    public Tile(String bottomLevel, String midLevel, int xPosition, int yPosition, boolean collision) {
+        setEvent(new Event());
+        setTopLevel("");
+        setMidLevel(midLevel);
+        setBottomLevel(bottomLevel);
+        setCollision(collision);
+        setxPosition(xPosition);
+        setyPosition(yPosition);
+    }
+
+    public Tile(String bottomLevel, String midLevel, String topLevel, int xPosition, int yPosition, boolean collision) {
+        setEvent(new Event());
+        setTopLevel(topLevel);
+        setMidLevel(midLevel);
+        setBottomLevel(bottomLevel);
+        setCollision(collision);
+        setxPosition(xPosition);
+        setyPosition(yPosition);
+    }
+
+    public Tile(String bottomLevel, String midLevel, String topLevel, Event event, int xPosition, int yPosition, boolean collision) {
         setEvent(event);
         setTopLevel(topLevel);
         setMidLevel(midLevel);
