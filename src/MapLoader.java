@@ -152,6 +152,10 @@ public class MapLoader {
         System.out.println("addMapLabel: " + currentMapLabel.getText());
     }
 
+    public void pushMapLabelToTop() {
+        currentMapLabel.toFront();
+    }
+
 
     //map-loading methods===============================================
 
@@ -208,6 +212,12 @@ public class MapLoader {
         //adding tiles to the map that will eventually have events that will take you to the next map if you move over it
         //there are two of each arrow (with a mapmove event) because windowed mode can get slightly cut off
 
+        //==============================================================================
+
+        //middle stuff
+
+        //arrows and MapMove events
+
         worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName);
         worldMap.tileArray[15][downArrowToNextMapY].setEvent(new MapMove("walk", "map_0_1", 15, 2));
         //System.out.println(worldMap.tileArray[15][downArrowToNextMapY].getEvent().getEventType());
@@ -219,7 +229,16 @@ public class MapLoader {
         worldMap.tileArray[31][9] = new Tile(rightArrowFileName);
         worldMap.tileArray[31][9].setEvent(new MapMove("walk", "map_1_0", 2, 9));
 
+        //content of the map
+        String rockFileName = "file:assets/tiles/rock_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[4][4].setMidLevelWithCollision(rockFileName, true);
+        String bushFileName = "file:assets/tiles/bush_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[20][8].setMidLevelWithCollision(bushFileName, true);
+        String exclamationPointFileName = "file:assets/tiles/exclamation_point_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[20][8].setTopLevel(exclamationPointFileName);
 
+
+        //==============================================================================
 
         //tile data is used to figure out which images to add to the map
         worldMap.setAllBottomLevelImage(worldPane);
@@ -244,6 +263,8 @@ public class MapLoader {
     }
 
     public void loadMap_0_1(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+        //standard beginning map code and putting grass on the bottom level
+
         System.out.println("player x,y:" + player.getX() + ", " + player.getY());
         System.out.println("in progress map_0_1");
 
@@ -287,6 +308,31 @@ public class MapLoader {
         }
 
 
+
+        //middle stuff (specific to map_0_1====================================
+
+        //arrows + MapMove events to different maps
+        worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName);
+        worldMap.tileArray[15][downArrowToNextMapY].setEvent(new MapMove("walk", "map_0_2", 15, 2));
+        worldMap.tileArray[15][downArrowToNextMapY + 1] = new Tile(downArrowFileName);
+        worldMap.tileArray[15][downArrowToNextMapY + 1].setEvent(new MapMove("walk", "map_0_2", 15, 2));
+        String rightArrowFileName = "file:assets/tiles/right_arrow_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[30][9] = new Tile(rightArrowFileName);
+        worldMap.tileArray[30][9].setEvent(new MapMove("walk", "map_1_1", 2, 9));
+        worldMap.tileArray[31][9] = new Tile(rightArrowFileName);
+        worldMap.tileArray[31][9].setEvent(new MapMove("walk", "map_1_1", 2, 9));
+        String upArrowFileName = "file:assets/tiles/up_arrow_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[15][0] = new Tile(upArrowFileName);
+        worldMap.tileArray[15][0].setEvent(new MapMove("walk", "map_0_0", 15, 15));
+        worldMap.tileArray[15][1] = new Tile(upArrowFileName);
+        worldMap.tileArray[15][1].setEvent(new MapMove("walk", "map_0_0", 15, 15));
+
+
+        //actual content of the map
+        String treeFileName = "file:assets/tiles/tree_" + tileSizeFileNamePart + ".png";
+        worldMap.tileArray[10][10].setMidLevelWithCollision(treeFileName, true);
+
+        //end of middle stuff==================================================
 
 
 
@@ -1041,6 +1087,7 @@ public class MapLoader {
 
             System.gc();
             System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving down: " + player.getX() + ", " + player.getY());
+            pushMapLabelToTop();
             //boombox.playSound(3);
         }
     }
@@ -1191,6 +1238,7 @@ public class MapLoader {
 
             System.gc();
             System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving right: " + player.getX() + ", " + player.getY());
+            pushMapLabelToTop();
             //boombox.playSound(3);
         }
     }
@@ -1344,6 +1392,7 @@ public class MapLoader {
 
             System.gc();
             System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving up: " + player.getX() + ", " + player.getY());
+            pushMapLabelToTop();
             //boombox.playSound(3);
         }
     }
@@ -1367,7 +1416,7 @@ public class MapLoader {
                 //moving will be handled with mapmove events, not implemented yet
                 //System.out.println("can't move right, at the edge of the map");
             } else {
-                //the below left can possibly be moved to
+                //the left tile can possibly be moved to
 
                 //check if left tile has collision or not
                 if (worldMap.tileArray[newX][player.getY()].collision == false) {
@@ -1496,6 +1545,7 @@ public class MapLoader {
 
             System.gc();
             System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving left: " + player.getX() + ", " + player.getY());
+            pushMapLabelToTop();
             //boombox.playSound(3);
         }
     }
