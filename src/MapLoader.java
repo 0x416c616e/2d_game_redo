@@ -1,11 +1,15 @@
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
+
 
 //this class is used to load maps
 //no attributes, no getters or setters
@@ -16,7 +20,7 @@ public class MapLoader {
 
     //attributes===============================================
 
-
+    Label currentMapLabel;
 
     boolean controlsAreOnTheMap;
 
@@ -69,6 +73,11 @@ public class MapLoader {
         rightButton = new Button(">");
         upButton = new Button("^");
         leftButton = new Button("<");
+        currentMapLabel = new Label();
+        currentMapLabel.setLayoutX(50);
+        currentMapLabel.setLayoutY(50);
+
+        currentMapLabel.setStyle("-fx-font: 20 arial; -fx-font-weight: bold; -fx-background-color: white;");
     }
 
 
@@ -136,6 +145,13 @@ public class MapLoader {
         }
     }
 
+    public void addMapLabel(Player player, Pane worldPane) {
+        currentMapLabel.setText(null);
+        currentMapLabel.setText(player.getCurrentMapName());
+        worldPane.getChildren().add(currentMapLabel);
+        System.out.println("addMapLabel: " + currentMapLabel.getText());
+    }
+
 
     //map-loading methods===============================================
 
@@ -149,6 +165,9 @@ public class MapLoader {
         //which means it needs to load the player from a file rather than being able to use getters
 
         System.out.println("player x,y for loadMap_0_0: " + player.getX() + ", " + player.getY());
+
+        player.setCurrentMapName("map_0_0");
+
         //testing loading bottom level
         String tileSizeFileNamePart = "";
         if (resolution.equals("1280x720")) {
@@ -218,6 +237,7 @@ public class MapLoader {
 
         //now that the map is loaded, time to add the player and controls
         putPlayerAndControlsOnMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+        addMapLabel(player, worldPane);
         System.gc();
 
 
@@ -226,6 +246,9 @@ public class MapLoader {
     public void loadMap_0_1(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("player x,y:" + player.getX() + ", " + player.getY());
         System.out.println("in progress map_0_1");
+
+        player.setCurrentMapName("map_0_1");
+        System.out.println("mapName for loadMap_0_1 here: " + player.getCurrentMapName());
         //testing loading bottom level
         String tileSizeFileNamePart = "";
         if (resolution.equals("1280x720")) {
@@ -273,7 +296,7 @@ public class MapLoader {
         worldMap.setAllMidLevelImage(worldPane);
         worldMap.setAllTopLevelImage(worldPane);
         mainMenu.getChildren().addAll(worldPane);
-        player.loadPlayerFromFile();
+
 
 
         if (firstLoadOfCurrentPlay) {
@@ -281,158 +304,160 @@ public class MapLoader {
         } else {
             player.setX(newX);
             player.setY(newY);
-            System.out.println("player newX and newY for map_0_0: " + player.getX() + ", " + player.getY());
+            System.out.println("player newX and newY for map_0_1: " + player.getX() + ", " + player.getY());
         }
 
         //now that the map is loaded, time to add the player and controls
         putPlayerAndControlsOnMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+        System.out.println("right here 123 player currentMapName: " + player.getCurrentMapName());
+        addMapLabel(player, worldPane);
         System.gc();
 
     }
 
-    public void loadMap_0_2(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_0_2(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_0_2");
     }
 
-    public void loadMap_0_3(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_0_3(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_0_3");
     }
 
-    public void loadMap_0_4(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_0_4(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_0_4");
     }
 
-    public void loadMap_0_5(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_0_5(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_0_5");
     }
 
     //==================================
 
-    public void loadMap_1_0(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_1_0(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_1_0");
     }
 
-    public void loadMap_1_1(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_1_1(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_1_1");
     }
 
-    public void loadMap_1_2(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_1_2(boolean firstLoadOfCurrentPlay, int newX, int newY,  WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_1_2");
     }
 
-    public void loadMap_1_3(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_1_3(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_1_3");
     }
 
-    public void loadMap_1_4(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_1_4(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_1_4");
     }
 
-    public void loadMap_1_5(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_1_5(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_1_5");
     }
 
     //==================================
 
-    public void loadMap_2_0(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_2_0(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_2_0");
     }
 
-    public void loadMap_2_1(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_2_1(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_2_1");
     }
 
-    public void loadMap_2_2(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_2_2(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_2_2");
     }
 
-    public void loadMap_2_3(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_2_3(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_2_3");
     }
 
-    public void loadMap_2_4(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_2_4(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_2_4");
     }
 
-    public void loadMap_2_5(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_2_5(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_2_5");
     }
 
     //==================================
 
-    public void loadMap_3_0(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_3_0(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_3_0");
     }
 
-    public void loadMap_3_1(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_3_1(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_3_1");
     }
 
-    public void loadMap_3_2(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_3_2(boolean firstLoadOfCurrentPlay, int newX, int newY,  WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_3_2");
     }
 
-    public void loadMap_3_3(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_3_3(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_3_3");
     }
 
-    public void loadMap_3_4(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_3_4(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_3_4");
     }
 
-    public void loadMap_3_5(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_3_5(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_3_5");
     }
 
     //==================================
 
-    public void loadMap_4_0(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_4_0(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_4_0");
     }
 
-    public void loadMap_4_1(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_4_1(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_4_1");
     }
 
-    public void loadMap_4_2(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_4_2(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_4_2");
     }
 
-    public void loadMap_4_3(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_4_3(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_4_3");
     }
 
-    public void loadMap_4_4(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_4_4(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_4_4");
     }
 
-    public void loadMap_4_5(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_4_5(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_4_5");
     }
 
     //==================================
 
-    public void loadMap_5_0(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_5_0(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_5_0");
     }
 
-    public void loadMap_5_1(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_5_1(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_5_1");
     }
 
-    public void loadMap_5_2(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_5_2(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_5_2");
     }
 
-    public void loadMap_5_3(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_5_3(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_5_3");
     }
 
-    public void loadMap_5_4(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_5_4(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_5_4");
     }
 
-    public void loadMap_5_5(boolean firstLoadOfCurrentPlay, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
+    public void loadMap_5_5(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_5_5");
     }
 
@@ -452,146 +477,146 @@ public class MapLoader {
                 break;
             case "map_0_2":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_0_2(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_0_2(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_0_3":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_0_3(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_0_3(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_0_4":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_0_4(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_0_4(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_0_5":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_0_5(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_0_5(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
 
             //====================
             case "map_1_0":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_1_0(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_1_0(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_1_1":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_1_1(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_1_1(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_1_2":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_1_2(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_1_2(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_1_3":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_1_3(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_1_3(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_1_4":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_1_4(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_1_4(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_1_5":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_1_5(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_1_5(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             //====================
             case "map_2_0":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_2_0(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_2_0(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_2_1":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_2_1(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_2_1(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_2_2":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_2_2(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_2_2(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_2_3":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_2_3(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_2_3(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_2_4":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_2_4(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_2_4(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_2_5":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_2_5(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_2_5(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             //====================
             case "map_3_0":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_3_0(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_3_0(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_3_1":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_3_1(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_3_1(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_3_2":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_3_2(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_3_2(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_3_3":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_3_3(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_3_3(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_3_4":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_3_4(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_3_4(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_3_5":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_3_5(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_3_5(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             //====================
             case "map_4_0":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_4_0(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_4_0(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_4_1":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_4_1(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_4_1(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_4_2":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_4_2(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_4_2(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_4_3":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_4_3(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_4_3(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_4_4":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_4_4(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_4_4(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_4_5":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_4_5(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_4_5(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
 
             //====================
             case "map_5_0":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_5_0(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_5_0(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_5_1":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_5_1(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_5_1(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_5_2":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_5_2(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_5_2(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_5_3":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_5_3(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_5_3(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_5_4":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_5_4(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_5_4(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
             case "map_5_5":
                 unloadMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                loadMap_5_5(firstLoadOfCurrentPlay, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+                loadMap_5_5(firstLoadOfCurrentPlay, newX, newY, worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
                 break;
 
         }
@@ -1015,7 +1040,7 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving down: " + player.getX() + ", " + player.getY());
+            System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving down: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
@@ -1165,7 +1190,7 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving right: " + player.getX() + ", " + player.getY());
+            System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving right: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
@@ -1318,7 +1343,7 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving up: " + player.getX() + ", " + player.getY());
+            System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving up: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
@@ -1470,7 +1495,7 @@ public class MapLoader {
 
 
             System.gc();
-            System.out.println("player x,y after moving left: " + player.getX() + ", " + player.getY());
+            System.out.println("[" + player.getCurrentMapName() + "] player x,y after moving left: " + player.getX() + ", " + player.getY());
             //boombox.playSound(3);
         }
     }
