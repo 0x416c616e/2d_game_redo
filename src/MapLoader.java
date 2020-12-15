@@ -320,12 +320,12 @@ public class MapLoader {
                 case "keyboard":
                     //System.out.println("Adding keyboard controls");
                     addKeyBoardControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                    System.out.println("adding keyboard controls");
+                    //System.out.println("adding keyboard controls");
                     break;
                 case "touchscreen":
                     //System.out.println("Adding touchscreen controls");
                     addTouchscreenControls(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
-                    System.out.println("adding touchscreen controls");
+                    //System.out.println("adding touchscreen controls");
                     break;
                 default:
                     System.err.println("Error with addControls switch(controls)");
