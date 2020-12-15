@@ -863,17 +863,17 @@ public class Main extends Application {
                     //so the maps are the same on all resolutions
                     worldMap = new WorldMap(32, 18, "40x40");
                     dbgAlert("new worldMap worldMap, 720p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
+                    mapLoader.loadMap_0_0(true, player.getX(), player.getY(), worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
                     break;
                 case "1280x800":
                     worldMap = new WorldMap(32, 20, "40x40");
                     dbgAlert("new worldMap worldMap, 800p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
+                    mapLoader.loadMap_0_0(true, player.getX(), player.getY(), worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
                     break;
                 case "1920x1080":
                     worldMap = new WorldMap(32, 18, "60x60");
                     dbgAlert("new worldMap worldMap, 1080p");
-                    mapLoader.loadMap_0_0(worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
+                    mapLoader.loadMap_0_0(true, player.getX(), player.getY(), worldMap, worldPane, mainMenu, currentResolution, player, controls, scene, jukebox);
                     break;
                 default:
                     System.out.println("error with resolution in creating new WorldMap");
@@ -891,7 +891,7 @@ public class Main extends Application {
         //Label for build number to show which version the player is playing
         //build number is the current number of commits + 1 because this will be in the next commit
         //ex: if there are 555 commits on github, then it will be build 0.0556
-        Label buildNumberLabel = new Label("Build: 0.0104");
+        Label buildNumberLabel = new Label("Build: 0.0105");
         dbgAlert("new Label buildNumber");
         buildNumberLabel.setFont(standardFont);
         buildNumberLabel.setLayoutX(900);

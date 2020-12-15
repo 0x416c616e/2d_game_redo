@@ -8,11 +8,18 @@ public class Event {
 
     String eventType; //MapMove, Shop, Dialogue, Quest, Combat, Treasure, or none
 
+
+    //only use these two ints for a MapMove object
+    int newXPositionForPlayer;
+    int newYPositionForPlayer;
+
     //constructors============================================
     public Event() {
         //not implemented yet
         setTrigger("none");
         setEventType("none");
+        newXPositionForPlayer = -1; //meaning this Event is not a MapMove event
+        newYPositionForPlayer = -1; //meaning this Event is not a MapMove event
     }
 
     public Event(String trigger, String eventType) {
@@ -46,6 +53,27 @@ public class Event {
     public String getMapToLoad() {
         System.out.println("This Event is not a MapMove event, therefore this method does nothing");
         return "none";
+    }
+
+    public void setNewXPositionForPlayer(int newXPositionForPlayer) {
+        this.newXPositionForPlayer = newXPositionForPlayer;
+    }
+
+    public int getNewXPositionForPlayer() {
+        return newXPositionForPlayer;
+    }
+
+    public void setNewYPositionForPlayer(int newYPositionForPlayer) {
+        this.newYPositionForPlayer = newYPositionForPlayer;
+    }
+
+    public int getNewYPositionForPlayer() {
+        return newYPositionForPlayer;
+    }
+
+    public void setNewXY(int x, int y) {
+        setNewXPositionForPlayer(x);
+        setNewYPositionForPlayer(y);
     }
 
     //other methods============================================
