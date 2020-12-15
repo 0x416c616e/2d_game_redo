@@ -891,11 +891,12 @@ public class Main extends Application {
         //Label for build number to show which version the player is playing
         //build number is the current number of commits + 1 because this will be in the next commit
         //ex: if there are 555 commits on github, then it will be build 0.0556
-        Label buildNumberLabel = new Label("Build: 0.0103");
+        Label buildNumberLabel = new Label("Build: 0.0104");
         dbgAlert("new Label buildNumber");
         buildNumberLabel.setFont(standardFont);
         buildNumberLabel.setLayoutX(900);
         buildNumberLabel.setLayoutY(500);
+
 
         //^end of label for build number
 
