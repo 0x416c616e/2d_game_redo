@@ -1,0 +1,31 @@
+map tiles:
+down_arrow = 0
+right_arrow = 1
+up_arrow = 2
+left_arrow = 3
+grass = 4
+rocks = 5
+tree1 = 6
+bush = 7
+water = 8
+magic_trees = 9
+magic_gated_temple = 10
+cave = 11
+tree2 = 12
+tree3 = 13
+snow_tree = 14
+snow = 15
+scorched earth = 16
+lava = 17
+castle_part_0_0 = 18
+castle_part_0_1 = 19
+castle_part_0_2 = 20
+castle_part_1_0 = 21
+castle_part_1_1 = 22
+castle_part_1_2 = 23
+castle_part_2_0 = 24
+castle_part_2_1 = 25
+castle_part_2_2 = 26
+treasure_chest = 27
+dead_tree = 28
+

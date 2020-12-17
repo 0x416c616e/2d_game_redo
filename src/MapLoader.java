@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.util.HashMap;
 
 
 //this class is used to load maps
@@ -19,6 +20,8 @@ import javafx.scene.text.Font;
 public class MapLoader {
 
     //attributes===============================================
+
+    HashMap tileHashMap;
 
     Label currentMapLabel;
 
@@ -78,6 +81,67 @@ public class MapLoader {
         currentMapLabel.setLayoutY(50);
 
         currentMapLabel.setStyle("-fx-font: 20 arial; -fx-font-weight: bold; -fx-background-color: white;");
+        tileHashMap = new HashMap<Integer, String>()
+        {{
+            //down_arrow = 0
+            put(0, "down_arrow");
+            //right_arrow = 1
+            put(1, "right_arrow");
+            //up_arrow = 2
+            put(2, "up_arrow");
+            //left_arrow = 3
+            put(3, "left_arrow");
+            //grass = 4
+            put(4, "grass");
+            //rocks = 5
+            put(5, "rock");
+            //tree1 = 6
+            put(6, "tree1");
+            //bush = 7
+            put(6, "bush");
+            //water = 8
+            put(8, "water");
+            //magic_trees = 9
+            put(9, "magic_trees");
+            //magic_gated_temple = 10
+            put(10, "magic_gated_temple");
+            //cave = 11
+            put(11, "cave");
+            //tree2 = 12
+            put(12, "tree2");
+            //tree3 = 13
+            put(13, "tree3");
+            //snow_tree = 14
+            put(14, "snow_tree");
+            //snow = 15
+            put(15, "snow");
+            //scorched earth = 16
+            put(16, "scorched_earth");
+            //lava = 17
+            put(17, "lava");
+            //castle_part_0_0 = 18
+            put(18, "castle_0_0");
+            //castle_part_0_1 = 19
+            put(19, "castle_0_1");
+            //castle_part_0_2 = 20
+            put(20, "castle_0_2");
+            //castle_part_1_0 = 21
+            put(21, "castle_0_1");
+            //castle_part_1_1 = 22
+            put(22, "castle_1_1");
+            //castle_part_1_2 = 23
+            put(23, "castle_part_1_2");
+            //castle_part_2_0 = 24
+            put(24, "castle_2_0");
+            //castle_part_2_1 = 25
+            put(25, "castle_2_1");
+            //castle_part_2_2 = 26
+            put(26, "castle_2_2");
+            //treasure_chest = 27
+            put(27, "treasure_chest");
+            //dead_tree = 28
+            put(28, "dead_tree");
+        }};
     }
 
 

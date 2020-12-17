@@ -1,0 +1,21 @@
+6x6 grid
+5 regular towns
+6 regular dungeons
+1 snowy town
+1 end lava town
+6 temples that require a password in order to enter and get the legendary gear
+10 treasure chests on the map that only have normal loot like money and potions
+
+when you complete a dungeon, you learn of a temple password
+
+6 types of gear:
+helmet
+armor
+shield
+sword
+ring
+amulet
+
+maps need to have "encounter levels" that have a label, just like the map x,y label, and the encounters are based on the random encounter level
+it helps you figure out if you should be on that map or not, like if you're level 1 and you go to a map with encounter level 5, it's probably not a good idea
+maybe there can be 10 levels in total?
