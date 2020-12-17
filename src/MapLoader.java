@@ -664,8 +664,10 @@ public class MapLoader {
 
         //middle stuff (specific to map_0_1====================================
 
-        //arrows + MapMove events to different maps
+        //actual content of the map
+        processMapArray(worldMap, resolution, "map_0_1");
 
+        //arrows + MapMove events to different maps
 
 
         worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName, 15, downArrowToNextMapY);
@@ -684,9 +686,7 @@ public class MapLoader {
         worldMap.tileArray[15][1].setEvent(new MapMove("walk", "map_0_0", 15, 15));
 
 
-        //actual content of the map
-        String treeFileName = "file:assets/tiles/tree_" + tileSizeFileNamePart + ".png";
-        worldMap.tileArray[10][10].setMidLevelWithCollision(treeFileName, true);
+
 
         //end of middle stuff==================================================
 
