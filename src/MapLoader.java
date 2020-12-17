@@ -98,7 +98,7 @@ public class MapLoader {
             //rocks = 5
             put(5, "rock");
             //tree1 = 6
-            put(6, "tree1");
+            put(6, "tree");
             //bush = 7
             put(7, "bush");
             //water = 8
@@ -128,11 +128,11 @@ public class MapLoader {
             //castle_part_0_2 = 20
             put(20, "castle_0_2");
             //castle_part_1_0 = 21
-            put(21, "castle_0_1");
+            put(21, "castle_1_0");
             //castle_part_1_1 = 22
             put(22, "castle_1_1");
             //castle_part_1_2 = 23
-            put(23, "castle_part_1_2");
+            put(23, "castle_1_2");
             //castle_part_2_0 = 24
             put(24, "castle_2_0");
             //castle_part_2_1 = 25
@@ -318,6 +318,7 @@ public class MapLoader {
             case 8:
             //lava
             case 17:
+                System.out.println("adding water " + getTileNameFromHashMap(tileInt));
                 addTileToMap(getTileNameFromHashMap(tileInt), tileSizeFileNamePart, worldMap, x, y, true);
                 break;
 
@@ -346,11 +347,127 @@ public class MapLoader {
     //world in progress!!!!!
     //left off here!!!
     //need to account for different resolutions later
-    public void processMapArrayMap_0_2(WorldMap worldMap, String resolution) {
+    public void processMapArray(WorldMap worldMap, String resolution, String mapName) {
+
         for (int x = 0; x < 32; x++) {
             for (int y = 0; y < 18; y++) {
-                int tileInt = this.mapLevels.map_0_2[y][x];
-                System.out.println("attempting to set tile " + x +"," + y);
+                int tileInt = -1; //means not initialized properly yet
+                switch (mapName) {
+                    //put this switch into the loop part
+                    //and for each of the cases, use this: int tileInt = this.mapLevels.map_0_2[y][x];
+                    case "map_0_0":
+                        tileInt = this.mapLevels.map_0_0[y][x]; //looks weird but it works only if the x and y are reversed
+                        break;
+                    case "map_0_1":
+                        tileInt = this.mapLevels.map_0_1[y][x];
+                        break;
+                    case "map_0_2":
+                        tileInt = this.mapLevels.map_0_2[y][x];
+                        break;
+                    case "map_0_3":
+                        tileInt = this.mapLevels.map_0_3[y][x];
+                        break;
+                    case "map_0_4":
+                        tileInt = this.mapLevels.map_0_4[y][x];
+                        break;
+                    case "map_0_5":
+                        tileInt = this.mapLevels.map_0_5[y][x];
+                        break;
+                    case "map_1_0":
+                        tileInt = this.mapLevels.map_1_0[y][x];
+                        break;
+                    case "map_1_1":
+                        tileInt = this.mapLevels.map_1_1[y][x];
+                        break;
+                    case "map_1_2":
+                        tileInt = this.mapLevels.map_1_2[y][x];
+                        break;
+                    case "map_1_3":
+                        tileInt = this.mapLevels.map_1_3[y][x];
+                        break;
+                    case "map_1_4":
+                        tileInt = this.mapLevels.map_1_4[y][x];
+                        break;
+                    case "map_1_5":
+                        tileInt = this.mapLevels.map_1_5[y][x];
+                        break;
+                    case "map_2_0":
+                        tileInt = this.mapLevels.map_2_0[y][x];
+                        break;
+                    case "map_2_1":
+                        tileInt = this.mapLevels.map_2_1[y][x];
+                        break;
+                    case "map_2_2":
+                        tileInt = this.mapLevels.map_2_2[y][x];
+                        break;
+                    case "map_2_3":
+                        tileInt = this.mapLevels.map_2_3[y][x];
+                        break;
+                    case "map_2_4":
+                        tileInt = this.mapLevels.map_2_4[y][x];
+                        break;
+                    case "map_2_5":
+                        tileInt = this.mapLevels.map_2_5[y][x];
+                        break;
+                    case "map_3_0":
+                        tileInt = this.mapLevels.map_3_0[y][x];
+                        break;
+                    case "map_3_1":
+                        tileInt = this.mapLevels.map_3_1[y][x];
+                        break;
+                    case "map_3_2":
+                        tileInt = this.mapLevels.map_3_2[y][x];
+                        break;
+                    case "map_3_3":
+                        tileInt = this.mapLevels.map_3_3[y][x];
+                        break;
+                    case "map_3_4":
+                        tileInt = this.mapLevels.map_3_4[y][x];
+                        break;
+                    case "map_3_5":
+                        tileInt = this.mapLevels.map_3_5[y][x];
+                        break;
+                    case "map_4_0":
+                        tileInt = this.mapLevels.map_4_0[y][x];
+                        break;
+                    case "map_4_1":
+                        tileInt = this.mapLevels.map_4_1[y][x];
+                        break;
+                    case "map_4_2":
+                        tileInt = this.mapLevels.map_4_2[y][x];
+                        break;
+                    case "map_4_3":
+                        tileInt = this.mapLevels.map_4_3[y][x];
+                        break;
+                    case "map_4_4":
+                        tileInt = this.mapLevels.map_4_4[y][x];
+                        break;
+                    case "map_4_5":
+                        tileInt = this.mapLevels.map_4_5[y][x];
+                        break;
+                    case "map_5_0":
+                        tileInt = this.mapLevels.map_5_0[y][x];
+                        break;
+                    case "map_5_1":
+                        tileInt = this.mapLevels.map_5_1[y][x];
+                        break;
+                    case "map_5_2":
+                        tileInt = this.mapLevels.map_5_2[y][x];
+                        break;
+                    case "map_5_3":
+                        tileInt = this.mapLevels.map_5_3[y][x];
+                        break;
+                    case "map_5_4":
+                        tileInt = this.mapLevels.map_5_4[y][x];
+                        break;
+                    case "map_5_5":
+                        tileInt = this.mapLevels.map_5_5[y][x];
+                        break;
+                    default:
+                        System.out.println("processMapArray switch error");
+                        System.exit(777772342);
+                }
+                //System.out.println("attempting to set tile " + x +"," + y);
                 setTileFromIntArray(tileInt, worldMap, x, y, resolution);
             }
 
@@ -448,6 +565,10 @@ public class MapLoader {
 
         //middle stuff
 
+        //content of the map
+        processMapArray(worldMap, resolution, "map_0_0");
+
+
         //arrows and MapMove events
 
         worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName, 15, downArrowToNextMapY);
@@ -461,14 +582,14 @@ public class MapLoader {
         worldMap.tileArray[31][9] = new Tile(rightArrowFileName, 31, 9);
         worldMap.tileArray[31][9].setEvent(new MapMove("walk", "map_1_0", 2, 9));
 
-        //content of the map
+        /*
         String rockFileName = "file:assets/tiles/rock_" + tileSizeFileNamePart + ".png";
         worldMap.tileArray[4][4].setMidLevelWithCollision(rockFileName, true);
         String bushFileName = "file:assets/tiles/bush_" + tileSizeFileNamePart + ".png";
         worldMap.tileArray[20][8].setMidLevelWithCollision(bushFileName, true);
         String exclamationPointFileName = "file:assets/tiles/exclamation_point_" + tileSizeFileNamePart + ".png";
         worldMap.tileArray[20][8].setTopLevel(exclamationPointFileName);
-
+        */
 
         //==============================================================================
 
@@ -544,6 +665,9 @@ public class MapLoader {
         //middle stuff (specific to map_0_1====================================
 
         //arrows + MapMove events to different maps
+
+
+
         worldMap.tileArray[15][downArrowToNextMapY] = new Tile(downArrowFileName, 15, downArrowToNextMapY);
         worldMap.tileArray[15][downArrowToNextMapY].setEvent(new MapMove("walk", "map_0_2", 15, 2));
         worldMap.tileArray[15][downArrowToNextMapY + 1] = new Tile(downArrowFileName, 15, (downArrowToNextMapY + 1));
@@ -595,7 +719,7 @@ public class MapLoader {
 
     public void loadMap_0_2(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_0_2");
-        player.setCurrentMapName("map_0_1");
+        player.setCurrentMapName("map_0_2");
 
         for (int xMap = 0; xMap < worldMap.getxDimension(); xMap++) {
             for (int yMap = 0; yMap < worldMap.getyDimension(); yMap++) {
@@ -603,7 +727,7 @@ public class MapLoader {
             }
         }
 
-        processMapArrayMap_0_2(worldMap, resolution);
+        processMapArray(worldMap, resolution, "map_0_2");
 
         worldMap.setAllBottomLevelImage(worldPane);
         worldMap.setAllMidLevelImage(worldPane);
@@ -617,7 +741,7 @@ public class MapLoader {
         } else {
             player.setX(newX);
             player.setY(newY);
-            System.out.println("player newX and newY for map_0_1: " + player.getX() + ", " + player.getY());
+            System.out.println("player newX and newY for map_0_2: " + player.getX() + ", " + player.getY());
         }
 
         //now that the map is loaded, time to add the player and controls

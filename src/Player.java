@@ -70,8 +70,8 @@ public class Player {
 
     public Player() {
         setName("noNameYet");
-        setX(5);
-        setY(5);
+        setX(8);
+        setY(6);
         setPosition("down");
         setCurrentMapName("map_0_0");
         setIsBusy(false);
