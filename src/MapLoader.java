@@ -21,6 +21,8 @@ public class MapLoader {
 
     //attributes===============================================
 
+    MapLevels mapLevels;
+
     HashMap tileHashMap;
 
     Label currentMapLabel;
@@ -98,7 +100,7 @@ public class MapLoader {
             //tree1 = 6
             put(6, "tree1");
             //bush = 7
-            put(6, "bush");
+            put(7, "bush");
             //water = 8
             put(8, "water");
             //magic_trees = 9
@@ -142,8 +144,8 @@ public class MapLoader {
             //dead_tree = 28
             put(28, "dead_tree");
         }};
+        mapLevels = new MapLevels();
     }
-
 
 
     public void setDownPressed(boolean downPressed) {
@@ -235,8 +237,125 @@ public class MapLoader {
 
     }
 
+    //hashmap contains numbers for tiles that correspond to strings
+    public String getTileNameFromHashMap(int tileTypeInt) {
+        return tileHashMap.get(tileTypeInt).toString();
+    }
+
+    public void setTileFromIntArray(int tileInt, WorldMap worldMap, int x, int y, String resolution) {
+        String tileSizeFileNamePart = "";
+        if (resolution.equals("1280x720")) {
+            //System.out.println("loading map 720p");
+            tileSizeFileNamePart = "40x40";
+        } else if (resolution.equals("1280x800")) {
+            //System.out.println("loading map 800p");
+            tileSizeFileNamePart = "40x40";
+
+        } else if (resolution.equals("1920x1080")) {
+            //System.out.println("loading map 1080p");
+            tileSizeFileNamePart = "60x60";
+        } else {
+            System.err.println("Error withsetTileFromIntArray for resolution part");
+            System.exit(99922222);
+        }
+
+        switch (tileInt) {
+
+            //bottom level image only and no collision
+            //arrows (but no mapmove events -- those must be done separately)
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            //grass
+            case 4:
+            //snow
+            case 15:
+            //scorched earth
+            case 16:
+                addTileToMap(getTileNameFromHashMap(tileInt), tileSizeFileNamePart, worldMap, x, y, false);
+                break;
+
+            //bottom level is grass, add mid level, set collision
+            //rock
+            case 5:
+            //tree1
+            case 6:
+            //bush
+            case 7:
+            //magic trees
+            case 9:
+            //tree2
+            case 12:
+            //tree3
+            case 13:
+            //snow tree
+            case 14:
+            //castle 0 0
+            case 18:
+            //castle 0 1
+            case 19:
+            //castle 0 2
+            case 20:
+            //castle 1 0
+            case 21:
+            //case 1 1
+            case 22:
+            //castle 2 0
+            case 24:
+            //castle 2 1
+            case 25:
+            //castle 2 2
+            case 26:
+            //dead tree
+            case 28:
+            //grass is below the mid level stuff for each of these cases
+                addTileToMap("grass", getTileNameFromHashMap(tileInt), tileSizeFileNamePart, worldMap, x, y, true);
+                break;
+
+            //bottom level only and collision
+            //water
+            case 8:
+            //lava
+            case 17:
+                addTileToMap(getTileNameFromHashMap(tileInt), tileSizeFileNamePart, worldMap, x, y, true);
+                break;
+
+            //bottom level is grass, add mid level, set no collision
+            //magic gated temple
+            case 10:
+            //cave
+            case 11:
+            //castle 1 2
+            //entrance (no collision)
+            case 23:
+            //treasure chest
+            case 27:
+                addTileToMap("grass", getTileNameFromHashMap(tileInt), tileSizeFileNamePart, worldMap, x, y, false);
+                break;
 
 
+            default:
+                System.out.println("setTileFromIntArray switch error");
+                System.exit(5675999);
+                break;
+        }
+    }
+
+
+    //world in progress!!!!!
+    //left off here!!!
+    //need to account for different resolutions later
+    public void processMapArrayMap_0_2(WorldMap worldMap, String resolution) {
+        for (int x = 0; x < 32; x++) {
+            for (int y = 0; y < 18; y++) {
+                int tileInt = this.mapLevels.map_0_2[y][x];
+                System.out.println("attempting to set tile " + x +"," + y);
+                setTileFromIntArray(tileInt, worldMap, x, y, resolution);
+            }
+
+        }
+    }
 
     //you will only be able to move again after a certain amount of time
     //this method checks how long it's been since the last time you moved
@@ -476,6 +595,36 @@ public class MapLoader {
 
     public void loadMap_0_2(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
         System.out.println("not implemented yet map_0_2");
+        player.setCurrentMapName("map_0_1");
+
+        for (int xMap = 0; xMap < worldMap.getxDimension(); xMap++) {
+            for (int yMap = 0; yMap < worldMap.getyDimension(); yMap++) {
+                worldMap.tileArray[xMap][yMap] = new Tile();
+            }
+        }
+
+        processMapArrayMap_0_2(worldMap, resolution);
+
+        worldMap.setAllBottomLevelImage(worldPane);
+        worldMap.setAllMidLevelImage(worldPane);
+        worldMap.setAllTopLevelImage(worldPane);
+        mainMenu.getChildren().addAll(worldPane);
+
+
+
+        if (firstLoadOfCurrentPlay) {
+            player.loadPlayerFromFile();
+        } else {
+            player.setX(newX);
+            player.setY(newY);
+            System.out.println("player newX and newY for map_0_1: " + player.getX() + ", " + player.getY());
+        }
+
+        //now that the map is loaded, time to add the player and controls
+        putPlayerAndControlsOnMap(worldMap, worldPane, mainMenu, resolution, player, controls, scene, boombox);
+        System.out.println("right here 123 player currentMapName: " + player.getCurrentMapName());
+        addMapLabel(player, worldPane);
+        System.gc();
     }
 
     public void loadMap_0_3(boolean firstLoadOfCurrentPlay,  int newX, int newY, WorldMap worldMap, Pane worldPane, Pane mainMenu, String resolution, Player player, String controls, Scene scene, AudioPlayer boombox) {
