@@ -2,6 +2,8 @@
 
 2D game written in Java/OpenJFX. Intended for Windows. It isn't finished yet.
 
+Here is what it looks like: [https://raw.githubusercontent.com/0x416c616e/2d_game_redo/main/screenshot123.png](https://raw.githubusercontent.com/0x416c616e/2d_game_redo/main/screenshot123.png)
+
 ## Requirements
 
 You need to have Java 15 installed in order to run this game. This game is intended for Windows. It can be run in either fullscreen or windowed mode.
